@@ -9,6 +9,7 @@
     <title>订单确认</title>
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/rem.js"></script>
+    <script src="js/Jquery.Query.js"></script>
     <script src="js/own.js"></script>
     <link rel="stylesheet" href="css/own.css">
     <style>
@@ -81,25 +82,27 @@
     <div class="order-pay">
         <h3><img src="images/zffs.png" alt=""><span>支付方式</span></h3>
         <ul>
-            <li><img src="images/zhifubao.png" alt=""> <b>支付宝</b><span>推荐支付宝用户使用</span><img src="images/xuanzhe2.png" alt=""></li>
+            <li><img src="images/zhifubao.png" alt=""> <b>支付宝</b><span>推荐支付宝用户使用</span><img src="images/xuanzhe2.png"
+                                                                                            alt=""></li>
             <li><img src="images/weixin.png" alt=""> <b>微信支付</b><img src="images/xuanzhe2.png" alt=""></li>
         </ul>
     </div>
     <div class="shop-cart-bar order-cofiure-bottom">
-        <p>注：每笔订单满200元包邮；未满200元，收取10元运费  (全场商品适用)</p>
+        <p>注：每笔订单满200元包邮；未满200元，收取10元运费 (全场商品适用)</p>
         <div class="shop-cart-bar-l">
             <ul>
                 <li>总计：</li>
-                <li><b>¥</b><span>3000.00</span></li>
+                <li><b>¥</b><span class="pay-price">3000.00</span></li>
             </ul>
         </div>
         <div class="shop-cart-bar-r">
-            <p><span>结算</span>(<b>3</b>)</p>
+            <p><span>结算</span>(<b class="product-number">3</b>)</p>
         </div>
     </div>
 </div>
 <script>
     $(function () {
+        var buyType = $.query.get("buyType");
         var wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
         var productAddr = JSON.parse(localStorage.getItem("productInfo"));
         console.log(wxPay);
@@ -108,17 +111,29 @@
             $(".buy-suc-div-b-r ul li:eq(0) span b").text(productAddr.Reman);
             $(".buy-suc-div-b-r ul li:eq(0) > b").text(productAddr.Phone);
             $(".buy-suc-div-b-r ul li:eq(1)").text(productAddr.Address);
-//            if()
-            $('.order-list .shop-cart-product-info>img').attr("src",productAddr.productImg);
-            $('.order-list .shop-cart-product-disc ul li:eq(0)').text(productAddr.productName);
-            $('.order-list .shop-cart-product-disc ul li:eq(1) b').text(productAddr.productStyle);
-            $('.product-price-this').text(productAddr.productPrice);
-            $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
-            $('.shop-cart-product-number p').text("X1")
-            $('.shop-cart-check-list').click(function () {
-                window.location.href="products-main.html?productId="+productAddr.productId;
-            })
+            if (buyType == "buysoon") {
+                $('.order-list .shop-cart-product-info>img').attr("src", productAddr.productImg);
+                $('.order-list .shop-cart-product-disc ul li:eq(0)').text(productAddr.productName);
+                $('.order-list .shop-cart-product-disc ul li:eq(1) b').text(productAddr.productStyle);
+                $('.product-price-this').text(productAddr.productPrice);
+                $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
+                $('.shop-cart-product-number p').text("X1")
+                $('.shop-cart-check-list').click(function () {
+                    window.location.href = "products-main.html?productId=" + productAddr.productId;
+                });
+                if (productAddr.productPrice < 200) {
+                    $('.pay-price').text((parseFloat(productAddr.productPrice) + parseFloat(10)).toFixed(2) );
+                } else {
+                    $('.pay-price').text(productAddr.productPrice);
+
+                }
+                $('.product-number').text($('.order-list .shop-cart-check-list').length);
+            } else {
+
+            }
+
         }
+
         setAddr()
     })
 </script>

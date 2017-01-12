@@ -248,8 +248,9 @@
                             productsStyles.Reman = $reman;
                             productsStyles = JSON.stringify(productsStyles);
                             localStorage.setItem("wxPayinfo", wxPay);
-                            localStorage.setItem("productInfo",productsStyles)
-                            window.location.href="order-confure.html";
+                            localStorage.setItem("productInfo",productsStyles);
+                            $('.loading').show();
+                            window.location.href="order-confure.html?buyType=buysoon";
 
                         }
 
