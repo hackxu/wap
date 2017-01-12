@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+    <title>快捷购买</title>
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/rem.js"></script>
+    <script src="js/own.js"></script>
+    <script src="js/Jquery.Query.js"></script>
+    <link rel="stylesheet" href="css/own.css">
+    <style>
+    </style>
+</head>
+<body>
+<div id="main">
+    <div class="main">
+        <div class="down-btn">
+            <ul>
+                <li><img src="images/logo.png" alt=""></li>
+                <li><a href="###"><span>一键下载</span></a></li>
+            </ul>
+        </div>
+        <div class="top-title">
+            <div class="center-word shop-cart-center">
+                <img src="images/txdd.png" alt="">
+                <span>填写订单</span>
+            </div>
+            <div class="nav-list">
+                <p><img src="images/gd.png" alt=""></p>
+                <div class="hide-nav">
+                    <i><img src="images/sj.png" alt=""></i>
+                    <ul>
+                        <li class="nav-list-active"><img src="images/rxcp.png" alt=""><span>热销产品</span></li>
+                        <li><img src="images/fljp.png" alt=""><span>分类精品</span></li>
+                        <li><img src="images/gwc.png" alt=""><span>购物车</span></li>
+                        <li><img src="images/grzx.png" alt=""><span>个人中心</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="go-login">
+            <p>已有当好妈APP账号请 <a href="###">登陆</a></p>
+            <p>没有账号可 <a href="###">快速注册</a> 或在本页填写订单快捷购买</p>
+        </div>
+        <div class="add-address-write">
+            <ul>
+                <li><img src="images/shouhuoren.png" alt=""><span>收货人：</span><input type="text"></li>
+                <li><img src="images/lianxidianhua.png" alt=""><span>联系电话：</span><input type="text"></li>
+                <li class="check-address-more"><img src="images/suozaidiqu.png" alt=""><span>所在地区：</span><img
+                        src="images/b.png" alt="">
+                    <p><b class="Province"></b><b class="City"></b><b class="Area"></b></p></li>
+                <li class="check-address-jie"><img src="images/jiedao.png" alt=""><span>街道：</span><img
+                        src="images/b.png"
+                        alt=""><b></b>
+                </li>
+                <li><img src="images/xiangxidizhi.png" alt=""><span>详细地址：</span><textarea name="" id="" cols="30"
+                                                                                          rows="10"></textarea></li>
+            </ul>
+        </div>
+        <div class="auth-phone">
+            <div class="auth-phone-t">
+                <ul>
+                    <li>
+                        <p><img src="images/kjxd.png" alt=""><span>快捷下单手机号验证：</span></p>
+                        <p><img src="images/dlff.png" alt=""><span>登陆方法</span></p>
+                    </li>
+                    <li>Tips:可利用该手机号登陆当好妈app，查询物流信息及购买记录等</li>
+                </ul>
+            </div>
+            <div class="login-div">
+                <ul>
+                    <li><img src="images/shoujihao.png" alt=""><input class="phone" type="number" placeholder="请输入手机号">
+                    </li>
+                    <li><img src="images/mima.png" alt=""><input class="authcode" type="number"
+                                                                 placeholder="请输入验证码"><input data-type="Order"
+                                                                                             class="get-code"
+                                                                                             type="button"
+                                                                                             value="获取验证码">
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div class="shop-cart-check order-confiure-center buy-soon-product">
+            <div class="shop-cart-check-list">
+                <div class="shop-cart-product-info">
+                    <img src="images/nf.png" alt="">
+                    <div class="shop-cart-product-disc">
+                        <ul>
+                            <li>Nutrilon诺优能幼儿配方奶粉3段双罐装 荷兰牛栏进口</li>
+                            <li>颜色分类: <b>标准版</b></li>
+                            <li>
+                                <div class="shop-cart-product-price">
+                                    <b>¥</b>
+                                    <span class="product-price-this">689</span>
+                                    <del>¥1200</del>
+                                </div>
+                                <div class="shop-cart-product-number">
+                                    <p>X1</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn">
+            <span>提&nbsp;&nbsp;&nbsp;&nbsp;交</span>
+        </div>
+    </div>
+    <div class="all-address">
+        <ul>
+        </ul>
+    </div>
+    <div class="alert">
+        <p>房价快速的减肥倒计时的风景 家居服</p>
+        <b>确&nbsp;&nbsp;&nbsp;&nbsp;定</b>
+    </div>
+    <div class="bg"></div>
+    <div class="loading">
+        <div class="wai">
+            <div class="spinner">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var productsStyles;
+        var addarr = [];
+        $('.btn').click(function () {
+            var $reman = $('.add-address-write ul li:eq(0) input').val();
+            var $phone = $('.add-address-write ul li:eq(1) input').val();
+            var $addr = $('.check-address-more  p').text();
+            var $street = $('.check-address-jie b').text();
+            var $addrmore = $('.add-address-write ul li:eq(4) textarea').val();
+            var $orderphone = $(".phone").val();
+            var $authcode = $('.authcode').val();
+            if ($reman.length < 2) {
+                showBg();
+                $('.alert p').text("请检查收货人是否填写");
+                return false
+            }
+            ;
+            if (!re.test($phone)) {
+                showBg()
+                $('.alert p').text("请检查联系电话是否填写正确");
+                return false;
+            } else if ($addr == "") {
+                showBg()
+                $('.alert p').text("请检查地区是否选择");
+                return false;
+            } else if ($street == "") {
+                showBg()
+                $('.alert p').text("请检查街道是否选择");
+                return false;
+            } else if ($addrmore == "") {
+                showBg()
+                $('.alert p').text("请检查详细地址是否填写");
+                return false;
+            } else if (!re.test($orderphone)) {
+                showBg()
+                $('.alert p').text("请检查下单手机号码是否填写正确");
+                return false;
+            } else if ($authcode == "") {
+                showBg()
+                $('.alert p').text("请检查验证码是否填写");
+                return false;
+            } else {
+//                var orderSubmitWX = {
+//                    "CusNo":"-1",
+//                    "OrderType":"ORDER_WAP",
+//                    "ReceiveMan":$reman,
+//                    "Phone":$phone,
+//                    "Province":$('.Province').text(),
+//                    "City":$('.city').text(),
+//                    "Area":$('.Area').text(),
+//                    "Street":$('.check-address-jie b').text(),
+//                    "DetailAddress":$addrmore,
+//                    "PayMode":,
+//                    "OrderFee":$('.product-price-this').text(),
+//                    "TiketNo":"",
+//                    "Receipt_Type":"00",
+//                    "Receipt_Title":"",
+//                    "Remark":"",
+//
+//
+//
+//                }
+                var orderSubmitWX = {
+                    "CusNo": -1,
+                    "OrderType": "ORDER_WAP",
+                    "ReceiveMan": $reman,
+                    "Phone": $phone,
+                    "Province": $('.Province').text(),
+                    "City": $('.City').text(),
+                    "Area": $('.Area').text(),
+                    "Street": $('.check-address-jie b').text(),
+                    "DetailAddress": $addrmore,
+                    "PayMode": "微信",
+                    "OrderFee": $('.product-price-this').text(),
+                    "TiketNo": "",
+                    "Receipt_Type": "00",
+                    "Receipt_Title": "",
+                    "Remark": "",
+                    "OrderDetail": [
+                        {
+                            "Product_ID": productsStyles.productId,
+                            "Name": productsStyles.productName,
+                            "Color_id": productsStyles.productColorId,
+                            "Color_Nm": productsStyles.productStyle,
+                            "Style_id": productsStyles.productStyleId,
+                            "Style_Nm": productsStyles.productStyleNm,
+                            "OrderNum": 1,
+                            "OrderPrice": productsStyles.productPrice,
+                            "OrderOldPrice": productsStyles.productMarketPrice
+                        }
+                    ],
+                    "SessionCode": "",
+                    "LoginName": $orderphone,
+                    "SmsCode": $authcode
+                };
+                console.log(JSON.stringify(orderSubmitWX))
+//                return
+                $.ajax({
+                    url: orderapi + "/Order/OrderSubmitWX",
+                    type: "post",
+                    data: orderSubmitWX,
+//                    dataType:"json",
+                    success: function (data) {
+                        var msg = data.Data;
+                        console.log(msg)
+
+                        if (data.Code != 200) {
+                            showBg();
+                            $('.alert p').text(data.Message)
+                        } else {
+                            var wxPay = JSON.stringify(msg);
+                            console.log(wxPay)
+                            productsStyles.Phone = $phone;
+                            productsStyles.Address = $('.check-address-more').text() + $('.check-address-jie b').text() + $addrmore;
+                            productsStyles.Reman = $reman;
+                            productsStyles = JSON.stringify(productsStyles);
+                            localStorage.setItem("wxPayinfo", wxPay);
+                            window.location.href="order-confure.html";
+
+                        }
+
+                    }
+                })
+            }
+
+        });
+        //快捷购买商品样式
+        function setproductStylesoon() {
+            productsStyles = JSON.parse(localStorage.getItem("productInfo"));
+            console.log(productsStyles)
+            $('.buy-soon-product .shop-cart-product-info img').attr("src", productsStyles.productImg);
+            $('.buy-soon-product .shop-cart-product-disc ul li:eq(0)').text(productsStyles.productName);
+            if (productsStyles.productStyle == "共同") {
+                $('.buy-soon-product .shop-cart-product-disc ul li:eq(1) b').text("标准版");
+            } else {
+                $('.buy-soon-product .shop-cart-product-disc ul li:eq(1) b').text(productsStyles.productStyle);
+
+            }
+            $('.product-price-this').text(productsStyles.productPrice);
+            $('.shop-cart-product-price>del').text(productsStyles.productMarketPrice)
+        }
+
+        setproductStylesoon()
+
+//        省选择
+        $('.check-address-more').click(function () {
+            $('.loading').show();
+            $('.all-address').attr("data-id", "0")
+            $('.main').hide();
+            $.ajax({
+                url: api + "/Common/Addr?value=0",
+                type: "get",
+                success: function (data) {
+//                    console.log(data)
+                    $('.loading').hide();
+                    var msg = data.Data;
+                    $('.all-address ul').empty();
+                    for (var i = 0; i < msg.length; i++) {
+                        var $li = $('<li><span data-value="' + msg[i].Value + '">' + msg[i].Name + '</span><img src="images/b.png" alt=""></li>')
+                        $('.all-address ul').append($li)
+                    }
+                    $(".all-address").show();
+                }
+            });
+        });
+
+
+        //获取省市区
+        $(document).on("click", ".all-address ul li", function () {
+            $('.loading').show()
+            if ($(".all-address").attr("data-id") == 0) {
+                addarr.push($(this).find('span').text());
+
+                if (addarr.length < 3) {
+                    $.ajax({
+                        url: api + "/Common/Addr?value=" + $(this).find("span").attr("data-value"),
+                        type: "get",
+                        success: function (data) {
+                            $('.loading').hide();
+                            var msg = data.Data;
+                            $('.all-address ul').empty();
+                            for (var i = 0; i < msg.length; i++) {
+                                var $li = $('<li><span data-value="' + msg[i].Value + '">' + msg[i].Name + '</span><img src="images/b.png" alt=""></li>')
+                                $('.all-address ul').append($li)
+                            }
+                            $(".all-address").show();
+                        }
+                    });
+                } else if (addarr.length == 3) {
+                    $('.check-address-jie').attr("data-value", $(this).find("span").attr("data-value"))
+                    $('.Province').text(addarr[0])
+                    $('.City').text(addarr[1])
+                    $('.Area').text(addarr[2])
+                    $('.main').show();
+                    $('.loading').hide()
+                    $('.all-address').hide();
+                    $('.check-address-jie b').text("")
+                    addarr = []
+                }
+                /*else if (addarr.length == 4) {
+                 $('.check-address-jie b').text(addarr[3])
+                 $('.main').show();
+                 $('.all-address').hide()
+                 }*/
+            }
+            if ($('.all-address').attr("data-id") == 1) {
+                $('.loading').hide()
+                $('.check-address-jie b').text($(this).find("span").text())
+                $('.main').show();
+                $('.all-address').hide()
+            }
+
+
+        })
+//            街道选择
+        $('.check-address-jie').click(function () {
+            $('.all-address').attr("data-id", "1")
+            $.ajax({
+                url: api + "/Common/Addr?value=" + $(this).attr("data-value"),
+                type: "get",
+                success: function (data) {
+                    $(".main").hide();
+//                    console.log(data)
+                    $('.loading').hide();
+                    var msg = data.Data;
+                    $('.all-address ul').empty();
+                    for (var i = 0; i < msg.length; i++) {
+                        var $li = $('<li><span data-value="' + msg[i].Value + '">' + msg[i].Name + '</span><img src="images/b.png" alt=""></li>')
+                        $('.all-address ul').append($li)
+                    }
+                    $(".all-address").show();
+                }
+            })
+        })
+
+    })
+</script>
+</body>
+</html>

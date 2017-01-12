@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+    <title>详情</title>
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/own.js"></script>
+    <script src="js/rem.js"></script>
+    <script src="js/swiper-3.4.1.jquery.min.js"></script>
+    <link rel="stylesheet" href="css/own.css">
+    <link rel="stylesheet" href="css/swiper-3.4.1.min.css">
+    <style>
+        .classify-main ol, .buy-bar ol { display: none; }
+        .classify-main ol dl, .buy-bar ol { width: 100%; height: 2.55rem; text-align: center; line-height: 2.55rem; font-size: .65rem; float: left; color: #ffffff; background: #808080 }
+    </style>
+</head>
+<body>
+<div id="main">
+    <div class="down-btn">
+        <ul>
+            <li><img src="images/logo.png" alt=""></li>
+            <li><a href="###"><span>一键下载</span></a></li>
+        </ul>
+    </div>
+    <div class="transparent-div nav-list">
+        <p><img src="images/gd.png" alt=""></p>
+        <div class="hide-nav">
+            <i><img src="images/sj.png" alt=""></i>
+            <ul>
+                <li class="nav-list-active"><img src="images/rxcp.png" alt=""><span>热销产品</span></li>
+                <li><img src="images/fljp.png" alt=""><span>分类精品</span></li>
+                <li><img src="images/gwc.png" alt=""><span>购物车</span></li>
+                <li><img src="images/grzx.png" alt=""><span>个人中心</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="product-info">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+        <div class="product-info-main">
+            <ul>
+                <li>Aptamil爱他美3段德国进口奶粉双罐装 1-3岁</li>
+                <li>
+                    <div class="product-price">
+                        <b>¥</b>
+                        <span class="low-price">689</span>
+                        <del class="high-price">¥1200</del>
+                    </div>
+                    <div class="phone-only">
+                        <span>手机专享价</span>
+                    </div>
+                    <div class="product-discount">
+                        <span>4.5</span>
+                    </div>
+                </li>
+                <li><span>快递: <b class="product-Freight">免运费</b></span><span>月销: <b
+                        class="product-Sales">9999</b>笔</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="check-classify">
+        <p><span>选择分类</span><i><img src="images/b.png" alt=""></i></p>
+    </div>
+    <div class="product-interaction">
+        <ul>
+            <li><img src="images/tuijian.png" alt=""><span>更多相关商品推荐</span><i><img src="images/b.png" alt=""></i></li>
+            <li><img src="images/jifen.png" alt=""><span>购买此商品可获得<b>积分</b></span></li>
+            <li><img src="images/yunfei.png" alt=""><span>全场包邮</span></li>
+        </ul>
+    </div>
+    <div class="product-img">
+        <div class="product-disc">
+            <h3>产品描述</h3>
+            <ul>
+            </ul>
+        </div>
+    </div>
+    <div class="buy-bar">
+        <div class="buy-bar-left">
+            <ul>
+                <li><img src="images/kfd.png" alt=""><span>客服</span></li>
+                <li><img src="images/scd.png" alt=""><span>收藏</span></li>
+                <li class="car-position"><img src="images/gwcd.png" alt=""><span>购物车</span><b>2</b></li>
+            </ul>
+        </div>
+        <div class="buy-bar-right">
+            <ol>
+                <dl><b>已售完,紧急补货中</b></dl>
+            </ol>
+            <ul>
+                <li class="add-cart add-cart-im"><b>加入购物车</b></li>
+                <li class="buy-now buy-now-im"><b>立即购买</b></li>
+            </ul>
+
+        </div>
+    </div>
+    <div class="bg"></div>
+    <div class="classify-main">
+        <h3>选择(库存 <b>99</b> 件)</h3>
+        <ul>
+        </ul>
+        <div class="buy-bar-right buy-bar-long">
+            <ol>
+                <dl><b>已售完,紧急补货中</b></dl>
+            </ol>
+            <ul>
+                <li class="add-cart add-cart-long"><b>加入购物车</b></li>
+                <li class="buy-now buy-now-not"><b>立即购买</b></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var ProductID = /*207404*/172423;
+        var productinfoobject = {};
+
+        function eachstyle() {
+            $('.classify-main>ul>li').each(function () {
+                var $class = $(this).attr("class");
+                if ($class == "classify-active") {
+                    $('.check-classify span').text("已选:" + $(this).text()).attr("data-checked", "true");
+                    return;
+                }
+            })
+        }
+
+        //当前商品信息展示不包括选择样式
+        $.ajax({
+            url: api + "/Product/ProductDetailV2",
+            type: "POST",
+            data: {Product_ID: ProductID},
+            dataType: "json",
+            success: function (data) {
+                if (data) {
+
+                    var msg = data.Data;
+                    console.log(msg)
+                    productinfoobject = {
+                        "productId": ProductID,
+//                        "productImg": msg.Imgs[0].Url ? msg.Imgs[0].Url : "",
+
+                        "productName": msg.Name,
+                        "productPrice": msg.Price,
+                        "productMarketPrice": msg.MarketPrice,
+                    };
+                    if (msg.Imgs.length > 0) {
+                        productinfoobject.productImg = msg.Imgs[0].Url;
+                    } else {
+                        productinfoobject.productImg = ""
+                    }
+                    //此处为商品详细轮播图
+                    if (msg.Imgs.length == 1) {
+                        var $li = '<div class="swiper-slide"> <img src="' + msg.Imgs[0].Url + '" alt=""> </div>'
+                        $('.swiper-container>.swiper-wrapper').append($li)
+                    } else {
+                        for (var i = 0; i < msg.Imgs.length; i++) {
+                            var $li = '<div class="swiper-slide"> <img src="' + msg.Imgs[i].Url + '" alt=""> </div>'
+                            $('.swiper-container>.swiper-wrapper').append($li)
+                        }
+                        var mySwiper = new Swiper('.swiper-container', {
+                            direction: 'horizontal',
+                            pagination: '.swiper-pagination',
+                        });
+                    }
+                    //此处为详情页title价格信息
+                    $('.product-info-main ul li:first-child').text(msg.Name);
+                    $('.low-price').text(msg.Price);
+                    $('.high-price').text("¥" + msg.MarketPrice)
+                    if (msg.PriceTarget1) {
+                        $('.phone-only span').text(msg.PriceTarget1)
+                    }
+                    if (msg.PriceTarget2) {
+                        $('.product-discount span').text(msg.PriceTarget2)
+                    }
+                    if (parseFloat(msg.Price) > 200) {
+                        console.log("免运费")
+                    } else {
+                        $('.product-Freight').text("10元")
+                    }
+                    $('.product-Sales').text(msg.SellCount)
+                    //商品大图
+//                    if()
+                    if (msg.ProductDesc) {
+                        for (var i = 0; i < msg.ProductDesc.List.length; i++) {
+                            if (msg.ProductDesc.List[i].Content) {
+                                $('.product-disc').before("<img src='" + msg.ProductDesc.List[i].Content + "'/>")
+                            }
+                        }
+                    }
+
+                    //商品文字描述
+                    if (msg.ProductParams) {
+                        for (var i = 0; i < msg.ProductParams.length; i++) {
+                            var $li = $('<li><b>' + msg.ProductParams[i].Name + '</b><p>' + msg.ProductParams[i].Value + '</p></li>');
+                            $('.product-disc ul').append($li)
+                        }
+                    }
+                }
+            }
+        });
+
+        //当前商品选择样式
+        $.ajax({
+            url: api + "/Product/ProductItem",
+            type: "post",
+            data: {Product_ID: ProductID},
+            dataType: "json",
+            success: function (data) {
+                var msg = data.Data;
+                console.log(msg)
+                if (msg.length != 0) {
+                    for (var i = 0; i < msg.length; i++) {
+                        var $li = $("<li data_Color_ID='" + msg[i].Color_ID + "' data_Stock='" + msg[i].Stock + "' data_Style_ID='" + msg[i].Style_ID + "' data_Style_Nm='" + msg[i].Style_Nm + "'>" + msg[i].Color_Nm + "</li>")
+                        $('.classify-main ul').append($li)
+                    }
+                    $('.classify-main h3 b').text(msg[0].Stock);
+                    $('.classify-main ul li:first-child').addClass("classify-active");
+
+                }
+
+                //多种样式
+                if (msg.length > 1) {
+                    //加入购物车或者购买弹出选择样式
+                    $(".check-classify,.add-cart-im").click(function () {
+                        $('.bg').show();
+                        $('.classify-main').slideDown();
+                    });
+                    //关闭弹窗
+                    $('.bg').click(function () {
+                        $('.bg').hide();
+                        $('.classify-main').slideUp();
+                        eachstyle()
+                    });
+
+                    //非弹出层按钮购买
+                    $('.buy-now-im').click(function () {
+//                        $('.')
+                        if ($('.check-classify span').attr("data-checked") != "true") {
+                            $('.bg').show();
+                            $('.classify-main').slideDown();
+                        } else {
+                            dataGo()
+                        }
+                    })
+
+                    //弹出层按钮购买
+                    $('.buy-now-not').click(function () {
+                        dataGo()
+                    })
+
+//                    选择样式
+                    $(document).on("click", ".classify-main>ul>li", function () {
+                        $(this).addClass("classify-active").siblings().removeClass("classify-active");
+                        $('.classify-main h3 b').text($(this).attr("data_Stock"))
+                        if ($(this).attr("data_Stock") == 0) {
+                            $(".classify-main ol").show();
+                            $('.classify-main ul').hide();
+                        } else {
+                            $(".classify-main ol").hide();
+                            $('.classify-main ul').show();
+                        }
+                    })
+
+
+                    //点击弹出框购物车关闭弹窗
+                    $('.add-cart-long').click(function () {
+                        $('.bg').hide();
+                        $('.classify-main').slideUp()
+                        eachstyle()
+
+                    })
+                }
+                //购买跳转及带数据过去
+                function dataGo() {
+                    if (msg.length > 1) {
+                        $('.classify-main ul li').each(function () {
+                            if ($(this).attr("class") == "classify-active") {
+                                productinfoobject.productStyle = $(this).text();
+                                productinfoobject.productColorId = $(this).attr("data_color_id");
+                                productinfoobject.productStock = $(this).attr("data_tock");
+                                productinfoobject.productStyleId = $(this).attr("data_style_id");
+                                productinfoobject.productStyleNm = $(this).attr("data_style_nm");
+                                return true;
+                            }
+                        });
+                    } else {
+                        $('.classify-main ul li').each(function () {
+                            if ($(this).attr("class") == "classify-active") {
+                                productinfoobject.productStyle = $(this).text();
+                                productinfoobject.productColorId = $(this).attr("data_color_id");
+                                productinfoobject.productStock = $(this).attr("data_tock");
+                                productinfoobject.productStyleId = $(this).attr("data_style_id");
+                                productinfoobject.productStyleNm = $(this).attr("data_style_nm");
+                                return true;
+                            }
+                        });
+                    }
+                    console.log(productinfoobject);
+                    productinfoobject = JSON.stringify(productinfoobject);
+                    localStorage.setItem("productInfo", productinfoobject);
+
+//                        return;
+                    window.location.href = "buysoon.html?ProductID=" + ProductID
+
+                }
+
+//                只有一种样式
+                if (msg.length == 1) {
+                    $('.check-classify').hide();
+                    $('.buy-now-im').click(function () {
+                        dataGo();
+                    })
+                }
+            }
+        });
+
+
+    })
+</script>
+</body>
+</html>

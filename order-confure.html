@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+    <title>订单确认</title>
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/rem.js"></script>
+    <script src="js/own.js"></script>
+    <link rel="stylesheet" href="css/own.css">
+    <style>
+
+    </style>
+</head>
+<body>
+<div id="main">
+    <div class="down-btn">
+        <ul>
+            <li><img src="images/logo.png" alt=""></li>
+            <li><a href="###"><span>一键下载</span></a></li>
+        </ul>
+    </div>
+    <div class="top-title">
+        <div class="center-word shop-cart-center">
+            <img src="images/ddqr.png" alt="">
+            <span>订单确认</span>
+        </div>
+        <div class="nav-list">
+            <p><img src="images/gd.png" alt=""></p>
+            <div class="hide-nav">
+                <i><img src="images/sj.png" alt=""></i>
+                <ul>
+                    <li class="nav-list-active"><img src="images/rxcp.png" alt=""><span>热销产品</span></li>
+                    <li><img src="images/fljp.png" alt=""><span>分类精品</span></li>
+                    <li><img src="images/gwc.png" alt=""><span>购物车</span></li>
+                    <li><img src="images/grzx.png" alt=""><span>个人中心</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="order-cofiure-top">
+        <div class="buy-suc-div-b">
+            <div class="buy-suc-div-b-l">
+                <img src="images/suozaidiqu.png" alt="">
+            </div>
+            <div class="buy-suc-div-b-r">
+                <ul>
+                    <li><span>收货人：<b>胡萝卜</b></span><b>13838384388</b></li>
+                    <li>江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号</li>
+                </ul>
+            </div>
+            <img src="images/b.png" alt="">
+        </div>
+    </div>
+    <div class="shop-cart-check order-confiure-center">
+        <div class="shop-cart-check-list">
+            <div class="shop-cart-product-info">
+                <img src="images/nf.png" alt="">
+                <div class="shop-cart-product-disc">
+                    <ul>
+                        <li>Nutrilon诺优能幼儿配方奶粉3段双罐装 荷兰牛栏进口</li>
+                        <li>颜色分类: <b>蓝装</b></li>
+                        <li>
+                            <div class="shop-cart-product-price">
+                                <b>¥</b>
+                                <span class="product-price-this">689</span>
+                                <del>¥1200</del>
+                            </div>
+                            <div class="shop-cart-product-number">
+                                <p>X56</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="shop-cart-check-list">
+            <div class="shop-cart-product-info">
+                <img src="images/nf.png" alt="">
+                <div class="shop-cart-product-disc">
+                    <ul>
+                        <li>Nutrilon诺优能幼儿配方奶粉3段双罐装 荷兰牛栏进口</li>
+                        <li>颜色分类: <b>蓝装</b></li>
+                        <li>
+                            <div class="shop-cart-product-price">
+                                <b>¥</b>
+                                <span class="product-price-this">689</span>
+                                <del>¥1200</del>
+                            </div>
+                            <div class="shop-cart-product-number">
+                                <p>X56</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="order-pay">
+        <h3><img src="images/zffs.png" alt=""><span>支付方式</span></h3>
+        <ul>
+            <li><img src="images/zhifubao.png" alt=""> <b>支付宝</b><span>推荐支付宝用户使用</span><img src="images/xuanzhe2.png" alt=""></li>
+            <li><img src="images/weixin.png" alt=""> <b>微信支付</b><img src="images/xuanzhe2.png" alt=""></li>
+        </ul>
+    </div>
+    <div class="shop-cart-bar order-cofiure-bottom">
+        <p>注：每笔订单满200元包邮；未满200元，收取10元运费  (全场商品适用)</p>
+        <div class="shop-cart-bar-l">
+            <ul>
+                <li>总计：</li>
+                <li><b>¥</b><span>3000.00</span></li>
+            </ul>
+        </div>
+        <div class="shop-cart-bar-r">
+            <p><span>结算</span>(<b>3</b>)</p>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var wxPay = localStorage.getItem("wxPayinfo");
+        var productAddr = localStorage.getItem("productInfo");
+        console.log(wxPay);
+        console.log(productAddr)
+    })
+</script>
+</body>
+</html>
