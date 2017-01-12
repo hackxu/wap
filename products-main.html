@@ -10,6 +10,7 @@
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/own.js"></script>
     <script src="js/rem.js"></script>
+    <script src="js/Jquery.Query.js"></script>
     <script src="js/swiper-3.4.1.jquery.min.js"></script>
     <link rel="stylesheet" href="css/own.css">
     <link rel="stylesheet" href="css/swiper-3.4.1.min.css">
@@ -119,7 +120,7 @@
 </div>
 <script>
     $(function () {
-        var ProductID = /*207404*/172423;
+        var ProductID = $.query.get("productId");
         var productinfoobject = {};
 
         function eachstyle() {

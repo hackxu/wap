@@ -244,10 +244,11 @@
                             var wxPay = JSON.stringify(msg);
                             console.log(wxPay)
                             productsStyles.Phone = $phone;
-                            productsStyles.Address = $('.check-address-more').text() + $('.check-address-jie b').text() + $addrmore;
+                            productsStyles.Address = $('.check-address-more p').text() + $('.check-address-jie b').text() + $addrmore;
                             productsStyles.Reman = $reman;
                             productsStyles = JSON.stringify(productsStyles);
                             localStorage.setItem("wxPayinfo", wxPay);
+                            localStorage.setItem("productInfo",productsStyles)
                             window.location.href="order-confure.html";
 
                         }

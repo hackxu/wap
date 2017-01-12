@@ -55,28 +55,7 @@
             <img src="images/b.png" alt="">
         </div>
     </div>
-    <div class="shop-cart-check order-confiure-center">
-        <div class="shop-cart-check-list">
-            <div class="shop-cart-product-info">
-                <img src="images/nf.png" alt="">
-                <div class="shop-cart-product-disc">
-                    <ul>
-                        <li>Nutrilon诺优能幼儿配方奶粉3段双罐装 荷兰牛栏进口</li>
-                        <li>颜色分类: <b>蓝装</b></li>
-                        <li>
-                            <div class="shop-cart-product-price">
-                                <b>¥</b>
-                                <span class="product-price-this">689</span>
-                                <del>¥1200</del>
-                            </div>
-                            <div class="shop-cart-product-number">
-                                <p>X56</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <div class="shop-cart-check order-confiure-center order-list">
         <div class="shop-cart-check-list">
             <div class="shop-cart-product-info">
                 <img src="images/nf.png" alt="">
@@ -121,10 +100,26 @@
 </div>
 <script>
     $(function () {
-        var wxPay = localStorage.getItem("wxPayinfo");
-        var productAddr = localStorage.getItem("productInfo");
+        var wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
+        var productAddr = JSON.parse(localStorage.getItem("productInfo"));
         console.log(wxPay);
         console.log(productAddr)
+        function setAddr() {
+            $(".buy-suc-div-b-r ul li:eq(0) span b").text(productAddr.Reman);
+            $(".buy-suc-div-b-r ul li:eq(0) > b").text(productAddr.Phone);
+            $(".buy-suc-div-b-r ul li:eq(1)").text(productAddr.Address);
+//            if()
+            $('.order-list .shop-cart-product-info>img').attr("src",productAddr.productImg);
+            $('.order-list .shop-cart-product-disc ul li:eq(0)').text(productAddr.productName);
+            $('.order-list .shop-cart-product-disc ul li:eq(1) b').text(productAddr.productStyle);
+            $('.product-price-this').text(productAddr.productPrice);
+            $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
+            $('.shop-cart-product-number p').text("X1")
+            $('.shop-cart-check-list').click(function () {
+                window.location.href="products-main.html?productId="+productAddr.productId;
+            })
+        }
+        setAddr()
     })
 </script>
 </body>
