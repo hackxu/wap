@@ -49,7 +49,7 @@
         <div class="add-address-write">
             <ul>
                 <li><img src="images/shouhuoren.png" alt=""><span>收货人：</span><input type="text"></li>
-                <li><img src="images/lianxidianhua.png" alt=""><span>联系电话：</span><input type="text"></li>
+                <li><img src="images/lianxidianhua.png" alt=""><span>联系电话：</span><input type="number"></li>
                 <li class="check-address-more"><img src="images/suozaidiqu.png" alt=""><span>所在地区：</span><img
                         src="images/b.png" alt="">
                     <p><b class="Province"></b><b class="City"></b><b class="Area"></b></p></li>
@@ -135,6 +135,8 @@
         var productsStyles;
         var addarr = [];
         $('.btn').click(function () {
+            $('.loading').show();
+
             var $reman = $('.add-address-write ul li:eq(0) input').val();
             var $phone = $('.add-address-write ul li:eq(1) input').val();
             var $addr = $('.check-address-more  p').text();
@@ -249,7 +251,6 @@
                             productsStyles = JSON.stringify(productsStyles);
                             localStorage.setItem("wxPayinfo", wxPay);
                             localStorage.setItem("productInfo",productsStyles);
-                            $('.loading').show();
                             window.location.href="order-confure.html?buyType=buysoon";
 
                         }
@@ -299,9 +300,13 @@
             });
         });
 
-
+        //订单页商品跳转
+        $('.shop-cart-check-list').click(function () {
+            window.location.href = "products-main.html?productId=" + productsStyles.productId;
+        });
         //获取省市区
         $(document).on("click", ".all-address ul li", function () {
+//            alert("1")
             $('.loading').show()
             if ($(".all-address").attr("data-id") == 0) {
                 addarr.push($(this).find('span').text());

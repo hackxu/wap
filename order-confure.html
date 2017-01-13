@@ -11,6 +11,7 @@
     <script src="js/rem.js"></script>
     <script src="js/Jquery.Query.js"></script>
     <script src="js/own.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <link rel="stylesheet" href="css/own.css">
     <style>
 
@@ -82,9 +83,11 @@
     <div class="order-pay">
         <h3><img src="images/zffs.png" alt=""><span>支付方式</span></h3>
         <ul>
-            <li><img src="images/zhifubao.png" alt=""> <b>支付宝</b><span>推荐支付宝用户使用</span><img src="images/xuanzhe2.png"
-                                                                                            alt=""></li>
-            <li><img src="images/weixin.png" alt=""> <b>微信支付</b><img src="images/xuanzhe2.png" alt=""></li>
+            <li datapay="wx"><img src="images/weixin.png" alt=""> <b>微信支付</b><img class="wx" src="images/xuanzhe1.png"
+                                                                                  alt=""></li>
+
+            <li><img src="images/zhifubao.png" alt=""> <b>支付宝</b><span>推荐支付宝用户使用</span>
+                <img class="zfb" src="images/xuanzhe2.png" alt=""></li>
         </ul>
     </div>
     <div class="shop-cart-bar order-cofiure-bottom">
@@ -105,8 +108,10 @@
         var buyType = $.query.get("buyType");
         var wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
         var productAddr = JSON.parse(localStorage.getItem("productInfo"));
+        var paymode;
         console.log(wxPay);
-        console.log(productAddr)
+        console.log(productAddr);
+
         function setAddr() {
             $(".buy-suc-div-b-r ul li:eq(0) span b").text(productAddr.Reman);
             $(".buy-suc-div-b-r ul li:eq(0) > b").text(productAddr.Phone);
@@ -122,7 +127,7 @@
                     window.location.href = "products-main.html?productId=" + productAddr.productId;
                 });
                 if (productAddr.productPrice < 200) {
-                    $('.pay-price').text((parseFloat(productAddr.productPrice) + parseFloat(10)).toFixed(2) );
+                    $('.pay-price').text((parseFloat(productAddr.productPrice) + parseFloat(10)).toFixed(2));
                 } else {
                     $('.pay-price').text(productAddr.productPrice);
 
@@ -135,6 +140,107 @@
         }
 
         setAddr()
+
+        //选择微信支付或支付宝支付
+        $('.order-pay ul li').click(function () {
+            paymode = $(this).find("img").eq(1).attr("class");
+            if (paymode == "wx") {
+                $('.wx').attr("src", "images/xuanzhe1.png");
+                $('.zfb').attr("src", "images/xuanzhe2.png");
+                $(this).attr("dataPay", "wx").siblings().removeAttr("dataPay");
+            } else {
+                $('.wx').attr("src", "images/xuanzhe2.png");
+                $('.zfb').attr("src", "images/xuanzhe1.png");
+                $(this).attr("dataPay", "zfb").siblings().removeAttr("dataPay");
+            }
+        });
+
+//        $('.shop-cart-bar-r').click(function () {
+//            paymode = $('.order-pay ul li').each(function () {
+//                if ($(this).attr("dataPay")) {
+//                    paymode = $(this).attr("dataPay")
+//                }
+//            });
+//
+//            wx.config({
+//                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+//                appId: wxPay.WxPayParams.appid, // 必填，公众号的唯一标识
+//                timestamp: parseInt((new Date().getTime()) / 1000), // 必填，生成签名的时间戳
+//                nonceStr: wxPay.WxPayParams.nonce_str, // 必填，生成签名的随机串
+//                signature: wxPay.WxPayParams.sign,// 必填，签名，见附录1
+//                jsApiList: ["chooseWXPay"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+//            });
+//            wx.ready(function(){
+//
+//                // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+//                wx.chooseWXPay({
+//                    timestamp: parseInt((new Date().getTime()) / 1000), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+//                    nonceStr: wxPay.WxPayParams.nonce_str, // 支付签名随机串，不长于 32 位
+//                    package: "prepay_id=" + wxPay.WxPayParams.prepay_id, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+//                    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+//                    paySign: wxPay.WxPayParams.sign, // 支付签名
+//                    success: function (res) {
+//                        // 支付成功后的回调函数
+//                    }
+//                });
+//            });
+//        })
+        $('.shop-cart-bar-r').click(function () {
+            localStorage.setItem("OrderNo",wxPay.out_trand_no)
+            window.location.href="buy-success.html";
+            return false;
+//            区分支付方式
+//            console.log(paymode)
+            $(".order-pay ul li").each(function () {
+                if ($(this).attr("dataPay")) {
+                    paymode = $(this).attr("dataPay")
+                }
+            });
+
+            function onBridgeReady() {
+                var times = ((new Date().getTime()) / 1000).toString();
+//                alert(times.toString())
+//                alert(typeof times)
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest', {
+                        "appId": wxPay.WxPayParams.appid,     //公众号名称，由商户传入
+                        "timeStamp": times,         //时间戳，自1970年以来的秒数
+                        "nonceStr": wxPay.WxPayParams.nonce_str, //随机串
+                        "package": "prepay_id=" + wxPay.WxPayParams.prepay_id,
+                        "signType": "MD5",         //微信签名方式：
+                        "paySign": wxPay.WxPayParams.sign //微信签名
+                    },
+                    function (res) {
+                        if (res.err_msg == "get_brand_wcpay_request：ok") {
+
+                            localStorage.setItem("OrderNo",wxPay.out_trand_no)
+                        }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                    }
+                );
+            }
+
+            if (paymode == "wx") {
+                console.log(wxPay.prepay_id);
+                if (typeof WeixinJSBridge == "undefined") {
+                    if (document.addEventListener) {
+                        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                    } else if (document.attachEvent) {
+                        document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                        document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                    }
+                } else {
+                    onBridgeReady();
+                }
+
+            } else if (paymode == 'zfb') {
+
+            } else {
+
+            }
+
+
+        })
+
     })
 </script>
 </body>

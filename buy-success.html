@@ -44,9 +44,9 @@
         <div class="buy-suc-div-t">
             <div class="buy-suc-div-t-l">
                 <ul>
-                    <li>恭喜您，订单成功！</li>
+                    <li class="order-status">恭喜您，订单成功！</li>
                     <li>宝贝很快就会送到您手上！</li>
-                    <li>订单号:<b>13231231321323</b></li>
+                    <li>订单号:<b class="order-no">13231231321323</b></li>
                 </ul>
             </div>
             <div class="buy-suc-div-t-r">
@@ -67,65 +67,42 @@
         </div>
     </div>
     <div class="trendtoys-list-main">
-        <div class="trendtoys-list">
-            <div class="trendtoys-list-l">
-                <img src="images/t4.jpg" alt="">
-            </div>
-            <div class="trendtoys-list-r">
-                <img src="images/bq.png" alt="">
-                <p>JELLYCAT害羞邦尼兔卡其色</p>
-                <b>节日聚惠</b>
-                <div class="trendtoys-list-r-div">
-                    <div class="trendtoys-list-r-div-l">
-                        <p><b>¥</b><span>689</span></p>
-                        <del>¥1200</del>
-                    </div>
-                    <div class="trendtoys-list-r-div-r">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="trendtoys-list">
-            <div class="trendtoys-list-l">
-                <img src="images/t4.jpg" alt="">
-            </div>
-            <div class="trendtoys-list-r">
-                <img src="images/bq.png" alt="">
-                <p>JELLYCAT害羞邦尼兔卡其色</p>
-                <b>节日聚惠</b>
-                <div class="trendtoys-list-r-div">
-                    <div class="trendtoys-list-r-div-l">
-                        <p><b>¥</b><span>689</span></p>
-                        <del>¥1200</del>
-                    </div>
-                    <div class="trendtoys-list-r-div-r">
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="trendtoys-list">
-            <div class="trendtoys-list-l">
-                <img src="images/t4.jpg" alt="">
-            </div>
-            <div class="trendtoys-list-r">
-                <img src="images/bq.png" alt="">
-                <p>JELLYCAT害羞邦尼兔卡其色</p>
-                <b>节日聚惠</b>
-                <div class="trendtoys-list-r-div">
-                    <div class="trendtoys-list-r-div-l">
-                        <p><b>¥</b><span>689</span></p>
-                        <del>¥1200</del>
-                    </div>
-                    <div class="trendtoys-list-r-div-r">
-
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
 </div>
+<script>
+    $(function () {
+        var $OrderNo = localStorage.getItem("OrderNo");
+        $.ajax({
+            url: orderapi+"/Order/paySuccess",
+            type:"post",
+            data:{"OrderNo":$OrderNo},
+            success:function (data) {
+                var msg = data.Data;
+                console.log(msg)
+                if(msg){
+                    $('.order-no').text($OrderNo);
+                    $('.buy-suc-div-b .buy-suc-div-b-r ul li:eq(1) span').text(msg.ReceiveMan)
+                    $('.buy-suc-div-b .buy-suc-div-b-r ul li:eq(1) b').text(msg.Phone)
+                    $('.buy-suc-div-b .buy-suc-div-b-r ul li:eq(2)').text(msg.Province + msg.City + msg.Area +msg.Street +msg.DetailAddress)
+
+                    //推荐列表
+                    for(var i =0;i<msg.ADList.length;i++){
+                        var $div = $('<div class="trendtoys-list" dataProductId="'+ msg.ADList[i].ActionData.ProductID+'"> <div class="trendtoys-list-l"> <img src="'+ msg.ADList[i].ShowData.ImgUrl+'" alt=""> </div> <div class="trendtoys-list-r"> <img src="images/bq.png" alt=""> <p>'+ msg.ADList[i].ShowData.Title+'</p><div class="trendtoys-list-r-div"> <div class="trendtoys-list-r-div-l"> <p><b>¥</b><span>'+ msg.ADList[i].ShowData.Price+'</span></p> <del>'+ msg.ADList[i].ShowData.MarketPrice+'</del> </div> <div class="trendtoys-list-r-div-r" > </div> </div> </div> </div>')
+                        $('.trendtoys-list-main').append($div)
+                    }
+                }
+
+            }
+        });
+        $(document).on("click",".trendtoys-list",function () {
+
+//        })
+//        $('.trendtoys-list').click(function () {
+            var productId = $(this).attr("dataProductId");
+            window.location.href = "products-main.html?productId="+productId
+        })
+    })
+</script>
 </body>
 </html>

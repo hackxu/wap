@@ -63,6 +63,7 @@ $(function () {
 
     $(".alert b").click(function () {
         $(".bg").hide();
-        $('.alert').hide()
+        $('.alert').hide();
+        $('.loading').hide()
     })
 })

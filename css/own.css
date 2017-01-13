@@ -3,7 +3,14 @@ ul { list-style: none }
 a { text-decoration: none; color: #000; }
 img { display: block; border: none }
 b{ font-weight:300;}
-input{ outline:none;}
+input{ outline:none;border-radius: 0;}
+input[type="button"], input[type="submit"], input[type="reset"] {
+ -webkit-appearance: none;
+}
+input{
+ -webkit-appearance: none;
+}
+textarea {  -webkit-appearance: none;}
 body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 #main { max-width: 640px; height: auto; overflow: hidden; margin: 0 auto }
 .down-btn { width: 100%; height: auto; overflow: hidden; background: #f2f2f2; height: 2.75rem }
@@ -112,7 +119,7 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 /*.reandtoys-list ul li:nth-child(2) img{ margin-bottom:.2rem;}*/
 .reandtoys-list ul li span{font-size: .5rem}
 .trendtoys-list-main{ width:100%; overflow: hidden; height:auto; margin-bottom:2rem;}
-.trendtoys-list{width: 96%; height:8.5rem;margin: 0 auto; margin-top:.32rem;border-radius: 5px;background: #fff; }
+.trendtoys-list{width: 96%; height:8.5rem;margin: 0 auto; margin-top:.42rem;border-radius: 5px;background: #fff; cursor: pointer;}
 .trendtoys-list-l{ width:55.6%; overflow: hidden; float: left;border-bottom-left-radius: 5px;border-top-left-radius: 5px }
 .trendtoys-list-l img{ width:100%;}
 .trendtoys-list-r{ width:40%; float: right; position: relative;  height:100%;}
@@ -167,7 +174,7 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 .classify-main h3 b{ color: #e82c1d;}
 .buy-bar-long{ width:100%; }
 .classify-main>ul{ margin-left:.5rem; margin-bottom:.3rem; overflow: hidden;}
-.classify-main>ul>li{ width:2.1rem; height:.9rem; float: left; line-height:.95rem;text-align: center;border-radius: 3px;color: #808080;background: #eeeeee; margin-bottom:.3rem; margin-right:.3rem;}
+.classify-main>ul>li{ width:2.1rem; height:.9rem; float: left; cursor: pointer; line-height:.95rem;text-align: center;border-radius: 3px;color: #808080;background: #eeeeee; margin-bottom:.3rem; margin-right:.3rem;}
 .classify-main>ul>li.classify-active{ color: #ffffff!important;background: #ce2a1f!important;}
 .car-position{ position: relative; overflow: hidden;}
 .car-position b{ width:.7rem; height:.7rem;border-radius: 100px;background: #ce2a1f; display: block; position: absolute; top:.35rem; right:.4rem;text-align: center; line-height:.7rem; color: #ffffff;font-size: .5rem}
@@ -251,7 +258,7 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 
 .order-cofiure-top .buy-suc-div-b { position: relative; padding: 0 6%}
 .order-cofiure-top .buy-suc-div-b-r { margin-right:.2rem; }
-.order-cofiure-top .buy-suc-div-b>img{ position: absolute; right:.4rem; top:1rem; width:.3rem;}
+.order-cofiure-top .buy-suc-div-b>img{ position: absolute; right:.4rem; top:1rem; width:.3rem; cursor: pointer;}
 
 .go-login { width: 100%; height: auto; overflow: hidden; padding: .44rem; }
 .go-login p { text-align: center; line-height: .9rem; font-size: .6rem; color: #333333; }
@@ -277,10 +284,10 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 .auth-phone-t ul li p:last-child span{ color: #d02116;}
 .auth-phone-t ul li p:last-child img{ width:.7rem;}
 .auth-phone .login-div{margin: 0rem auto; margin-bottom:.8rem;}
-.auth-phone .login-div ul li:first-child input{border-top: 1px solid #e5e5e5;border-bottom: 1px solid #e5e5e5}
+.auth-phone .login-div ul li:first-child input{border-top: 1px solid #e5e5e5;/*border-bottom: 1px solid #e5e5e5*/}
 .btn{ width:78.2%; height:1.72rem; overflow: hidden;margin: 1.5rem auto;text-align: center;font-size: .75rem;background:#eb514f; line-height:1.72rem; color: #ffffff;border-radius: 5px;}
 .all-address{ width:100%; height:auto; overflow: hidden; position: absolute; top:0; left:0;background: #fff; z-index:3; display: none;}
-.all-address ul li{ width:95%;padding: .5rem 0;font-size: .6rem; overflow: hidden;margin: 0 auto;border-bottom: 1px solid #e5e5e5;}
+.all-address ul li{ width:95%;padding: .5rem 0;font-size: .6rem; overflow: hidden;margin: 0 auto;border-bottom: 1px solid #e5e5e5; cursor: pointer;}
 .all-address ul li span{ float: left;font-size: .6rem; margin-left:.5rem;}
 .all-address ul li img{ float: right; width:2.5%; margin-right:.5rem;}
 .addanaddress{ margin-top:.4rem;}
@@ -292,7 +299,7 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 .product-img>img{ width:100%;}
 
 
-.loading{ width:100%; height:100%; overflow: hidden;background: rgba(0,0,0,.5); position: absolute; left:0; top:0; z-index:13; display: none;}
+.loading{ width:100%; height:100%; overflow: hidden;background: rgba(0,0,0,.5); position: fixed; left:0; top:0; z-index:13; display: none;}
 .wai{ position: absolute; left:50%; top:50%; overflow: hidden; height:60px; -webkit-transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); -o-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
 .spinner {
  width: 60px;
@@ -336,6 +343,6 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
    }
 }
 
-.alert{ width:60%; height:7rem; overflow: hidden;margin: 0 auto; position: fixed; top:50%; left:50%; -webkit-transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); -o-transform: translate(-50%, -50%); transform: translate(-50%, -50%);border: 2px solid #e60000;border-radius: .5rem;background: #fff;display: none;z-index: 5}
+.alert{ width:60%; height:7rem; overflow: hidden;margin: 0 auto; position: fixed; top:50%; left:50%; -webkit-transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); -o-transform: translate(-50%, -50%); transform: translate(-50%, -50%);border: 2px solid #e60000;border-radius: .5rem;background: #fff;display: none;z-index: 14}
 .alert p{ width: 80%; line-height:.9rem;font-size: .6rem;margin: 1rem auto; min-height:3rem;text-align: center;}
 .alert b{ display: block;width:80%; height:1.4rem;border-radius: 5px;font-size:.6rem ;text-align: center; line-height:1.6rem; color: #ffffff;background: #e60000;margin: 0 auto;}
