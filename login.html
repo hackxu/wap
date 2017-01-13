@@ -43,16 +43,68 @@
             <a href="###">快捷购买</a>
         </div>
     </div>
+    <div class="alert">
+        <p>房价快速的减肥倒计时的风景 家居服</p>
+        <b>确&nbsp;&nbsp;&nbsp;&nbsp;定</b>
+    </div>
+    <div class="bg"></div>
     <div class="login-div">
         <ul>
-            <li><img src="images/shouji.png" alt=""><input type="number" placeholder="请输入手机号"></li>
-            <li><img src="images/key.png" alt=""><input type="number" placeholder="请输入验证码"><input class="get-code" type="button" value="获取验证码"></li>
+            <li><img src="images/shoujihao.png" alt=""><input type="number" class="phone" placeholder="请输入手机号"></li>
+            <li><img src="images/mima.png" alt=""><input class="authcode" type="number" placeholder="请输入验证码"><input class="get-code" data-type="login" type="button" value="获取验证码"></li>
             <button type="button">提&nbsp;&nbsp;交</button>
         </ul>
     </div>
 </div>
 <script>
+    $(function () {
+        $('.login-div button').click(function () {
+            var $phone = $('.phone').val();
+            var $authcode = $('.authcode').val();
+            if(!re.test($phone)){
+                showBg()
+                $('.alert p').text("请检查联系电话是否填写正确");
+                return false;
 
+            }else if($authcode == ""){
+                showBg()
+                $('.alert p').text("请检查验证码是否填写");
+                return false;
+            }else{
+                $.ajax({
+                    url:api+"/Account/LoginBySms",
+                    type:"post",
+                    data:{"Phone":$phone,"SmsCode":$authcode,"ClientType":2},
+                    success:function (data) {
+                        console.log(data)
+                            var msg = data.Data;
+                            if(data.Code != 200){
+                                showBg()
+                                $('.alert p').text(data.Message);
+                                return false;
+                            }else {
+                                var userInfo = {
+                                    "CusNo":msg.CusNo,
+                                    "NickName":msg.NickName,
+                                    "Phone":msg.Phone,
+                                    "NeedBind":msg.NeedBind,
+                                    "IsBindTel":msg.IsBindTel,
+                                    "Points":msg.Points,
+                                    "Name":msg.Name,
+                                    "HeadUrl":msg.HeadUrl,
+                                };
+                                userInfo = JSON.stringify(userInfo);
+                                var $userInfo = localStorage.setItem("userInfo",userInfo);
+                                window.location.href="PersonalCenter.html"
+                            }
+
+
+
+                    }
+                })
+            }
+        })
+    })
 
 </script>
 </body>

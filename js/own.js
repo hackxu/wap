@@ -35,10 +35,22 @@ $(function () {
             var time = 60;
             $getcode.addClass("hui").val(time + "秒");
             if($(this).attr("data-type") == "Order"){
+                //快速购买获取验证码
                 $.ajax({
                     url:api+"/Common/SendSms",
                     type:"post",
                     data:{"Phone":$phone,"ActionType":"6"},
+                    success:function (data) {
+                        console.log(data)
+
+                    }
+                })
+            }else{
+                // 登陆注册获取验证码
+                $.ajax({
+                    url:api+"/Common/SendSms",
+                    type:"post",
+                    data:{"Phone":$phone,"ActionType":"5"},
                     success:function (data) {
                         console.log(data)
 
