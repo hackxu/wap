@@ -4,6 +4,7 @@
 var api = "http://test-webapi.ymws.jstv.com:80";
 var orderapi = "http://test-orderapi.ymws.jstv.com:80";
 var re = /^1[34578]\d{9}$/;
+var addarr = [];
 
 
 function showBg() {
@@ -78,4 +79,97 @@ $(function () {
         $('.alert').hide();
         $('.loading').hide()
     })
+
+
+    // 地区选择
+    $('.check-address-more').click(function () {
+        $('.loading').show();
+        $('.all-address').attr("data-id", "0")
+        $('.main').hide();
+        $.ajax({
+            url: api + "/Common/Addr?value=0",
+            type: "get",
+            success: function (data) {
+//                    console.log(data)
+                $('.loading').hide();
+                var msg = data.Data;
+                $('.all-address ul').empty();
+                for (var i = 0; i < msg.length; i++) {
+                    var $li = $('<li><span data-value="' + msg[i].Value + '">' + msg[i].Name + '</span><img src="images/b.png" alt=""></li>')
+                    $('.all-address ul').append($li)
+                }
+                $(".all-address").show();
+            }
+        });
+    });
+
+    //获取省市区
+    $(document).on("click", ".all-address ul li", function () {
+//            alert("1")
+        $('.loading').show()
+        if ($(".all-address").attr("data-id") == 0) {
+            addarr.push([$(this).find('span').text(),$(this).find("span").attr("data-value")]);
+
+            if (addarr.length < 3) {
+                $.ajax({
+                    url: api + "/Common/Addr?value=" + $(this).find("span").attr("data-value"),
+                    type: "get",
+                    success: function (data) {
+                        $('.loading').hide();
+                        var msg = data.Data;
+                        $('.all-address ul').empty();
+                        for (var i = 0; i < msg.length; i++) {
+                            var $li = $('<li><span data-value="' + msg[i].Value + '">' + msg[i].Name + '</span><img src="images/b.png" alt=""></li>')
+                            $('.all-address ul').append($li)
+                        }
+                        $(".all-address").show();
+                    }
+                });
+            } else if (addarr.length == 3) {
+                $('.check-address-jie').attr("data-value", $(this).find("span").attr("data-value"))
+                $('.Province').text(addarr[0][0]).attr("placeid",addarr[0][1])
+                $('.City').text(addarr[1][0]).attr("placeid",addarr[1][1])
+                $('.Area').text(addarr[2][0]).attr("placeid",addarr[2][1])
+                $('.main').show();
+                $('.loading').hide()
+                $('.all-address').hide();
+                $('.check-address-jie b').text("")
+                addarr = []
+            }
+            /*else if (addarr.length == 4) {
+             $('.check-address-jie b').text(addarr[3])
+             $('.main').show();
+             $('.all-address').hide()
+             }*/
+        }
+        if ($('.all-address').attr("data-id") == 1) {
+            $('.loading').hide()
+            $('.check-address-jie b').text($(this).find("span").text()).attr("placeid",$(this).find("span").attr("data-value"))
+            $('.main').show();
+            $('.all-address').hide()
+        }
+
+
+    })
+//            街道选择
+    $('.check-address-jie').click(function () {
+        $('.all-address').attr("data-id", "1")
+        $.ajax({
+            url: api + "/Common/Addr?value=" + $(this).attr("data-value"),
+            type: "get",
+            success: function (data) {
+                $(".main").hide();
+//                    console.log(data)
+                $('.loading').hide();
+                var msg = data.Data;
+                $('.all-address ul').empty();
+                for (var i = 0; i < msg.length; i++) {
+                    var $li = $('<li><span data-value="' + msg[i].Value + '">' + msg[i].Name + '</span><img src="images/b.png" alt=""></li>')
+                    $('.all-address ul').append($li)
+                }
+                $(".all-address").show();
+            }
+        })
+    })
+
 })

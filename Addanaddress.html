@@ -16,47 +16,155 @@
 </head>
 <body>
 <div id="main">
-    <div class="down-btn">
-        <ul>
-            <li><img src="images/logo.png" alt=""></li>
-            <li><a href="###"><span>一键下载</span></a></li>
-        </ul>
-    </div>
-    <div class="top-title">
-        <div class="center-word ">
-            <img src="images/tjdz.png" alt="">
-            <span>添加地址</span>
+    <div class="main">
+        <div class="down-btn">
+            <ul>
+                <li><img src="images/logo.png" alt=""></li>
+                <li><a href="###"><span>一键下载</span></a></li>
+            </ul>
         </div>
-        <div class="nav-list">
-            <p><img src="images/gd.png" alt=""></p>
-            <div class="hide-nav">
-                <i><img src="images/sj.png" alt=""></i>
-                <ul>
-                    <li class="nav-list-active"><img src="images/rxcp.png" alt=""><span>热销产品</span></li>
-                    <li><img src="images/fljp.png" alt=""><span>分类精品</span></li>
-                    <li><img src="images/gwc.png" alt=""><span>购物车</span></li>
-                    <li><img src="images/grzx.png" alt=""><span>个人中心</span></li>
-                </ul>
+        <div class="top-title">
+            <div class="center-word ">
+                <img src="images/tjdz.png" alt="">
+                <span>添加地址</span>
+            </div>
+            <div class="nav-list">
+                <p><img src="images/gd.png" alt=""></p>
+                <div class="hide-nav">
+                    <i><img src="images/sj.png" alt=""></i>
+                    <ul>
+                        <li class="nav-list-active"><img src="images/rxcp.png" alt=""><span>热销产品</span></li>
+                        <li><img src="images/fljp.png" alt=""><span>分类精品</span></li>
+                        <li><img src="images/gwc.png" alt=""><span>购物车</span></li>
+                        <li><img src="images/grzx.png" alt=""><span>个人中心</span></li>
+                    </ul>
+                </div>
             </div>
         </div>
+
+        <div class="addanaddress add-address-write">
+            <ul>
+                <li><img src="images/shouhuoren.png" alt=""><span>收货人：</span><input type="text"></li>
+                <li><img src="images/lianxidianhua.png" alt=""><span>联系电话：</span><input type="number"></li>
+                <li class="check-address-more"><img src="images/suozaidiqu.png" alt=""><span>所在地区：</span><img
+                        src="images/b.png" alt="">
+                    <p><b class="Province"></b><b class="City"></b><b class="Area"></b></p></li>
+                <li class="check-address-jie"><img src="images/jiedao.png" alt=""><span>街道：</span><img
+                        src="images/b.png"
+                        alt=""><b></b>
+                </li>
+                <li><img src="images/xiangxidizhi.png" alt=""><span>详细地址：</span><textarea name="" id="" cols="30"
+                                                                                          rows="10"></textarea></li>
+                <li></li>
+                <li><img src="images/czz.png" alt=""><span>设置为默认地址</span><img class="address-check"
+                                                                              src="images/xuanzhe2.png" alt=""></li>
+
+            </ul>
+        </div>
+        <div class="btn">
+            <span>提&nbsp;&nbsp;&nbsp;&nbsp;交</span>
+        </div>
     </div>
-    <div class="addanaddress add-address-write">
+    <div class="bg"></div>
+    <div class="alert">
+        <p></p>
+        <b>确&nbsp;&nbsp;&nbsp;&nbsp;定</b></div>
+    <div class="all-address">
         <ul>
-            <li><img src="images/shouhuoren.png" alt=""><span>收货人：</span><input type="text"></li>
-            <li><img src="images/lianxidianhua.png" alt=""><span>联系电话：</span><input type="text"></li>
-            <li class="check-address-more"><img src="images/suozaidiqu.png" alt=""><span>所在地区：</span><img src="images/b.png" alt=""><b class="qu">安徽省</b><b class="shi">安徽省</b><b class="sheng">annn</b></li>
-            <li class="check-address-jie"><img src="images/jiedao.png" alt=""><span>街道：</span><img src="images/b.png" alt=""><b>安徽省</b></li>
-            <li><img src="images/xiangxidizhi.png" alt=""><span>详细地址：</span><textarea name="" id="" cols="30"
-                                                                                      rows="10"></textarea></li>
-            <li></li>
-            <li><img src="images/czz.png" alt=""><span>设置为默认地址</span><img src="images/xuanzhe2.png" alt=""></li>
         </ul>
     </div>
-    <div class="btn">
-        <span>提&nbsp;&nbsp;&nbsp;&nbsp;交</span>
-    </div>
-
 
 </div>
+<script>
+    $(function () {
+        var userInfo = localStorage.getItem("userInfo");
+        if(userInfo){
+            userInfo = JSON.parse(userInfo)
+        }
+        $('.addanaddress ul li:eq(6)').click(function () {
+            if ($(this).attr("dataCheck") == "true") {
+                $(this).removeAttr("dataCheck")
+                        .find(".address-check").attr("src", "images/xuanzhe2.png");
+
+            } else {
+                $(this).attr("dataCheck", "true")
+                        .find(".address-check").attr("src", "images/xuanzhe1.png");
+
+            }
+        })
+        $(".btn").click(function () {
+
+            var $reman = $('.add-address-write ul li:eq(0) input').val();
+            var $phone = $('.add-address-write ul li:eq(1) input').val();
+            var $addr = $('.check-address-more  p').text();
+            var $street = $('.check-address-jie b').text();
+            var $addrmore = $('.add-address-write ul li:eq(4) textarea').val();
+            var $IsDefault = $('.add-address-write ul li:last-child').attr("dataCheck")
+            if ($reman.length < 2) {
+                showBg();
+                $('.alert p').text("请检查收货人是否填写");
+                return false
+            }
+            if (!re.test($phone)) {
+                showBg()
+                $('.alert p').text("请检查联系电话是否填写正确");
+                return false;
+            }
+            if ($addr == "") {
+                showBg()
+                $('.alert p').text("请检查地区是否选择");
+                return false;
+            }
+            if ($street == "") {
+                showBg()
+                $('.alert p').text("请检查街道是否选择");
+                return false;
+            }
+            if ($addrmore == "") {
+                showBg()
+                $('.alert p').text("请检查详细地址是否填写");
+                return false;
+            }
+            if ($IsDefault =="true") {
+                $IsDefault = 1
+            }else{
+                $IsDefault =0
+            }
+            var addrInfo = {
+                "CusNo":userInfo.CusNo ,
+                "Name": $reman,
+                "Phone": $phone,
+                "Province": $('.Province').text(),
+                "ProvinceId": $('.Province').attr("placeid"),
+                "City": $('.City').text(),
+                "CityId": $('.City').attr("placeid"),
+                "Area": $('.Area').text(),
+                "AreaId": $('.Area').attr("placeid"),
+                "Street": $('.check-address-jie b').text(),
+                "StreetId": $('.check-address-jie b').attr("placeid"),
+                "DetailAddr": $addrmore,
+                "IsDefault": $IsDefault
+            }
+           $.ajax({
+               url:api+"/Account/CusAddrAdd",
+               type:"post",
+               data:addrInfo,
+               success:function (data) {
+                   console.log(data);
+                   if(data.Code != 200){
+                       showBg();
+                       $('.alert p').text("添加失败");
+                       return false;
+
+                   }else{
+                       window.location.href="Addressmanagement.html"
+                   }
+               }
+           })
+
+        })
+
+    })
+</script>
 </body>
 </html>

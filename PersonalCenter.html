@@ -31,8 +31,8 @@
             </div>
             <div class="personal-center-list-top-center">
                 <a href="###">
-                    <img src="images/male.png" alt="">
-                    <p>点击登录</p>
+                    <img class="userimg" src="images/male.png" alt="">
+                    <p class="login-to username">点击登录</p>
                 </a>
             </div>
             <div class="nav-list">
@@ -51,8 +51,8 @@
         </div>
         <div class="personal-center-list-bottom">
             <ul>
-                <li><a href="###"><img src="images/dfk.png" alt=""><span>代付款</span></a></li>
-                <li><a href="###"><img src="images/dfh.png" alt=""><span>代发货</span></a></li>
+                <li><a href="###"><img src="images/dfk.png" alt=""><span>待付款</span></a></li>
+                <li><a href="###"><img src="images/dfh.png" alt=""><span>待发货</span></a></li>
                 <li><a href="###"><img src="images/dsh.png" alt=""><span>待收货</span></a></li>
                 <li><a href="###"><img src="images/sh.png" alt=""><span>售后/评价</span></a></li>
             </ul>
@@ -62,7 +62,7 @@
         <ul>
             <li class="personal-center-other-r-s personal-center-other-r"><a href="###"><img src="images/qbdd.png" alt=""><span>全部订单</span></a></li>
             <li class="personal-center-other-r personal-center-other-r-suo"><a href="###"><img src="images/jfzx.png" alt=""><span>积分中心</span></a></li>
-            <li class="personal-center-other-l personal-center-other-l-suo"><a href="###"><img src="images/dzgl.png" alt=""><span>地址管理</span></a></li>
+            <li class="personal-center-other-l personal-center-other-l-suo go-address"><a href="Addressmanagement.html"><img src="images/dzgl.png" alt=""><span>地址管理</span></a></li>
             <li class="personal-center-other-l personal-center-other-l-s"><a href="###"><img src="images/wdyhq.png" alt=""><span>我的优惠券</span></a></li>
         </ul>
     </div>
@@ -71,5 +71,25 @@
     </div>
 
 </div>
+<script>
+    $(function () {
+        var userInfo = localStorage.getItem("userInfo");
+        if(userInfo){
+            userInfo = JSON.parse(userInfo);
+            console.log(userInfo)
+//        控制当前信息展示
+            $('.username').text(userInfo.NickName);
+            $('.userimg').attr("src",userInfo.HeadUrl)
+            $('.personal-center-list-top-left span b').text(userInfo.Points);
+//            $('.go-address a').attr("data-CusNo",userInfo.CusNo)
+
+        }else{
+            $('.login-to').click(function () {
+                window.location.href="login.html"
+            })
+        }
+    })
+
+</script>
 </body>
 </html>

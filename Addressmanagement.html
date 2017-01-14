@@ -77,8 +77,24 @@
         </div>
     </div>
     <div class="add-address">
-        <a href="###">添加地址</a>
+        <a href="Addanaddress.html">添加地址</a>
     </div>
 </div>
+<script>
+    $(function () {
+        var userInfo = localStorage.getItem("userInfo");
+        if (userInfo){
+            $.ajax({
+                url:api + "/Account/CusAddressList",
+                type:"post",
+                data:{"CusNo":parseInt(userInfo.CusNo)},
+                success:function (data) {
+                    console.log(data)
+
+                }
+            })
+        }
+    })
+</script>
 </body>
 </html>
