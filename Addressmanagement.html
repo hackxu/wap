@@ -41,40 +41,6 @@
         </div>
     </div>
     <div class="address-list-main">
-        <div class="address-list">
-            <ul>
-                <li><span>收货人: <b>胡萝卜</b></span><span>13899997777</span></li>
-                <li><img src="images/suozaidiqu.png" alt="">
-                    <p>收货地址： <b>江苏省南京市玄武区北京东路4号23楼江苏省南京市玄武区北京东路4号23楼</b></p></li>
-                <li>
-                    <div class="check-default">
-                        <img src="images/xuanzhe2.png" alt="">
-                        <span>设为默认</span>
-                    </div>
-                    <div class="manage">
-                        <p><a href="###"><img src="images/xiangxidizhi.png" alt=""><span>编辑</span></a></p>
-                        <p><img src="images/shanchu.png" alt=""><span>删除</span></p>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="address-list">
-            <ul>
-                <li><span>收货人: <b>胡萝卜</b></span><span>13899997777</span></li>
-                <li><img src="images/suozaidiqu.png" alt="">
-                    <p>收货地址： <b>江苏省南京市玄武区北京东路4号23楼江苏省南京市玄武区北京东路4号23楼</b></p></li>
-                <li>
-                    <div class="check-default">
-                        <img src="images/xuanzhe2.png" alt="">
-                        <span>设为默认</span>
-                    </div>
-                    <div class="manage">
-                        <p><a href="###"><img src="images/xiangxidizhi.png" alt=""><span>编辑</span></a></p>
-                        <p><img src="images/shanchu.png" alt=""><span>删除</span></p>
-                    </div>
-                </li>
-            </ul>
-        </div>
     </div>
     <div class="add-address">
         <a href="Addanaddress.html">添加地址</a>
@@ -83,17 +49,94 @@
 <script>
     $(function () {
         var userInfo = localStorage.getItem("userInfo");
-        if (userInfo){
+        console.log(userInfo)
+
+        //判断用户信息是否存在并且获取地址列表
+        if (userInfo) {
+            userInfo = JSON.parse(userInfo)
             $.ajax({
-                url:api + "/Account/CusAddressList",
+                url: api + "/Account/CusAddressList",
+                type: "post",
+                data: {"CusNo": parseInt(userInfo.CusNo)},
+                success: function (data) {
+                    console.log(data)
+                    if (data.Code != 200) {
+                        console.log("失败")
+                    } else {
+                        var msg = data.Data;
+                        for (var i = 0; i < msg.length; i++) {
+                            var isdefault = ( msg[i].IsDefault == 1) ? 'images/xuanzhe1.png' : 'images/xuanzhe2.png';
+                            var isdefaultf = ( msg[i].IsDefault == 1) ? '默认地址' : '设为默认';
+                            console.log(isdefault)
+                            var $addrList = $('<div class="address-list"> <ul> <li><span>收货人: <b class="user-addr-name">' + msg[i].Name + '</b></span><span class="user-addr-phone">' + msg[i].Phone + '</span></li> <li><img src="images/suozaidiqu.png" alt=""> <p class="addr-info" data-province="'+ msg[i].Province+'" data-city="'+ msg[i].City+'" data-area="'+ msg[i].Area+'" data-street="'+ msg[i].Street+'" data-addrmore="'+ msg[i].DetailAddr+'" data-provinceid="'+ msg[i].ProvinceId+'" data-cityId="'+ msg[i].CityId+'" data-areaid="'+ msg[i].AreaId+'" data-streetid="'+ msg[i].StreetId+'">收货地址： <b>' + msg[i].Province + msg[i].City + msg[i].Area +  msg[i].Street + msg[i].DetailAddr + '</b></p></li> <li> <div class="check-default" data-autoid="'+ msg[i].AutoId+'"> <img src="' + isdefault + '" alt=""> <span>' + isdefaultf + '</span> </div> <div class="manage"> <p class="change-addr"><a><img src="images/xiangxidizhi.png" alt=""><span>编辑</span></a></p><p class="remove-addr"><img src="images/shanchu.png" alt=""><span>删除</span></p> </div> </li> </ul> </div>')
+                            $('.address-list-main').append($addrList)
+                        }
+                    }
+//                    console.log(data)
+
+                }
+            })
+        }
+
+        //设置用户默认地址
+        $(document).on("click", ".check-default", function () {
+            $('.check-default ').find("img").attr("src", "images/xuanzhe2.png")
+            $('.check-default ').find("span").text("设为默认");
+            $(this).find("img").attr("src", "images/xuanzhe1.png")
+            $(this).find("span").text("默认地址")
+            var $AutoId = $(this).attr("data-autoid");
+            $.ajax({
+                url:api + "/Account/CusAddrDefault",
                 type:"post",
-                data:{"CusNo":parseInt(userInfo.CusNo)},
+                data:{"CusNo":userInfo.CusNo,"AutoID":$AutoId},
                 success:function (data) {
                     console.log(data)
 
                 }
             })
-        }
+        })
+        //删除用户地址
+        $(document).on("click",".remove-addr",function () {
+            var $AutoId = $(this).parent().prev("div").attr("data-autoid");
+            $(this).parent().parent().parent().parent().remove();
+//            console.log($(this).parent().parent().parent().parent())
+//            return;
+            $.ajax({
+                url:api + "/Account/CusAddrDelete",
+                type:"post",
+                data:{"AutoID":$AutoId},
+                success:function (data) {
+                    console.log(data)
+//                    $(this).parent().parent().parent().parent().remove()
+                }
+            })
+        })
+
+        //编辑用户地址
+        $(document).on("click",".change-addr",function () {
+            var $AutoId = $(this).parent().prev("div").attr("data-autoid");
+            var $thispthree = $(this).parent().parent().parent();
+            var $thisprev = $(this).parent().parent().prev();
+            var detailInfo = {
+                "AutoId":$AutoId,
+                "Name":$thispthree.find(".user-addr-name").text(),
+                "Phone":$thispthree.find(".user-addr-phone").text(),
+                "Province":$thisprev.find("p").attr("data-province"),
+                "ProvinceId":$thisprev.find("p").attr("data-provinceid"),
+                "City":$thisprev.find("p").attr("data-city"),
+                "CityId":$thisprev.find("p").attr("data-cityid"),
+                "Area":$thisprev.find("p").attr("data-area"),
+                "AreaId":$thisprev.find("p").attr("data-areaid"),
+                "Street":$thisprev.find("p").attr("data-street"),
+                "StreetId":$thisprev.find("p").attr("data-streetid"),
+                "Addrmore":$thisprev.find("p").attr("data-addrmore"),
+                "Isdefault":$(this).parent().prev().find("span").text() == "默认地址" ? 1 : 0
+            }
+            console.log(detailInfo);
+            detailInfo = JSON.stringify(detailInfo);
+            localStorage.setItem("detailInfo",detailInfo);
+            window.location.href ="changeaddress.html"
+        })
     })
 </script>
 </body>

@@ -26,7 +26,7 @@
         <div class="top-title">
             <div class="center-word ">
                 <img src="images/tjdz.png" alt="">
-                <span>添加地址</span>
+                <span>编辑地址</span>
             </div>
             <div class="nav-list">
                 <p><img src="images/gd.png" alt=""></p>
@@ -78,9 +78,28 @@
 <script>
     $(function () {
         var userInfo = localStorage.getItem("userInfo");
-        if(userInfo){
+        if (userInfo) {
             userInfo = JSON.parse(userInfo)
         }
+        var detailInfo = localStorage.getItem("detailInfo");
+        if (detailInfo) {
+            detailInfo = JSON.parse(detailInfo);
+            $('.addanaddress ul li:eq(0) input').val(detailInfo.Name);
+            $('.addanaddress ul li:eq(1) input').val(detailInfo.Phone);
+            $('.Province').text(detailInfo.Province).attr("placeid",detailInfo.ProvinceId)
+            $('.City').text(detailInfo.City).attr("placeid",detailInfo.CityId)
+            $('.Area').text(detailInfo.Area).attr('placeid',detailInfo.AreaId)
+            $('.check-address-jie b').text(detailInfo.Street).attr('placeid',detailInfo.StreetId)
+            $('.check-address-jie').attr("data-value",detailInfo.AreaId);
+            $('.add-address-write ul li:eq(4) textarea').val(detailInfo.Addrmore);
+            if (detailInfo.Isdefault == 1) {
+                $('.addanaddress ul li:eq(6)').attr("dataCheck", "true");
+                $('.addanaddress .address-check').attr("src", "images/xuanzhe1.png")
+            } else {
+
+            }
+        }
+        console.log(detailInfo)
 //        是否默认地址
         $('.addanaddress ul li:eq(6)').click(function () {
             if ($(this).attr("dataCheck") == "true") {
@@ -128,43 +147,46 @@
                 $('.alert p').text("请检查详细地址是否填写");
                 return false;
             }
-            if ($IsDefault =="true") {
+            if ($IsDefault == "true") {
                 $IsDefault = 1
-            }else{
-                $IsDefault =0
+            } else {
+                $IsDefault = 0
             }
-            var addrInfo = {
-                "CusNo":userInfo.CusNo ,
+
+            var addrChangeInfo = {
+                "AutoID": detailInfo.AutoId,
+                "CusNo":  userInfo.CusNo,
                 "Name": $reman,
                 "Phone": $phone,
                 "Province": $('.Province').text(),
-                "ProvinceId": $('.Province').attr("placeid"),
+                "ProvinceId":  $('.Province').attr("placeid"),
                 "City": $('.City').text(),
-                "CityId": $('.City').attr("placeid"),
+                "CityId":  $('.City').attr("placeid"),
                 "Area": $('.Area').text(),
-                "AreaId": $('.Area').attr("placeid"),
-                "Street": $('.check-address-jie b').text(),
-                "StreetId": $('.check-address-jie b').attr("placeid"),
+                "AreaId":$('.Area').attr("placeid"),
+                "Street":  $('.check-address-jie b').text(),
+                "StreetId":$('.check-address-jie b').attr("placeid"),
                 "DetailAddr": $addrmore,
                 "IsDefault": $IsDefault
             }
-           $.ajax({
-               url:api+"/Account/CusAddrAdd",
-               type:"post",
-               data:addrInfo,
-               success:function (data) {
-                   console.log(data);
-                   if(data.Code != 200){
-                       showBg();
-                       $('.alert p').text("添加失败");
-                       return false;
 
-                   }else{
-                       window.location.href="Addressmanagement.html"
-                   }
-               }
-           })
+            $.ajax({
+                url: api + "/Account/CusAddrUpdate",
+                type: "post",
+                data: addrChangeInfo,
+                success: function (data) {
+                    console.log(data);
 
+                    if (data.Code != 200) {
+                        showBg();
+                        $('.alert p').text("添加失败");
+                        return false;
+
+                    } else {
+                        window.location.href = "Addressmanagement.html"
+                    }
+                }
+            })
         })
 
     })
