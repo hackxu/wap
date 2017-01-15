@@ -442,10 +442,48 @@
                             }
                         });
                     }
+                    var orderSubmitWX = {
+                        "CusNo": logined.CusNo,
+                        "OrderType": "ORDER_WAP",
+//                        "ReceiveMan": $reman,
+//                        "Phone": "",
+//                        "Province": $('.Province').text(),
+//                        "City": $('.City').text(),
+//                        "Area": $('.Area').text(),
+//                        "Street": $('.check-address-jie b').text(),
+//                        "DetailAddress": $addrmore,
+                        "PayMode": "微信",
+                        "OrderFee": $('.product-price-this').text(),
+                        "TiketNo": "",
+                        "Receipt_Type": "00",
+                        "Receipt_Title": "",
+                        "Remark": "",
+                        "OrderDetail": [
+                            {
+                                "ProductImg":productinfoobject.productImg,
+                                "ProductNumber":1,
+                                "Product_ID": productinfoobject.productId,
+                                "Name": productinfoobject.productName,
+                                "Color_id": productinfoobject.productColorId,
+                                "Color_Nm": productinfoobject.productStyle,
+                                "Style_id": productinfoobject.productStyleId,
+                                "Style_Nm": productinfoobject.productStyleNm,
+                                "OrderNum": 1,
+                                "OrderPrice": productinfoobject.productPrice,
+                                "OrderOldPrice": productinfoobject.productMarketPrice
+                            }
+                        ],
+                        "SessionCode": "",
+                        "LoginName": "",
+                        "SmsCode": ""
+                    }
                     productinfoobject.CusNo = logined.CusNo;
+                    console.log(orderSubmitWX)
                     console.log(productinfoobject);
+                    orderSubmitWX = JSON.stringify(orderSubmitWX);
                     productinfoobject = JSON.stringify(productinfoobject);
                     localStorage.setItem("productInfo", productinfoobject);
+                    localStorage.setItem("orderSubmitWX", orderSubmitWX);
 
 //                        return;
                     window.location.href = "order-confure.html"

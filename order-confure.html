@@ -58,27 +58,6 @@
         </div>
     </div>
     <div class="shop-cart-check order-confiure-center order-list">
-        <div class="shop-cart-check-list">
-            <div class="shop-cart-product-info">
-                <img src="images/nf.png" alt="">
-                <div class="shop-cart-product-disc">
-                    <ul>
-                        <li>Nutrilon诺优能幼儿配方奶粉3段双罐装 荷兰牛栏进口</li>
-                        <li>颜色分类: <b>蓝装</b></li>
-                        <li>
-                            <div class="shop-cart-product-price">
-                                <b>¥</b>
-                                <span class="product-price-this">689</span>
-                                <del>¥1200</del>
-                            </div>
-                            <div class="shop-cart-product-number">
-                                <p>X56</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="order-pay">
         <h3><img src="images/zffs.png" alt=""><span>支付方式</span></h3>
@@ -106,40 +85,100 @@
 <script>
     $(function () {
         var buyType = $.query.get("buyType");
-        var wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
-        var productAddr = JSON.parse(localStorage.getItem("productInfo"));
-        var paymode;
-        console.log(wxPay);
-        console.log(productAddr);
+        var paymode,wxPay;
 
-        function setAddr() {
-            $(".buy-suc-div-b-r ul li:eq(0) span b").text(productAddr.Reman);
-            $(".buy-suc-div-b-r ul li:eq(0) > b").text(productAddr.Phone);
-            $(".buy-suc-div-b-r ul li:eq(1)").text(productAddr.Address);
-            if (buyType == "buysoon") {
-                $('.order-list .shop-cart-product-info>img').attr("src", productAddr.productImg);
-                $('.order-list .shop-cart-product-disc ul li:eq(0)').text(productAddr.productName);
-                $('.order-list .shop-cart-product-disc ul li:eq(1) b').text(productAddr.productStyle);
-                $('.product-price-this').text(productAddr.productPrice);
-                $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
-                $('.shop-cart-product-number p').text("X1")
-                $('.shop-cart-check-list').click(function () {
-                    window.location.href = "products-main.html?productId=" + productAddr.productId;
-                });
-                if (productAddr.productPrice < 200) {
-                    $('.pay-price').text((parseFloat(productAddr.productPrice) + parseFloat(10)).toFixed(2));
-                } else {
-                    $('.pay-price').text(productAddr.productPrice);
+        if(logined){
+            var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
+            console.log(orderSubmitWX);
+            //填充下单商品
+            var OrderFee = 0;
+            for(var i =0;i<orderSubmitWX.OrderDetail.length;i++){
+                var $style = orderSubmitWX.OrderDetail[i].Color_Nm == '共同' ? '标准版' : orderSubmitWX.OrderDetail[i].Color_Nm;
+                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="'+ orderSubmitWX.OrderDetail[i].ProductImg+'" alt=""> <div class="shop-cart-product-disc"> <ul> <li>'+ orderSubmitWX.OrderDetail[i].Name +'</li> <li>颜色分类: <b>'+$style +'</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">'+ orderSubmitWX.OrderDetail[i].OrderPrice+'</span> <del>¥'+ orderSubmitWX.OrderDetail[i].OrderOldPrice+'</del> </div> <div class="shop-cart-product-number"> <p>X'+ orderSubmitWX.OrderDetail[i].ProductNumber+'</p> </div> </li> </ul> </div> </div> </div>'
+                $('.order-list').append($div)
+                OrderFee = Number(parseFloat(OrderFee).toFixed(2)) + Number(parseFloat(orderSubmitWX.OrderDetail[i].OrderPrice).toFixed(2));
 
+                orderSubmitWX.OrderFee = OrderFee;
+                delete orderSubmitWX.OrderDetail[i].ProductNumber
+                delete orderSubmitWX.OrderDetail[i].ProductImg
+            }
+            if(OrderFee < 200){
+                $('.pay-price').text((OrderFee + Number(10)).toFixed(2));
+
+            }else{
+                $('.pay-price').text(OrderFee.toFixed(2));
+            }
+
+            //获取默认地址
+            $.ajax({
+                url:api + "/Account/CusDefalutAddress",
+                type:"post",
+                data:{"CusNo":orderSubmitWX.CusNo},
+                success:function (data) {
+                    console.log(data)
+                    if(data.Data){
+                        var msg = data.Data;
+                        $(".buy-suc-div-b-r ul li:eq(0) span b").text(msg.Name);
+                        $(".buy-suc-div-b-r ul li:eq(0) > b").text(msg.Phone);
+                        $(".buy-suc-div-b-r ul li:eq(1)").text(msg.Province + msg.City + msg.Area +  msg.Street + msg.DetailAddr);
+                        orderSubmitWX.ReceiveMan = msg.Name;
+                        orderSubmitWX.Phone = msg.Phone;
+                        orderSubmitWX.Province = msg.Province;
+                        orderSubmitWX.City = msg.City;
+                        orderSubmitWX.Area = msg.Area;
+                        orderSubmitWX.Street = msg.Street;
+                        orderSubmitWX.DetailAddress = msg.DetailAddr;
+//                        console.log("!")
+                        $.ajax({
+                            url:orderapi + "/Order/OrderSubmitWX",
+                            type:"post",
+                            data:orderSubmitWX,
+                            success:function (data) {
+                                console.log(data)
+//                                console.log("@")
+                                 wxPay = data.Data;
+
+
+                            }
+                        })
+
+                    }
                 }
-                $('.product-number').text($('.order-list .shop-cart-check-list').length);
-            } else {
+            })
+
+        }else{
+            var wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
+            var productAddr = JSON.parse(localStorage.getItem("productInfo"));
+            console.log(wxPay);
+            console.log(productAddr);
+
+            function setAddr() {
+                $(".buy-suc-div-b-r ul li:eq(0) span b").text(productAddr.Reman);
+                $(".buy-suc-div-b-r ul li:eq(0) > b").text(productAddr.Phone);
+                $(".buy-suc-div-b-r ul li:eq(1)").text(productAddr.Address);
+                    $('.order-list .shop-cart-product-info>img').attr("src", productAddr.productImg);
+                    $('.order-list .shop-cart-product-disc ul li:eq(0)').text(productAddr.productName);
+                    $('.order-list .shop-cart-product-disc ul li:eq(1) b').text(productAddr.productStyle);
+                    $('.product-price-this').text(productAddr.productPrice);
+                    $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
+                    $('.shop-cart-product-number p').text("X1")
+                    $('.shop-cart-check-list').click(function () {
+                        window.location.href = "products-main.html?productId=" + productAddr.productId;
+                    });
+                    if (productAddr.productPrice < 200) {
+                        $('.pay-price').text((Number(productAddr.productPrice) + Number(10)).toFixed(2));
+                    } else {
+                        $('.pay-price').text(productAddr.productPrice);
+
+                    }
+                    $('.product-number').text($('.order-list .shop-cart-check-list').length);
+
 
             }
 
+            setAddr()
         }
 
-        setAddr()
 
         //选择微信支付或支付宝支付
         $('.order-pay ul li').click(function () {
