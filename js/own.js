@@ -5,7 +5,11 @@ var api = "http://test-webapi.ymws.jstv.com:80";
 var orderapi = "http://test-orderapi.ymws.jstv.com:80";
 var re = /^1[34578]\d{9}$/;
 var addarr = [];
-
+//判断是否登陆
+// var logined = localStorage.getItem("userInfo");
+if(localStorage.getItem("userInfo")){
+    var logined =  JSON.parse(localStorage.getItem("userInfo"));
+}
 
 function showBg() {
     $('.bg').show();
