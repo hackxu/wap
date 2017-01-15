@@ -138,7 +138,7 @@
 //                                console.log("@")
                                  wxPay = data.Data;
 
-
+                                console.log(wxPay)
                             }
                         })
 
@@ -224,10 +224,12 @@
 //                });
 //            });
 //        })
+
         $('.shop-cart-bar-r').click(function () {
-            localStorage.setItem("OrderNo",wxPay.out_trand_no)
-            window.location.href="buy-success.html";
+            localStorage.setItem("OrderNo",wxPay.out_trand_no);
+
             return false;
+            window.location.href="buy-success.html";
 //            区分支付方式
 //            console.log(paymode)
             $(".order-pay ul li").each(function () {
