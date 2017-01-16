@@ -114,7 +114,7 @@
             var OrderFee = 0;
             for (var i = 0; i < orderSubmitWX.OrderDetail.length; i++) {
                 var $style = orderSubmitWX.OrderDetail[i].Color_Nm == '共同' ? '标准版' : orderSubmitWX.OrderDetail[i].Color_Nm;
-                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + orderSubmitWX.OrderDetail[i].ProductImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + orderSubmitWX.OrderDetail[i].Name + '</li> <li>颜色分类: <b>' + $style + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + orderSubmitWX.OrderDetail[i].OrderPrice + '</span> <del>¥' + orderSubmitWX.OrderDetail[i].OrderOldPrice + '</del> </div> <div class="shop-cart-product-number"> <p>X' + orderSubmitWX.OrderDetail[i].ProductNumber + '</p> </div> </li> </ul> </div> </div> </div>'
+                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + orderSubmitWX.OrderDetail[i].ProductImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + orderSubmitWX.OrderDetail[i].Name + '</li> <li>颜色分类: <b>' + $style + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + orderSubmitWX.OrderDetail[i].OrderPrice /orderSubmitWX.OrderDetail[i].ProductNumber + '</span> <del>¥' + orderSubmitWX.OrderDetail[i].OrderOldPrice /orderSubmitWX.OrderDetail[i].ProductNumber + '</del> </div> <div class="shop-cart-product-number"> <p>X' + orderSubmitWX.OrderDetail[i].ProductNumber + '</p> </div> </li> </ul> </div> </div> </div>'
                 $('.order-list').append($div)
                 OrderFee = Number(parseFloat(OrderFee).toFixed(2)) + Number(parseFloat(orderSubmitWX.OrderDetail[i].OrderPrice).toFixed(2));
 
@@ -124,8 +124,9 @@
             }
             if (OrderFee < 200) {
                 $('.pay-price').text((OrderFee + Number(10)).toFixed(2));
-
+                orderSubmitWX.OrderFee = (OrderFee + Number(10)).toFixed(2)
             } else {
+                orderSubmitWX.OrderFee =OrderFee.toFixed(2)
                 $('.pay-price').text(OrderFee.toFixed(2));
             }
             $('.product-number').text($('.order-list .shop-cart-check-list').length);
@@ -363,9 +364,9 @@
 
         })
         //订单页商品跳转
-        $('.shop-cart-check-list').click(function () {
-            window.location.href = "products-main.html?productId=" + productsStyles.productId;
-        });
+//        $('.shop-cart-check-list').click(function () {
+//            window.location.href = "products-main.html?productId=" + productsStyles.productId;
+//        });
 
 
     })

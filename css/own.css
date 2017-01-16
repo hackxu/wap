@@ -7,6 +7,7 @@ input{ outline:none;border-radius: 0;}
 input[type="button"], input[type="submit"], input[type="reset"] {
  -webkit-appearance: none;
 }
+li{ cursor: pointer;}
 input{
  -webkit-appearance: none;
 }
@@ -202,7 +203,7 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 .shop-cart-product-price{ float: left; color: #e82c1d;font-size: .65rem}
 .shop-cart-product-price del{color: #b5b5b5;font-size: .5rem}
 .shop-cart-product-number{ float: right; width:3.5rem; height:1.08rem;border: 1px solid #e5e5e5; overflow: hidden;}
-.shop-cart-product-number ul li{ width:1.1rem; overflow: hidden; height:1.1rem; float: left;text-align: center; line-height:1.1rem; color: #979797;font-size: .8rem!important;}
+.shop-cart-product-number ul li{ width:1.1rem; overflow: hidden; height:1.1rem; float: left;text-align: center; line-height:1.1rem; color: #979797;font-size: .8rem!important; display: block;}
 /*.shop-cart-product-number ul li img{ width:100%;}*/
 .shop-cart-reduce{border-right: 1px solid #e5e5e5; cursor: pointer;}
 .shop-cart-add{ border-left:1px solid #e5e5e5; cursor: pointer;}
