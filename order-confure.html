@@ -45,16 +45,18 @@
     </div>
     <div class="order-cofiure-top">
         <div class="buy-suc-div-b">
-            <div class="buy-suc-div-b-l">
-                <img src="images/suozaidiqu.png" alt="">
-            </div>
-            <div class="buy-suc-div-b-r">
-                <ul>
-                    <li><span>收货人：<b>胡萝卜</b></span><b>13838384388</b></li>
-                    <li>江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号</li>
-                </ul>
-            </div>
-            <img src="images/b.png" alt="">
+            <a href="Addressmanagement.html?backinfo=order-confure.html">
+                <div class="buy-suc-div-b-l">
+                    <img src="images/suozaidiqu.png" alt="">
+                </div>
+                <div class="buy-suc-div-b-r">
+                    <ul>
+                        <li><span>收货人：<b>胡萝卜</b></span><b>13838384388</b></li>
+                        <li>江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号</li>
+                    </ul>
+                </div>
+                <img src="images/b.png" alt="">
+            </a>
         </div>
     </div>
     <div class="shop-cart-check order-confiure-center order-list">
@@ -81,20 +83,38 @@
             <p><span>结算</span>(<b class="product-number">3</b>)</p>
         </div>
     </div>
+    <div class="alert">
+        <p>房价快速的减肥倒计时的风景 家居服</p>
+        <span>确&nbsp;&nbsp;&nbsp;&nbsp;定</span>
+    </div>
+    <div class="bg"></div>
+    <div class="loading">
+        <div class="wai">
+            <div class="spinner">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     $(function () {
         var buyType = $.query.get("buyType");
-        var paymode,wxPay;
+        var backinfo = $.query.get("backinfo");
+        var from = $.query.get("from");
+        var paymode, wxPay;
 
-        if(logined){
+        if (logined) {
             var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
+            var setAddrinfo = JSON.parse(localStorage.getItem("setAddrinfo"));
+
             console.log(orderSubmitWX);
+//            console.log(setAddrinfo);
             //填充下单商品
             var OrderFee = 0;
-            for(var i =0;i<orderSubmitWX.OrderDetail.length;i++){
+            for (var i = 0; i < orderSubmitWX.OrderDetail.length; i++) {
                 var $style = orderSubmitWX.OrderDetail[i].Color_Nm == '共同' ? '标准版' : orderSubmitWX.OrderDetail[i].Color_Nm;
-                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="'+ orderSubmitWX.OrderDetail[i].ProductImg+'" alt=""> <div class="shop-cart-product-disc"> <ul> <li>'+ orderSubmitWX.OrderDetail[i].Name +'</li> <li>颜色分类: <b>'+$style +'</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">'+ orderSubmitWX.OrderDetail[i].OrderPrice+'</span> <del>¥'+ orderSubmitWX.OrderDetail[i].OrderOldPrice+'</del> </div> <div class="shop-cart-product-number"> <p>X'+ orderSubmitWX.OrderDetail[i].ProductNumber+'</p> </div> </li> </ul> </div> </div> </div>'
+                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + orderSubmitWX.OrderDetail[i].ProductImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + orderSubmitWX.OrderDetail[i].Name + '</li> <li>颜色分类: <b>' + $style + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + orderSubmitWX.OrderDetail[i].OrderPrice + '</span> <del>¥' + orderSubmitWX.OrderDetail[i].OrderOldPrice + '</del> </div> <div class="shop-cart-product-number"> <p>X' + orderSubmitWX.OrderDetail[i].ProductNumber + '</p> </div> </li> </ul> </div> </div> </div>'
                 $('.order-list').append($div)
                 OrderFee = Number(parseFloat(OrderFee).toFixed(2)) + Number(parseFloat(orderSubmitWX.OrderDetail[i].OrderPrice).toFixed(2));
 
@@ -102,25 +122,46 @@
                 delete orderSubmitWX.OrderDetail[i].ProductNumber
                 delete orderSubmitWX.OrderDetail[i].ProductImg
             }
-            if(OrderFee < 200){
+            if (OrderFee < 200) {
                 $('.pay-price').text((OrderFee + Number(10)).toFixed(2));
 
-            }else{
+            } else {
                 $('.pay-price').text(OrderFee.toFixed(2));
             }
+            $('.product-number').text($('.order-list .shop-cart-check-list').length);
+
+//            自主选择地址
+            if (backinfo == "addr") {
+                $(".buy-suc-div-b-r ul li:eq(0) span b").text(setAddrinfo.Name);
+                $(".buy-suc-div-b-r ul li:eq(0) > b").text(setAddrinfo.Phone);
+                $(".buy-suc-div-b-r ul li:eq(1)").text(setAddrinfo.mainAddr);
+
+                orderSubmitWX.ReceiveMan = setAddrinfo.Name;
+                orderSubmitWX.Phone = setAddrinfo.Phone;
+                orderSubmitWX.Province = setAddrinfo.Province;
+                orderSubmitWX.City = setAddrinfo.City;
+                orderSubmitWX.Area = setAddrinfo.Area;
+                orderSubmitWX.Street = setAddrinfo.Street;
+                orderSubmitWX.DetailAddress = setAddrinfo.Addrmore;
+//                alert("1")
+//                return;
+                console.log(orderSubmitWX)
+
+            } else {
+
 
             //获取默认地址
             $.ajax({
-                url:api + "/Account/CusDefalutAddress",
-                type:"post",
-                data:{"CusNo":orderSubmitWX.CusNo},
-                success:function (data) {
+                url: api + "/Account/CusDefalutAddress",
+                type: "post",
+                data: {"CusNo": orderSubmitWX.CusNo},
+                success: function (data) {
                     console.log(data)
-                    if(data.Data){
+                    if (data.Data) {
                         var msg = data.Data;
                         $(".buy-suc-div-b-r ul li:eq(0) span b").text(msg.Name);
                         $(".buy-suc-div-b-r ul li:eq(0) > b").text(msg.Phone);
-                        $(".buy-suc-div-b-r ul li:eq(1)").text(msg.Province + msg.City + msg.Area +  msg.Street + msg.DetailAddr);
+                        $(".buy-suc-div-b-r ul li:eq(1)").text(msg.Province + msg.City + msg.Area + msg.Street + msg.DetailAddr);
                         orderSubmitWX.ReceiveMan = msg.Name;
                         orderSubmitWX.Phone = msg.Phone;
                         orderSubmitWX.Province = msg.Province;
@@ -129,24 +170,34 @@
                         orderSubmitWX.Street = msg.Street;
                         orderSubmitWX.DetailAddress = msg.DetailAddr;
 //                        console.log("!")
-                        $.ajax({
-                            url:orderapi + "/Order/OrderSubmitWX",
-                            type:"post",
-                            data:orderSubmitWX,
-                            success:function (data) {
-                                console.log(data)
-//                                console.log("@")
-                                 wxPay = data.Data;
+//                        $.ajax({
+//                            url: orderapi + "/Order/OrderSubmitWX",
+//                            type: "post",
+//                            data: orderSubmitWX,
+//                            success: function (data) {
+//                                console.log(data)
+////                                console.log("@")
+//                                if(data.Data){
+//                                    wxPay = data.Data;
+//
+//                                    console.log(wxPay)
+//                                }else{
+//                                    showBg();
+//                                    $('.alert b').text(data.Message)
+//                                    return false;
+//                                }
+//                            }
+//                        })
 
-                                console.log(wxPay)
-                            }
-                        })
-
+                    } else {
+                        alert("获取地址失败");
+                        $('.buy-suc-div-b').css("opacity", 0)
                     }
                 }
             })
+        }
 
-        }else{
+        } else {
             var wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
             var productAddr = JSON.parse(localStorage.getItem("productInfo"));
             console.log(wxPay);
@@ -156,22 +207,22 @@
                 $(".buy-suc-div-b-r ul li:eq(0) span b").text(productAddr.Reman);
                 $(".buy-suc-div-b-r ul li:eq(0) > b").text(productAddr.Phone);
                 $(".buy-suc-div-b-r ul li:eq(1)").text(productAddr.Address);
-                    $('.order-list .shop-cart-product-info>img').attr("src", productAddr.productImg);
-                    $('.order-list .shop-cart-product-disc ul li:eq(0)').text(productAddr.productName);
-                    $('.order-list .shop-cart-product-disc ul li:eq(1) b').text(productAddr.productStyle);
-                    $('.product-price-this').text(productAddr.productPrice);
-                    $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
-                    $('.shop-cart-product-number p').text("X1")
-                    $('.shop-cart-check-list').click(function () {
-                        window.location.href = "products-main.html?productId=" + productAddr.productId;
-                    });
-                    if (productAddr.productPrice < 200) {
-                        $('.pay-price').text((Number(productAddr.productPrice) + Number(10)).toFixed(2));
-                    } else {
-                        $('.pay-price').text(productAddr.productPrice);
+                $('.order-list .shop-cart-product-info>img').attr("src", productAddr.productImg);
+                $('.order-list .shop-cart-product-disc ul li:eq(0)').text(productAddr.productName);
+                $('.order-list .shop-cart-product-disc ul li:eq(1) b').text(productAddr.productStyle);
+                $('.product-price-this').text(productAddr.productPrice);
+                $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
+                $('.shop-cart-product-number p').text("X1")
+                $('.shop-cart-check-list').click(function () {
+                    window.location.href = "products-main.html?productId=" + productAddr.productId;
+                });
+                if (productAddr.productPrice < 200) {
+                    $('.pay-price').text((Number(productAddr.productPrice) + Number(10)).toFixed(2));
+                } else {
+                    $('.pay-price').text(productAddr.productPrice);
 
-                    }
-                    $('.product-number').text($('.order-list .shop-cart-check-list').length);
+                }
+                $('.product-number').text($('.order-list .shop-cart-check-list').length);
 
 
             }
@@ -226,61 +277,96 @@
 //        })
 
         $('.shop-cart-bar-r').click(function () {
-            localStorage.setItem("OrderNo",wxPay.out_trand_no);
+            $('.loading').show();
+            //下单
+            $.ajax({
+                url: orderapi + "/Order/OrderSubmitWX",
+                type: "post",
+                data: orderSubmitWX,
+                success: function (data) {
+                    console.log(data)
+//                                console.log("@")
+                    if(data.Data){
+                        wxPay = data.Data;
 
-            return false;
-            window.location.href="buy-success.html";
+                        console.log(wxPay);
+//                        提交支付
+                        localStorage.setItem("OrderNo", wxPay.out_trand_no);
+
+//            return false;
+//                        window.location.href = "buy-success.html";
 //            区分支付方式
 //            console.log(paymode)
-            $(".order-pay ul li").each(function () {
-                if ($(this).attr("dataPay")) {
-                    paymode = $(this).attr("dataPay")
-                }
-            });
+                        $(".order-pay ul li").each(function () {
+                            if ($(this).attr("dataPay")) {
+                                paymode = $(this).attr("dataPay")
+                            }
+                        });
 
-            function onBridgeReady() {
-                var times = ((new Date().getTime()) / 1000).toString();
+                        function onBridgeReady() {
+                            var times = ((new Date().getTime()) / 1000).toString();
 //                alert(times.toString())
 //                alert(typeof times)
-                WeixinJSBridge.invoke(
-                    'getBrandWCPayRequest', {
-                        "appId": wxPay.WxPayParams.appid,     //公众号名称，由商户传入
-                        "timeStamp": times,         //时间戳，自1970年以来的秒数
-                        "nonceStr": wxPay.WxPayParams.nonce_str, //随机串
-                        "package": "prepay_id=" + wxPay.WxPayParams.prepay_id,
-                        "signType": "MD5",         //微信签名方式：
-                        "paySign": wxPay.WxPayParams.sign //微信签名
-                    },
-                    function (res) {
-                        if (res.err_msg == "get_brand_wcpay_request：ok") {
+                            WeixinJSBridge.invoke(
+                                'getBrandWCPayRequest', {
+                                    "appId": wxPay.WxPayParams.appid,     //公众号名称，由商户传入
+                                    "timeStamp": times,         //时间戳，自1970年以来的秒数
+                                    "nonceStr": wxPay.WxPayParams.nonce_str, //随机串
+                                    "package": "prepay_id=" + wxPay.WxPayParams.prepay_id,
+                                    "signType": "MD5",         //微信签名方式：
+                                    "paySign": wxPay.WxPayParams.sign //微信签名
+                                },
+                                function (res) {
+                                    if (res.err_msg == "get_brand_wcpay_request：ok") {
 
-                            localStorage.setItem("OrderNo",wxPay.out_trand_no)
-                        }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
-                    }
-                );
-            }
+                                        localStorage.setItem("OrderNo", wxPay.out_trand_no)
+                                    }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                                }
+                            );
+                        }
 
-            if (paymode == "wx") {
-                console.log(wxPay.prepay_id);
-                if (typeof WeixinJSBridge == "undefined") {
-                    if (document.addEventListener) {
-                        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-                    } else if (document.attachEvent) {
-                        document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-                        document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                        if (paymode == "wx") {
+                            console.log(wxPay.prepay_id);
+                            if (typeof WeixinJSBridge == "undefined") {
+                                if (document.addEventListener) {
+                                    document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                                } else if (document.attachEvent) {
+                                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                                    document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                                }
+                            } else {
+                                onBridgeReady();
+                            }
+
+                        } else if (paymode == 'zfb') {
+
+                        } else {
+
+                        }
+                    }else{
+                        showBg();
+                        $('.alert p').text(data.Message);
+                        $(".alert span").click(function () {
+                            $(".bg").hide();
+                            $('.alert').hide();
+                            $('.loading').hide();
+                            if(from == "product-main.html"){
+                                window.location.href ="products-main.html?productId="+orderSubmitWX.OrderDetail[0].Product_ID;
+                            }
+                        })
+
+                        return false;
+
                     }
-                } else {
-                    onBridgeReady();
                 }
-
-            } else if (paymode == 'zfb') {
-
-            } else {
-
-            }
-
+            })
 
         })
+        //订单页商品跳转
+        $('.shop-cart-check-list').click(function () {
+            window.location.href = "products-main.html?productId=" + productsStyles.productId;
+        });
+
 
     })
 </script>

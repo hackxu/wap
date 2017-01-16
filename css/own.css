@@ -62,7 +62,7 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 .personal-center-list-top-left span { font-size: .63rem; color: #ffffff; line-height: 1.25rem; margin-left: .42rem; }
 .personal-center-list-top-center { width: 24%; overflow: hidden; margin: 0 auto ; margin-top:1.5rem;}
 .personal-center-list-top-center img { width: 100%;border-radius: 100% }
-.personal-center-list-top-center p { text-align: center; font-size: .65rem; color: #ffffff; margin-top: .8rem; }
+.personal-center-list-top-center p { text-align: center; font-size: .6rem; color: #ffffff; margin-top: .8rem; }
 .personal-center-list-bottom{ width:100%; height:auto; overflow: hidden; margin-top:.5rem; margin-bottom:.4rem;}
 .personal-center-list-bottom ul li{ width:15%; float: left; overflow: hidden;margin: 0 5%;text-align: center;}
 .personal-center-list-bottom ul li img{ width:1.3rem;margin: 0 auto; margin-bottom:.25rem; height:1.2rem;}
@@ -201,13 +201,13 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 .shop-cart-product-disc ul li:nth-child(2){font-size:.55rem; color: #b5b5b5; margin-bottom:.3rem; }
 .shop-cart-product-price{ float: left; color: #e82c1d;font-size: .65rem}
 .shop-cart-product-price del{color: #b5b5b5;font-size: .5rem}
-.shop-cart-product-number{ float: right; width:3rem; height:.9rem;border: 1px solid #e5e5e5;}
-.shop-cart-product-number ul li{ width:.85rem; overflow: hidden; float: left;text-align: center; line-height:.9rem; color: #979797;font-size: .8rem!important;}
+.shop-cart-product-number{ float: right; width:3.5rem; height:1.08rem;border: 1px solid #e5e5e5; overflow: hidden;}
+.shop-cart-product-number ul li{ width:1.1rem; overflow: hidden; height:1.1rem; float: left;text-align: center; line-height:1.1rem; color: #979797;font-size: .8rem!important;}
 /*.shop-cart-product-number ul li img{ width:100%;}*/
-.shop-cart-reduce{border-right: 1px solid #e5e5e5;}
-.shop-cart-add{ border-left:1px solid #e5e5e5;}
-.shop-cart-product-number ul li:nth-child(2) { width:1.2rem;height:.9rem;}
-.shop-cart-product-number ul li input{border: none;text-align: center; width:100%; height:.9rem;}
+.shop-cart-reduce{border-right: 1px solid #e5e5e5; cursor: pointer;}
+.shop-cart-add{ border-left:1px solid #e5e5e5; cursor: pointer;}
+.shop-cart-product-number ul li:nth-child(2) { width:1.2rem;height:1.28rem;}
+.shop-cart-product-number ul li input{border: none;text-align: center; width:100%; height:1.28rem;}
 .shop-cart-bar{ width:100%; overflow: hidden; height:2.42rem;background: #fff; position: fixed; left:0; bottom:0;}
 .shop-cart-bar-l {margin-left:.9rem; height:2.42rem; overflow: hidden; float: left; line-height:2rem;}
 .shop-cart-bar-l ul li{font-size: .6rem; float: left; line-height:2.42rem; }
@@ -258,7 +258,7 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 
 .order-cofiure-top .buy-suc-div-b { position: relative; padding: 0 6%}
 .order-cofiure-top .buy-suc-div-b-r { margin-right:.2rem; }
-.order-cofiure-top .buy-suc-div-b>img{ position: absolute; right:.4rem; top:1rem; width:.3rem; cursor: pointer;}
+.order-cofiure-top .buy-suc-div-b a>img{ position: absolute; right:.4rem; top:1rem; width:.3rem; cursor: pointer;}
 
 .go-login { width: 100%; height: auto; overflow: hidden; padding: .44rem; }
 .go-login p { text-align: center; line-height: .9rem; font-size: .6rem; color: #333333; }
@@ -346,8 +346,16 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 
 .alert{ width:60%; height:7rem; overflow: hidden;margin: 0 auto; position: fixed; top:50%; left:50%; -webkit-transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); -o-transform: translate(-50%, -50%); transform: translate(-50%, -50%);border: 2px solid #e60000;border-radius: .5rem;background: #fff;display: none;z-index: 14}
 .alert p{ width: 80%; line-height:.9rem;font-size: .6rem;margin: 1rem auto; min-height:3rem;text-align: center;}
-.alert b{ display: block;width:80%; height:1.4rem;border-radius: 5px;font-size:.6rem ;text-align: center; line-height:1.6rem; color: #ffffff;background: #e60000;margin: 0 auto;}
+.alert b,.alert span{ display: block;width:80%; height:1.4rem;border-radius: 5px;font-size:.6rem ;text-align: center; line-height:1.6rem; color: #ffffff;background: #e60000;margin: 0 auto;}
 
 .userimg{ width:3.84rem!important; height:3.84rem;border-radius: 100%}
 
 .order-cofiure-bottom .shop-cart-bar-l ul li{ line-height:2rem;}
+
+.classify-main ol, .buy-bar ol { display: none; }
+.classify-main ol dl, .buy-bar ol { width: 100%; height: 2.55rem; text-align: center; line-height: 2.55rem; font-size: .65rem; float: left; color: #ffffff; background: #808080 }
+.back-info{ cursor: pointer;}
+
+.shop-cart-bar .shop-cart-bar-r{ line-height:2.42rem;}
+.shop-cart-big-btn ul li:first-child{ height:1.5rem;}
+.shop-cart-big-btn ul li:last-child{ height:1.2rem;}

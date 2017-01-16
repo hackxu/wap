@@ -10,6 +10,7 @@
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/own.js"></script>
     <script src="js/rem.js"></script>
+    <script src="js/Jquery.Query.js"></script>
     <link rel="stylesheet" href="css/own.css">
     <style>
     </style>
@@ -49,7 +50,34 @@
 <script>
     $(function () {
         var userInfo = localStorage.getItem("userInfo");
+        var backinfo = $.query.get("backinfo");
         console.log(userInfo)
+        console.log(backinfo)
+        //判断是否需要返回订单页
+        if (backinfo) {
+            $('.add-address a').attr("href","Addanaddress.html?backinfo="+backinfo)
+            $(document).on('click', ".back-info", function () {
+//                alert("1")
+                var setAddrinfo = {
+                    "Name": $(this).parent().find("li:eq(0) span:eq(0) b").text(),
+                    "Phone": $(this).parent().find("li:eq(0) span:eq(1)").text(),
+                    "mainAddr": $(this).parent().find("li:eq(1) p b").text(),
+                    "Province":$(this).parent().find("li:eq(1) p").attr("data-province"),
+                    "City":$(this).parent().find("li:eq(1) p").attr("data-city"),
+                    "Area":$(this).parent().find("li:eq(1) p").attr("data-area"),
+                    "Street":$(this).parent().find("li:eq(1) p").attr("data-street"),
+                    "Addrmore":$(this).parent().find("li:eq(1) p").attr("data-addrmore"),
+                };
+                setAddrinfo = JSON.stringify(setAddrinfo);
+                localStorage.setItem("setAddrinfo", setAddrinfo);
+                $(this).parent().find("li:eq(1) img").attr("src","images/dizhi-r.png");
+                setTimeout(function () {
+                    window.location.href = backinfo +"?backinfo=addr";
+                },1000)
+            })
+        } else {
+            console.log("no")
+        }
 
         //判断用户信息是否存在并且获取地址列表
         if (userInfo) {
@@ -68,7 +96,7 @@
                             var isdefault = ( msg[i].IsDefault == 1) ? 'images/xuanzhe1.png' : 'images/xuanzhe2.png';
                             var isdefaultf = ( msg[i].IsDefault == 1) ? '默认地址' : '设为默认';
                             console.log(isdefault)
-                            var $addrList = $('<div class="address-list"> <ul> <li><span>收货人: <b class="user-addr-name">' + msg[i].Name + '</b></span><span class="user-addr-phone">' + msg[i].Phone + '</span></li> <li><img src="images/suozaidiqu.png" alt=""> <p class="addr-info" data-province="'+ msg[i].Province+'" data-city="'+ msg[i].City+'" data-area="'+ msg[i].Area+'" data-street="'+ msg[i].Street+'" data-addrmore="'+ msg[i].DetailAddr+'" data-provinceid="'+ msg[i].ProvinceId+'" data-cityId="'+ msg[i].CityId+'" data-areaid="'+ msg[i].AreaId+'" data-streetid="'+ msg[i].StreetId+'">收货地址： <b>' + msg[i].Province + msg[i].City + msg[i].Area +  msg[i].Street + msg[i].DetailAddr + '</b></p></li> <li> <div class="check-default" data-autoid="'+ msg[i].AutoId+'"> <img src="' + isdefault + '" alt=""> <span>' + isdefaultf + '</span> </div> <div class="manage"> <p class="change-addr"><a><img src="images/xiangxidizhi.png" alt=""><span>编辑</span></a></p><p class="remove-addr"><img src="images/shanchu.png" alt=""><span>删除</span></p> </div> </li> </ul> </div>')
+                            var $addrList = $('<div class="address-list"> <ul> <li class="back-info"><span>收货人: <b class="user-addr-name">' + msg[i].Name + '</b></span><span class="user-addr-phone">' + msg[i].Phone + '</span></li> <li class="back-info"><img src="images/dizhi-h.png" alt=""> <p class="addr-info" data-province="' + msg[i].Province + '" data-city="' + msg[i].City + '" data-area="' + msg[i].Area + '" data-street="' + msg[i].Street + '" data-addrmore="' + msg[i].DetailAddr + '" data-provinceid="' + msg[i].ProvinceId + '" data-cityId="' + msg[i].CityId + '" data-areaid="' + msg[i].AreaId + '" data-streetid="' + msg[i].StreetId + '">收货地址： <b>' + msg[i].Province + msg[i].City + msg[i].Area + msg[i].Street + msg[i].DetailAddr + '</b></p></li> <li> <div class="check-default" data-autoid="' + msg[i].AutoId + '"> <img src="' + isdefault + '" alt=""> <span>' + isdefaultf + '</span> </div> <div class="manage"> <p class="change-addr"><a><img src="images/xiangxidizhi.png" alt=""><span>编辑</span></a></p><p class="remove-addr"><img src="images/shanchu.png" alt=""><span>删除</span></p> </div> </li> </ul> </div>')
                             $('.address-list-main').append($addrList)
                         }
                     }
@@ -86,26 +114,26 @@
             $(this).find("span").text("默认地址")
             var $AutoId = $(this).attr("data-autoid");
             $.ajax({
-                url:api + "/Account/CusAddrDefault",
-                type:"post",
-                data:{"CusNo":userInfo.CusNo,"AutoID":$AutoId},
-                success:function (data) {
+                url: api + "/Account/CusAddrDefault",
+                type: "post",
+                data: {"CusNo": userInfo.CusNo, "AutoID": $AutoId},
+                success: function (data) {
                     console.log(data)
 
                 }
             })
         })
         //删除用户地址
-        $(document).on("click",".remove-addr",function () {
+        $(document).on("click", ".remove-addr", function () {
             var $AutoId = $(this).parent().prev("div").attr("data-autoid");
             $(this).parent().parent().parent().parent().remove();
 //            console.log($(this).parent().parent().parent().parent())
 //            return;
             $.ajax({
-                url:api + "/Account/CusAddrDelete",
-                type:"post",
-                data:{"AutoID":$AutoId},
-                success:function (data) {
+                url: api + "/Account/CusAddrDelete",
+                type: "post",
+                data: {"AutoID": $AutoId},
+                success: function (data) {
                     console.log(data)
 //                    $(this).parent().parent().parent().parent().remove()
                 }
@@ -113,29 +141,34 @@
         })
 
         //编辑用户地址
-        $(document).on("click",".change-addr",function () {
+        $(document).on("click", ".change-addr", function () {
             var $AutoId = $(this).parent().prev("div").attr("data-autoid");
             var $thispthree = $(this).parent().parent().parent();
             var $thisprev = $(this).parent().parent().prev();
             var detailInfo = {
-                "AutoId":$AutoId,
-                "Name":$thispthree.find(".user-addr-name").text(),
-                "Phone":$thispthree.find(".user-addr-phone").text(),
-                "Province":$thisprev.find("p").attr("data-province"),
-                "ProvinceId":$thisprev.find("p").attr("data-provinceid"),
-                "City":$thisprev.find("p").attr("data-city"),
-                "CityId":$thisprev.find("p").attr("data-cityid"),
-                "Area":$thisprev.find("p").attr("data-area"),
-                "AreaId":$thisprev.find("p").attr("data-areaid"),
-                "Street":$thisprev.find("p").attr("data-street"),
-                "StreetId":$thisprev.find("p").attr("data-streetid"),
-                "Addrmore":$thisprev.find("p").attr("data-addrmore"),
-                "Isdefault":$(this).parent().prev().find("span").text() == "默认地址" ? 1 : 0
+                "AutoId": $AutoId,
+                "Name": $thispthree.find(".user-addr-name").text(),
+                "Phone": $thispthree.find(".user-addr-phone").text(),
+                "Province": $thisprev.find("p").attr("data-province"),
+                "ProvinceId": $thisprev.find("p").attr("data-provinceid"),
+                "City": $thisprev.find("p").attr("data-city"),
+                "CityId": $thisprev.find("p").attr("data-cityid"),
+                "Area": $thisprev.find("p").attr("data-area"),
+                "AreaId": $thisprev.find("p").attr("data-areaid"),
+                "Street": $thisprev.find("p").attr("data-street"),
+                "StreetId": $thisprev.find("p").attr("data-streetid"),
+                "Addrmore": $thisprev.find("p").attr("data-addrmore"),
+                "Isdefault": $(this).parent().prev().find("span").text() == "默认地址" ? 1 : 0
             }
             console.log(detailInfo);
             detailInfo = JSON.stringify(detailInfo);
-            localStorage.setItem("detailInfo",detailInfo);
-            window.location.href ="changeaddress.html"
+            localStorage.setItem("detailInfo", detailInfo);
+            if (backinfo){
+                window.location.href = "changeaddress.html?backinfo="+backinfo
+            }else{
+                window.location.href = "changeaddress.html"
+
+            }
         })
     })
 </script>
