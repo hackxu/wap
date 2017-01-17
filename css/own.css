@@ -229,7 +229,7 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 .buy-suc-div-t-r img{ width:100%;}
 /*.buy-suc-div-b .address-list{background: #e82c1d bottom  center url("images/cd.png") no-repeat;background-size: 100% .4rem;}*/
 .buy-suc-div-b{ width:88%;margin:.6rem auto; overflow: hidden;}
-.buy-suc-div-b-l{ width:8%; float: left; overflow: hidden;}
+.buy-suc-div-b-l{ width:8%; float: left; overflow: hidden; margin-top:.5rem;}
 .buy-suc-div-b-l img{ width:100%;}
 .buy-suc-div-b-r{ float: right; width:85%; overflow: hidden;}
 .buy-suc-div-b-r ul li:first-child{font-size: .6rem; color: #fff; }
@@ -360,3 +360,9 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 .shop-cart-bar .shop-cart-bar-r{ line-height:2.42rem;}
 .shop-cart-big-btn ul li:first-child{ height:1.5rem;}
 .shop-cart-big-btn ul li:last-child{ height:1.2rem;}
+.empty{ width:30%; overflow: hidden;margin: 0 auto; display: none; margin-bottom:1rem;}
+.empty img{ width:80%; margin-top:1rem; margin-bottom:.2rem;}
+.empty p { line-height:1rem;font-size: .6rem;text-align: center;}
+
+.no-adress{ width:100%; height:auto; overflow: hidden; position: fixed; top:50%; left:50%; -webkit-transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); -o-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
+.no-adress p{text-align: center;font-size: .7rem;}

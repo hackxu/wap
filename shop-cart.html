@@ -41,6 +41,11 @@
         </div>
     </div>
     <div class="shop-cart-check">
+        <div class="empty">
+            <img src="images/4-3-1.png" alt="">
+            <p>您的购物车好干净</p>
+            <p>快去挑选好货吧！</p>
+        </div>
         <h3><p class="shop-cart-check-all"><img src="images/xuanzhe2.png" alt=""><span>全选</span></p><b>编辑</b></h3>
     </div>
     <div class="reandtoys-list">
@@ -52,17 +57,17 @@
         <div class="shop-cart-bar-l">
             <ul>
                 <li>总计：</li>
-                <li><b>¥</b><span>3000.00</span></li>
+                <li><b>¥</b><span>0.00</span></li>
                 <li>(不含运费)</li>
             </ul>
         </div>
         <div class="shop-cart-bar-r">
-            <p><span>结算</span>(<b>3</b>)</p>
+            <p><span>结算</span>(<b>0</b>)</p>
         </div>
     </div>
     <div class="alert">
         <p>房价快速的减肥倒计时的风景 家居服</p>
-        <span>确&nbsp;&nbsp;&nbsp;&nbsp;定</span>
+        <b>确&nbsp;&nbsp;&nbsp;&nbsp;定</b>
     </div>
     <div class="bg"></div>
     <div class="loading">
@@ -78,7 +83,33 @@
 <script>
     $(function () {
         $('.loading').show();
-        var productarr = [];
+        var productarr = [];//购物车已选种商品
+        function orderMoney(arr) {
+            var ComorderMoney = 0;
+//            alert("1")
+
+            if (arr.length != 0) {
+
+//                alert("1")
+                for (var i = 0; i < arr.length; i++) {
+                    ComorderMoney = arr[i][1].OrderPrice + ComorderMoney;
+                }
+//                ordermoney[0] = ComorderMoney;
+                $('.shop-cart-bar-l span').text(ComorderMoney.toFixed(2));
+                $('.shop-cart-bar-r b').text(arr.length)
+
+                orderSubmitWX.OrderFee = ComorderMoney.toFixed(2);
+//                console.log(orderSubmitWX.OrderFee)
+            } else {
+
+                $('.shop-cart-bar-l span').text("0");
+                $('.shop-cart-bar-r b').text("0");
+                orderSubmitWX.OrderFee = 0
+//                console.log(orderSubmitWX.OrderFee)
+            };
+
+        }
+
         var orderSubmitWX = {
             "CusNo": logined.CusNo,
             "OrderType": "ORDER_WAP",
@@ -119,14 +150,25 @@
                     if (data.Code == 200) {
                         $('.loading').hide();
 //                        console.log($(this));
-                        var dataCount = $(this).parent().find('img').attr("data-count");
+                        var dataCount = $this.parent().find('img').attr("data-count");
                         for (var i = 0; i < productarr.length; i++) {
                             if (productarr[i][0] == dataCount) {
                                 productarr.splice(i, 1)
                             }
                         }
+                        orderMoney(productarr)
 
                         $this.parent().remove();
+                        if ($('.shop-cart-check .shop-cart-check-list').length != 0) {
+                            console.log($('.shop-cart-check .shop-cart-check-list').length)
+                            $('.empty').hide();
+                            $('.shop-cart-check h3, .shop-cart-check-list').show();
+                        } else {
+                            console.log($('.shop-cart-check .shop-cart-check-list').length)
+                            $('.empty').show();
+                            $('.shop-cart-check h3, .shop-cart-check-list').hide();
+                        }
+
                         console.log(productarr)
                     }
                 }
@@ -138,11 +180,30 @@
         $(".shop-cart-check-all").click(function () {
             if ($(this).find('img').attr("data-check") == "true") {
                 $(this).find("img").attr("src", "images/xuanzhe2.png").removeAttr("data-check");
-                $('.shop-cart-check-one').click()
-            }else{
+                $('.shop-cart-check .shop-cart-check-one').each(function () {
+                    if ($(this).attr("data-check") == "true") {
+                        $(this).click()
+                    } else {
+                        console.log("已取消")
+
+                    }
+                })
+                orderMoney(productarr)
+
+            } else {
                 $(this).find("img").attr({"src": "images/xuanzhe1.png"})
                     .attr({"data-check": "true"})
-                $('.shop-cart-check-one').click()
+                $('.shop-cart-check .shop-cart-check-one').each(function () {
+                    if ($(this).attr("data-check") == "true") {
+                        console.log("1已选")
+                    } else {
+                        $(this).click()
+
+
+                    }
+                })
+                orderMoney(productarr)
+
             }
         })
         //选择购物车物品
@@ -153,6 +214,8 @@
                 for (var i = 0; i < productarr.length; i++) {
                     if (productarr[i][0] == dataCount) {
                         productarr.splice(i, 1)
+                        orderMoney(productarr)
+
                     }
                 }
             } else {
@@ -168,39 +231,108 @@
                     "Style_id": $(this).parent().attr("data-styleid"),
                     "Style_Nm": $(this).parent().attr("data-stylenm"),
                     "OrderNum": 1,
-                    "OrderPrice": parseInt($(this).next().find("input").val()) * Number(parseFloat($('.product-price-this').html()).toFixed(2)),
-                    "OrderOldPrice": Number(parseInt($(this).next().find("input").val()) * parseFloat($('.product-old').html()).toFixed(2))
+//<<<<<<< Updated upstream
+                    OrderPrice: parseInt($(this).next().find("input").val()) * Number(parseFloat($(this).next().find('.product-price-this').html()).toFixed(2)),
+                    OrderOldPrice: Number(parseInt($(this).next().find("input").val()) * parseFloat($(this).next().find('.product-old').html()).toFixed(2))
+//=======
+//                    "OrderPrice": parseInt($(this).next().find("input").val()) * Number(parseFloat($('.product-price-this').html()).toFixed(2)),
+//                    "OrderOldPrice": Number(parseInt($(this).next().find("input").val()) * parseFloat($('.product-old').html()).toFixed(2))
+//>>>>>>> Stashed changes
                 };
                 productarr.push([$(this).attr("data-count"), productinfo]);
+                orderMoney(productarr)
+
                 console.log(productinfo)
                 console.log(orderSubmitWX)
 
             }
+            var checklenth = 0;//获取购物车选中个数
+
+            $('.shop-cart-check .shop-cart-check-one').each(function () {
+
+                if ($(this).attr("data-check") == "true") {
+                    checklenth += 1;
+                    console.log(checklenth)
+//                    console.log( $('.shop-cart-check .shop-cart-check-one').attr("data-check") == "true")
+                }
+                if (checklenth == $('.shop-cart-check .shop-cart-check-one').length) {
+                    $('.shop-cart-check-all').find("img").attr("data-check", "true")
+                    $('.shop-cart-check-all').find("img").attr("src", "images/xuanzhe1.png")
+                } else {
+                    $('.shop-cart-check-all').find("img").removeAttr("data-check")
+                    $('.shop-cart-check-all').find("img").attr("src", "images/xuanzhe2.png")
+                }
+
+            })
+//            if()
             console.log(productarr)
 
         });
+
         //数量增减
-        $(document).on("click",".shop-cart-add",function () {
+        $(document).on("click", ".shop-cart-add", function () {
 //            alert("1")
             var $input = $(this).parent().find("input");
             var $val = parseInt($input.val());
             var $stock = parseInt($input.attr("data-stock"));
             $val += 1;
-            if($val > $stock ){
+            if ($val > $stock) {
                 $val = $stock
             }
             $input.val($val)
+            var $this = $(this).parent().parent().parent().parent().parent().parent().prev().attr("data-count");
+            for (var i = 0; i < productarr.length; i++) {
+                if (productarr[i][0] == $this) {
+                    var OrderPriceCom = parseInt($val) * (productarr[i][1].OrderPrice / productarr[i][1].ProductNumber );
+                    var OrderOldPriceCom = parseInt($val) * (productarr[i][1].OrderOldPrice / productarr[i][1].ProductNumber );
+                    productarr[i][1].ProductNumber = parseInt($val);
+                    productarr[i][1].OrderPrice = OrderPriceCom;
+                    productarr[i][1].OrderOldPrice = OrderOldPriceCom;
+                    console.log(productarr[i])
+                    orderMoney(productarr)
+                } else {
+                    console.log("未选中")
+
+                }
+            }
+//            if (productarr[$this]) {
+////                console.log( (productarr[$this][1].OrderPrice / productarr[$this][1].ProductNumber ))
+////                console.log(parseInt($val) * (productarr[$this][1].OrderOldPrice / productarr[$this][1].ProductNumber ))
+//
+//            } else {
+//                console.log("未选中")
+//            }
+
+//            console.log($this)
+//            if()
             console.log($val)
 
         })
-        $(document).on("click",".shop-cart-reduce",function () {
+        $(document).on("click", ".shop-cart-reduce", function () {
             var $input = $(this).parent().find("input");
             var $val = parseInt($input.val());
             $val -= 1;
-            if($val < 1){
+            if ($val < 1) {
                 $val = 1;
             }
             $input.val($val);
+            var $this = $(this).parent().parent().parent().parent().parent().parent().prev().attr("data-count");
+            for (var i = 0; i < productarr.length; i++) {
+                if (productarr[i][0] == $this) {
+                    var OrderPriceCom = parseInt($val) * (productarr[i][1].OrderPrice / productarr[i][1].ProductNumber );
+                    var OrderOldPriceCom = parseInt($val) * (productarr[i][1].OrderOldPrice / productarr[i][1].ProductNumber );
+                    productarr[i][1].ProductNumber = parseInt($val);
+                    productarr[i][1].OrderPrice = OrderPriceCom;
+                    productarr[i][1].OrderOldPrice = OrderOldPriceCom;
+                    console.log(productarr[i])
+                    orderMoney(productarr)
+                } else {
+                    console.log("未选中")
+
+                }
+            }
+
+
             console.log($val)
 
         })
@@ -220,15 +352,18 @@
                         $('.loading').hide();
 
                         var msg = data.Data;
-                        console.log(msg.CartList[0].ProductList);
-                        var productList = msg.CartList[0].ProductList;
-                        console.log(productList.length);
+                        if (msg.CartList[0]) {
+
+                            console.log(msg.CartList[0].ProductList);
+
+                            var productList = msg.CartList[0].ProductList;
+                            console.log(productList.length);
 //                        return false;
-                        //购物车列表
-                        for (var i = 0; i < productList.length; i++) {
-                            var productStyle = productList[i].Color_Nm == "共同" ? "标准版" : productList[i].Color_Nm
-                            var $div = $('<div class="shop-cart-check-list" data-productid="' + productList[i].Product_ID + '" data-colorid="' + productList[i].Color_id + '" data-colornm="' + productList[i].Color_Nm + '" data-stylenm="' + productList[i].Style_Nm + '" data-styleid="' + productList[i].Style_id + '"> <img class="shop-cart-check-one" data-count="' + i + '" src="images/xuanzhe2.png" alt=""> <div class="shop-cart-product-info shop-cart-short"> <img src="' + productList[i].ImgUrl + '" alt=""> <div class="shop-cart-product-disc shop-cart-big-btn"> <ul> <li>' + productList[i].Name + '</li> <li>颜色分类: <b>' + productStyle + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + productList[i].Price + '</span> <del>¥ <span class="product-old">' + productList[i].MarketPrice + '</span></del> </div> <div class="shop-cart-product-number"> <ul> <li class="shop-cart-reduce">-</li> <li><input type="number"  data-stock="'+ productList[i].Stock+'" value="' + productList[i].Num + '" readonly=""></li> <li class="shop-cart-add">+</li> </ul> </div> </li> </ul> </div> </div> <div class="shop-cart-check-remove"> <span>删除</span> </div> </div>')
-                            $('.shop-cart-check').append($div);
+                            //购物车列表
+                            for (var i = 0; i < productList.length; i++) {
+                                var productStyle = productList[i].Color_Nm == "共同" ? "标准版" : productList[i].Color_Nm
+                                var $div = $('<div class="shop-cart-check-list" data-productid="' + productList[i].Product_ID + '" data-colorid="' + productList[i].Color_id + '" data-colornm="' + productList[i].Color_Nm + '" data-stylenm="' + productList[i].Style_Nm + '" data-styleid="' + productList[i].Style_id + '"> <img class="shop-cart-check-one" data-count="' + i + '" src="images/xuanzhe2.png" alt=""> <div class="shop-cart-product-info shop-cart-short"> <img src="' + productList[i].ImgUrl + '" alt=""> <div class="shop-cart-product-disc shop-cart-big-btn"> <ul> <li class="go-products">' + productList[i].Name + '</li> <li class="go-products">颜色分类: <b>' + productStyle + '</b></li> <li > <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + productList[i].Price + '</span> <del>¥ <span class="product-old">' + productList[i].MarketPrice + '</span></del> </div> <div class="shop-cart-product-number"> <ul> <li class="shop-cart-reduce">-</li> <li><input type="number"  data-stock="' + productList[i].Stock + '" value="' + productList[i].Num + '" readonly=""></li> <li class="shop-cart-add">+</li> </ul> </div> </li> </ul> </div> </div> <div class="shop-cart-check-remove"> <span>删除</span> </div> </div>')
+                                $('.shop-cart-check').append($div);
 //                            //将商品信息传入下单json
 //                            var wxJson = {
 //                                "ProductImg": productList.ImgUrl,
@@ -245,7 +380,15 @@
 //                            }
 
 
+                            }
+                        }else{
+                                  console.log($('.shop-cart-check .shop-cart-check-list').length)
+                                $('.empty').show();
+                                $('.shop-cart-check h3, .shop-cart-check-list').hide();
+
+
                         }
+
                         // 推荐列表
                         for (var i = 0; i < msg.ADList.length; i++) {
                             var $div = $('<div class="trendtoys-list" dataProductId="' + msg.ADList[i].ActionData.ProductID + '"> <div class="trendtoys-list-l"> <img src="' + msg.ADList[i].ShowData.ImgUrl + '" alt=""> </div> <div class="trendtoys-list-r"> <img src="images/bq.png" alt=""> <p>' + msg.ADList[i].ShowData.Title + '</p><div class="trendtoys-list-r-div"> <div class="trendtoys-list-r-div-l"> <p><b>¥</b><span>' + msg.ADList[i].ShowData.Price + '</span></p> <del>' + msg.ADList[i].ShowData.MarketPrice + '</del> </div> <div class="trendtoys-list-r-div-r" > </div> </div> </div> </div>')
@@ -273,13 +416,35 @@
         })
         //购买跳转订单支付
         $('.shop-cart-bar-r').click(function () {
-
-            window.location.href = "order-confure.html?from=shopCart"
+            if ($(this).find("b").text() == "0") {
+                showBg();
+                $('.alert p').text("请选择商品");
+                return false;
+            } else {
+                var productarrCom = [];
+                for (var i = 0; i < productarr.length; i++) {
+                    productarrCom.push(productarr[i][1])
+                }
+                orderSubmitWX.OrderDetail = productarrCom
+                console.log(productarrCom);
+                orderSubmitWX = JSON.stringify(orderSubmitWX);
+                localStorage.setItem("orderSubmitWX", orderSubmitWX)
+//                return false;
+                window.location.href = "order-confure.html?from=shopCart"
+            }
         })
-        $(document).on("click",".trendtoys-list",function () {
+        //购物车商品跳转
+        $(document).on("click", ".go-products", function () {
+            var productId = $(this).parent().parent().parent().parent().attr('data-productid');
+//            alert("1")
+            window.location.href = "products-main.html?productId=" + productId
+        })
+
+        //商品推荐跳转
+        $(document).on("click", ".trendtoys-list", function () {
 
             var productId = $(this).attr("dataProductId");
-            window.location.href = "products-main.html?productId="+productId
+            window.location.href = "products-main.html?productId=" + productId
         })
     })
 

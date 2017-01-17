@@ -50,6 +50,7 @@
                     <img src="images/suozaidiqu.png" alt="">
                 </div>
                 <div class="buy-suc-div-b-r">
+                    <p style="text-align: left;font-size: .7rem;line-height: 2rem;display:none;">请选择地址</p>
                     <ul>
                         <li><span>收货人：<b>胡萝卜</b></span><b>13838384388</b></li>
                         <li>江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号</li>
@@ -114,7 +115,7 @@
             var OrderFee = 0;
             for (var i = 0; i < orderSubmitWX.OrderDetail.length; i++) {
                 var $style = orderSubmitWX.OrderDetail[i].Color_Nm == '共同' ? '标准版' : orderSubmitWX.OrderDetail[i].Color_Nm;
-                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + orderSubmitWX.OrderDetail[i].ProductImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + orderSubmitWX.OrderDetail[i].Name + '</li> <li>颜色分类: <b>' + $style + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + orderSubmitWX.OrderDetail[i].OrderPrice /orderSubmitWX.OrderDetail[i].ProductNumber + '</span> <del>¥' + orderSubmitWX.OrderDetail[i].OrderOldPrice /orderSubmitWX.OrderDetail[i].ProductNumber + '</del> </div> <div class="shop-cart-product-number"> <p>X' + orderSubmitWX.OrderDetail[i].ProductNumber + '</p> </div> </li> </ul> </div> </div> </div>'
+                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + orderSubmitWX.OrderDetail[i].ProductImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + orderSubmitWX.OrderDetail[i].Name + '</li> <li>颜色分类: <b>' + $style + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + orderSubmitWX.OrderDetail[i].OrderPrice / orderSubmitWX.OrderDetail[i].ProductNumber + '</span> <del>¥' + orderSubmitWX.OrderDetail[i].OrderOldPrice / orderSubmitWX.OrderDetail[i].ProductNumber + '</del> </div> <div class="shop-cart-product-number"> <p>X' + orderSubmitWX.OrderDetail[i].ProductNumber + '</p> </div> </li> </ul> </div> </div> </div>'
                 $('.order-list').append($div)
                 OrderFee = Number(parseFloat(OrderFee).toFixed(2)) + Number(parseFloat(orderSubmitWX.OrderDetail[i].OrderPrice).toFixed(2));
 
@@ -126,7 +127,7 @@
                 $('.pay-price').text((OrderFee + Number(10)).toFixed(2));
                 orderSubmitWX.OrderFee = (OrderFee + Number(10)).toFixed(2)
             } else {
-                orderSubmitWX.OrderFee =OrderFee.toFixed(2)
+                orderSubmitWX.OrderFee = OrderFee.toFixed(2)
                 $('.pay-price').text(OrderFee.toFixed(2));
             }
             $('.product-number').text($('.order-list .shop-cart-check-list').length);
@@ -136,7 +137,7 @@
                 $(".buy-suc-div-b-r ul li:eq(0) span b").text(setAddrinfo.Name);
                 $(".buy-suc-div-b-r ul li:eq(0) > b").text(setAddrinfo.Phone);
                 $(".buy-suc-div-b-r ul li:eq(1)").text(setAddrinfo.mainAddr);
-
+                $('.buy-suc-div-b-r p').hide()
                 orderSubmitWX.ReceiveMan = setAddrinfo.Name;
                 orderSubmitWX.Phone = setAddrinfo.Phone;
                 orderSubmitWX.Province = setAddrinfo.Province;
@@ -151,25 +152,25 @@
             } else {
 
 
-            //获取默认地址
-            $.ajax({
-                url: api + "/Account/CusDefalutAddress",
-                type: "post",
-                data: {"CusNo": orderSubmitWX.CusNo},
-                success: function (data) {
-                    console.log(data)
-                    if (data.Data) {
-                        var msg = data.Data;
-                        $(".buy-suc-div-b-r ul li:eq(0) span b").text(msg.Name);
-                        $(".buy-suc-div-b-r ul li:eq(0) > b").text(msg.Phone);
-                        $(".buy-suc-div-b-r ul li:eq(1)").text(msg.Province + msg.City + msg.Area + msg.Street + msg.DetailAddr);
-                        orderSubmitWX.ReceiveMan = msg.Name;
-                        orderSubmitWX.Phone = msg.Phone;
-                        orderSubmitWX.Province = msg.Province;
-                        orderSubmitWX.City = msg.City;
-                        orderSubmitWX.Area = msg.Area;
-                        orderSubmitWX.Street = msg.Street;
-                        orderSubmitWX.DetailAddress = msg.DetailAddr;
+                //获取默认地址
+                $.ajax({
+                    url: api + "/Account/CusDefalutAddress",
+                    type: "post",
+                    data: {"CusNo": orderSubmitWX.CusNo},
+                    success: function (data) {
+                        console.log(data)
+                        if (data.Data) {
+                            var msg = data.Data;
+                            $(".buy-suc-div-b-r ul li:eq(0) span b").text(msg.Name);
+                            $(".buy-suc-div-b-r ul li:eq(0) > b").text(msg.Phone);
+                            $(".buy-suc-div-b-r ul li:eq(1)").text(msg.Province + msg.City + msg.Area + msg.Street + msg.DetailAddr);
+                            orderSubmitWX.ReceiveMan = msg.Name;
+                            orderSubmitWX.Phone = msg.Phone;
+                            orderSubmitWX.Province = msg.Province;
+                            orderSubmitWX.City = msg.City;
+                            orderSubmitWX.Area = msg.Area;
+                            orderSubmitWX.Street = msg.Street;
+                            orderSubmitWX.DetailAddress = msg.DetailAddr;
 //                        console.log("!")
 //                        $.ajax({
 //                            url: orderapi + "/Order/OrderSubmitWX",
@@ -190,16 +191,18 @@
 //                            }
 //                        })
 
-                    } else {
-                        alert("获取地址失败");
-                        $('.buy-suc-div-b').css("opacity", 0)
+                        } else {
+//                            alert("获取地址失败");
+                            $('.buy-suc-div-b-r p').show()
+                            $('.buy-suc-div-b-r ul').hide()
+//                        $('.buy-suc-div-b').css("opacity", 0)
+                        }
                     }
-                }
-            })
-        }
+                })
+            }
 
         } else {
-            var wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
+             wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
             var productAddr = JSON.parse(localStorage.getItem("productInfo"));
             console.log(wxPay);
             console.log(productAddr);
@@ -208,12 +211,15 @@
                 $(".buy-suc-div-b-r ul li:eq(0) span b").text(productAddr.Reman);
                 $(".buy-suc-div-b-r ul li:eq(0) > b").text(productAddr.Phone);
                 $(".buy-suc-div-b-r ul li:eq(1)").text(productAddr.Address);
-                $('.order-list .shop-cart-product-info>img').attr("src", productAddr.productImg);
-                $('.order-list .shop-cart-product-disc ul li:eq(0)').text(productAddr.productName);
-                $('.order-list .shop-cart-product-disc ul li:eq(1) b').text(productAddr.productStyle);
-                $('.product-price-this').text(productAddr.productPrice);
-                $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
-                $('.shop-cart-product-number p').text("X1")
+                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + productAddr.productImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + productAddr.productName + '</li> <li>颜色分类: <b>' + productAddr.productStyle + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + productAddr.productPrice + '</span> <del>¥' + productAddr.productMarketPrice + '</del> </div> <div class="shop-cart-product-number"> <p>X1</p> </div> </li> </ul> </div> </div> </div>'
+                $('.order-list').append($div)
+
+//                $('.order-list .shop-cart-product-info>img').attr("src", productAddr.productImg);
+//                $('.order-list .shop-cart-product-disc ul li:eq(0)').text(productAddr.productName);
+//                $('.order-list .shop-cart-product-disc ul li:eq(1) b').text(productAddr.productStyle);
+//                $('.product-price-this').text(productAddr.productPrice);
+//                $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
+//                $('.shop-cart-product-number p').text("X1")
                 $('.shop-cart-check-list').click(function () {
                     window.location.href = "products-main.html?productId=" + productAddr.productId;
                 });
@@ -287,7 +293,7 @@
                 success: function (data) {
                     console.log(data)
 //                                console.log("@")
-                    if(data.Data){
+                    if (data.Data) {
                         wxPay = data.Data;
 
                         console.log(wxPay);
@@ -344,15 +350,19 @@
                         } else {
 
                         }
-                    }else{
+                    } else {
                         showBg();
                         $('.alert p').text(data.Message);
                         $(".alert span").click(function () {
                             $(".bg").hide();
                             $('.alert').hide();
                             $('.loading').hide();
-                            if(from == "product-main.html"){
-                                window.location.href ="products-main.html?productId="+orderSubmitWX.OrderDetail[0].Product_ID;
+                            if (from == "product-main.html") {
+                                window.location.href = "products-main.html?productId=" + orderSubmitWX.OrderDetail[0].Product_ID;
+                                return false;
+                            } else if (from == "shopCart") {
+                                window.location.href = "shop-cart.html"
+                                return false;
                             }
                         })
 

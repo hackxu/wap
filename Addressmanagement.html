@@ -43,6 +43,7 @@
     </div>
     <div class="address-list-main">
     </div>
+    <div class="no-adress"><p>暂无地址</p></div>
     <div class="add-address">
         <a href="Addanaddress.html">添加地址</a>
     </div>
@@ -91,6 +92,7 @@
                     if (data.Code != 200) {
                         console.log("失败")
                     } else {
+                        $('.no-adress').hide()
                         var msg = data.Data;
                         for (var i = 0; i < msg.length; i++) {
                             var isdefault = ( msg[i].IsDefault == 1) ? 'images/xuanzhe1.png' : 'images/xuanzhe2.png';
@@ -127,6 +129,9 @@
         $(document).on("click", ".remove-addr", function () {
             var $AutoId = $(this).parent().prev("div").attr("data-autoid");
             $(this).parent().parent().parent().parent().remove();
+            if($('.address-list-main .address-list').length == 0){
+                $('.no-adress').show();
+            }
 //            console.log($(this).parent().parent().parent().parent())
 //            return;
             $.ajax({
