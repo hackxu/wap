@@ -111,7 +111,7 @@
         }
 
         var orderSubmitWX = {
-            "CusNo": logined.CusNo,
+            "CusNo": '',
             "OrderType": "ORDER_WAP",
 //                        "ReceiveMan": $reman,
 //                        "Phone": "",
@@ -340,7 +340,7 @@
 
         //判断是否登陆
         if (logined) {
-
+            orderSubmitWX.CusNo = logined.CusNo;
             $.ajax({
                 url: api + "/Account/CartListV2",
                 type: "post",

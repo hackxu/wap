@@ -123,6 +123,11 @@
             </ul>
         </div>
     </div>
+    <div class="alert">
+        <p>房价快速的减肥倒计时的风景 家居服</p>
+        <b>确&nbsp;&nbsp;&nbsp;&nbsp;定</b>
+    </div>
+
 </div>
 <script>
     $(function () {
@@ -505,10 +510,17 @@
                 }
             }
         });
-
-        $('.car-position').click(function () {
-            window.location.href="shop-cart.html"
-        })
+        if(logined){
+            $('.car-position').click(function () {
+                window.location.href="shop-cart.html"
+            })
+        }else{
+            $('.buy-bar-left ul li:eq(0),.buy-bar-left ul li:eq(1),.buy-bar-left ul li:eq(2)').click(function () {
+                showBg();
+                $('.alert p').text('未登陆')
+                return false
+            })
+        }
     })
 </script>
 </body>

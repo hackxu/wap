@@ -42,10 +42,6 @@
     </div>
     <div class="competitiveProducts">
         <ul>
-            <li><a href=""><img src="images/t2.jpg" alt=""></a></li>
-            <li><a href=""><img src="images/t2.jpg" alt=""></a></li>
-            <li><a href=""><img src="images/t2.jpg" alt=""></a></li>
-            <li><a href=""><img src="images/t2.jpg" alt=""></a></li>
         </ul>
     </div>
     <div class="shop-cart">
@@ -53,5 +49,25 @@
     </div>
 
 </div>
+<script>
+    $(function () {
+        $.ajax({
+            url: api + "/AD/GetWXAd?Position=2",
+            type: "get",
+            success: function (data) {
+                console.log(data)
+                if (data.Code == 200) {
+                    var msg = data.Data;
+                    for (var i = 0; i < msg.length; i++) {
+//                        var $div = $('<div class="hotProducts-list-main"> <a href="products-main.html?productId='+ msg[i].Link+'"><ul> <li><img src="'+ msg[i].Img+'" alt=""><img src="images/HOT.png" alt=""></li> <li><img src="images/huo.png" alt=""> <p>'+ msg[i]+'</p></li> <li> <div class="hotProducts-list-main-l"> <b>￥</b> <span>'+msg[i].Price +'</span> <del>￥'+ msg[i].MarketPrice +'</del> <p>'+ msg[i].PriceTarget1+'</p> </div> <div class="hotProducts-list-main-r"> <img src="images/sale.png" alt=""> <span>已售:<b>'+ msg[i].SellCount+'</b>件</span> </div> </li> </ul> </a></div>')
+                        var $li = $('<li><a href="products-main.html?productId=' + msg[i].Link + '"><img src="' + msg[i].Img + '" alt=""></a></li>')
+                        $('.competitiveProducts ul').append($li)
+                    }
+                }
+//                alert(data)
+            }
+        })
+    })
+</script>
 </body>
 </html>

@@ -41,48 +41,30 @@
         </div>
     </div>
     <div class="hotProducts-list">
-        <div class="hotProducts-list-main">
-            <ul>
-                <li><img src="images/t1.jpg" alt=""><img src="images/HOT.png" alt=""></li>
-                <li><img src="images/huo.png" alt="">
-                    <p>张大奕 jupe vendue 重磅移针套头毛衫 (四种颜色)张大奕 jupe vendue 重磅移针套头毛衫 (四种颜色)</p></li>
-                <li>
-                    <div class="hotProducts-list-main-l">
-                        <b>￥</b>
-                        <span>689</span>
-                        <del>￥1200</del>
-                        <p>节日聚惠</p>
-                    </div>
-                    <div class="hotProducts-list-main-r">
-                        <img src="images/sale.png" alt="">
-                        <span>已售:<b>699</b>件</span>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="hotProducts-list-main">
-            <ul>
-                <li><img src="images/t1.jpg" alt=""><img src="images/HOT.png" alt=""></li>
-                <li><img src="images/huo.png" alt="">
-                    <p>张大奕 jupe vendue 重磅移针套头毛衫 (四种颜色)张大奕 jupe vendue 重磅移针套头毛衫 (四种颜色)</p></li>
-                <li>
-                    <div class="hotProducts-list-main-l">
-                        <b>￥</b>
-                        <span>689</span>
-                        <del>￥1200</del>
-                        <p>节日聚惠</p>
-                    </div>
-                    <div class="hotProducts-list-main-r">
-                        <img src="images/sale.png" alt="">
-                        <span>已售:<b>699</b>件</span>
-                    </div>
-                </li>
-            </ul>
-        </div>
     </div>
     <div class="shop-cart">
         <a href=""><img src="images/fd.png" alt=""></a>
     </div>
 </div>
+<script>
+    $(function () {
+        $.ajax({
+            url:api + "/AD/GetWXAd?Position=1",
+            type:"get",
+            success:function (data) {
+                console.log(data)
+                if(data.Code == 200){
+                    var msg = data.Data;
+                    for (var i =0;i<msg.length;i++){
+                        var $div = $('<div class="hotProducts-list-main"> <a href="products-main.html?productId='+ msg[i].Link+'"><ul> <li><img src="'+ msg[i].Img+'" alt=""><img src="images/HOT.png" alt=""></li> <li><img src="images/huo.png" alt=""> <p>'+ msg[i]+'</p></li> <li> <div class="hotProducts-list-main-l"> <b>￥</b> <span>'+msg[i].Price +'</span> <del>￥'+ msg[i].MarketPrice +'</del> <p>'+ msg[i].PriceTarget1+'</p> </div> <div class="hotProducts-list-main-r"> <img src="images/sale.png" alt=""> <span>已售:<b>'+ msg[i].SellCount+'</b>件</span> </div> </li> </ul> </a></div>')
+                        $('.hotProducts-list').append($div)
+                    }
+                }
+//                alert(data)
+            }
+        })
+    })
+
+</script>
 </body>
 </html>
