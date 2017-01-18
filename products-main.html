@@ -71,7 +71,7 @@
         <ul>
             <li><img src="images/tuijian.png" alt=""><span>更多相关商品推荐</span><i><img src="images/b.png" alt=""></i></li>
             <li><img src="images/jifen.png" alt=""><span>购买此商品可获得<b>积分</b></span></li>
-            <li><img src="images/yunfei.png" alt=""><span>全场包邮</span></li>
+            <li><img src="images/yunfei.png" alt=""><span>每笔订单满200元包邮(全场商品适用)</span></li>
         </ul>
     </div>
     <div class="product-img">
@@ -131,323 +131,350 @@
 </div>
 <script>
     $(function () {
-        var ProductID = $.query.get("productId");
-        var productinfoobject = {};
-        function eachstyle() {
-            $('.classify-main>ul>li').each(function () {
-                var $class = $(this).attr("class");
-                if ($class == "classify-active") {
-                    $('.check-classify span').text("已选:" + $(this).text()).attr("data-checked", "true");
-                    return;
+        var redirectUrl = encodeURIComponent("http://wap-ymws.jstv.com/products-main.html?productId=172423");
+        var authcode = $.query.get("code");
+//        alert("1")
+        if (authcode.length > 0) {
+            $.getJSON('http://test-webapi.ymws.jstv.com/WXHandler/GetOpenId?code=' + authcode, function (data) {
+                localStorage.setItem("openid",data.Data)
+            });
+//            $.ajax({
+//                url:"http://test-webapi.ymws.jstv.com/WXHandler/GetOpenId?code=" + authcode,
+//                type:"get",
+//                success:function(data) {
+////                    alert("1")
+//                    localStorage.setItem("openid",data.Data)
+//                }
+//            })
+            var ProductID = $.query.get("productId");
+            var productinfoobject = {};
+
+            function eachstyle() {
+                $('.classify-main>ul>li').each(function () {
+                    var $class = $(this).attr("class");
+                    if ($class == "classify-active") {
+                        $('.check-classify span').text("已选:" + $(this).text()).attr("data-checked", "true");
+                        return;
+                    }
+                })
+            }
+
+            //获取购物车数量
+            $.ajax({
+                url: api + "/Account/CartCnt",
+                type: "post",
+                data: {"CusNo": logined ? logined.CusNo : -1},
+                success: function (data) {
+                    console.log(data)
+                    if (data.Data) {
+                        $('.car-position b').text(data.Data)
+                    } else {
+                        $('.car-position b').hide()
+                    }
                 }
             })
-        }
-        //获取购物车数量
-        $.ajax({
-            url:api+"/Account/CartCnt",
-            type:"post",
-            data:{"CusNo":logined?logined.CusNo:-1},
-            success:function (data) {
-                console.log(data)
-                if(data.Data){
-                    $('.car-position b').text(data.Data)
-                }else{
-                    $('.car-position b').hide()
-                }
-            }
-        })
-        //当前商品信息展示不包括选择样式
-        $.ajax({
-            url: api + "/Product/ProductDetailV2",
-            type: "POST",
-            data: {Product_ID: ProductID},
-            dataType: "json",
-            success: function (data) {
-                if (data) {
-                    $('.loading').hide();
-                    var msg = data.Data;
-                    console.log(msg)
-                    productinfoobject = {
-                        "productId": ProductID,
+            //当前商品信息展示不包括选择样式
+            $.ajax({
+                url: api + "/Product/ProductDetailV2",
+                type: "POST",
+                data: {Product_ID: ProductID},
+                dataType: "json",
+                success: function (data) {
+                    if (data) {
+                        $('.loading').hide();
+                        var msg = data.Data;
+                        console.log(msg)
+                        productinfoobject = {
+                            "productId": ProductID,
 //                        "productImg": msg.Imgs[0].Url ? msg.Imgs[0].Url : "",
 
-                        "productName": msg.Name,
-                        "productPrice": msg.Price,
-                        "productMarketPrice": msg.MarketPrice,
-                    };
-                    if (msg.Imgs.length > 0) {
-                        productinfoobject.productImg = msg.Imgs[0].Url;
-                    } else {
-                        productinfoobject.productImg = ""
-                    }
-                    //此处为商品详细轮播图
-                    if (msg.Imgs.length == 1) {
-                        var $li = '<div class="swiper-slide"> <img src="' + msg.Imgs[0].Url + '" alt=""> </div>'
-                        $('.swiper-container>.swiper-wrapper').append($li)
-                    } else {
-                        for (var i = 0; i < msg.Imgs.length; i++) {
-                            var $li = '<div class="swiper-slide"> <img src="' + msg.Imgs[i].Url + '" alt=""> </div>'
-                            $('.swiper-container>.swiper-wrapper').append($li)
+                            "productName": msg.Name,
+                            "productPrice": msg.Price,
+                            "productMarketPrice": msg.MarketPrice,
+                        };
+                        if (msg.Imgs.length > 0) {
+                            productinfoobject.productImg = msg.Imgs[0].Url;
+                        } else {
+                            productinfoobject.productImg = ""
                         }
-                        var mySwiper = new Swiper('.swiper-container', {
-                            direction: 'horizontal',
-                            pagination: '.swiper-pagination',
-                        });
-                    }
-                    //此处为详情页title价格信息
-                    $('.product-info-main ul li:first-child').text(msg.Name);
-                    $('.low-price').text(msg.Price);
-                    $('.high-price').text("¥" + msg.MarketPrice)
-                    if (msg.PriceTarget1) {
-                        $('.phone-only span').text(msg.PriceTarget1)
-                    }
-                    if (msg.PriceTarget2) {
-                        $('.product-discount span').text(msg.PriceTarget2)
-                    }
-                    if (parseFloat(msg.Price) > 200) {
-                        console.log("免运费")
-                    } else {
-                        $('.product-Freight').text("10元")
-                    }
-                    if(msg.Stock == 0){
-                        $('.buy-bar .buy-bar-right ol').show()
-                        $('.buy-bar .buy-bar-right ul').hide()
-                    }
-                    $('.product-Sales').text(msg.SellCount)
-                    //商品大图
+                        //此处为商品详细轮播图
+                        if (msg.Imgs.length == 1) {
+                            var $li = '<div class="swiper-slide"> <img src="' + msg.Imgs[0].Url + '" alt=""> </div>'
+                            $('.swiper-container>.swiper-wrapper').append($li)
+                        } else {
+                            for (var i = 0; i < msg.Imgs.length; i++) {
+                                var $li = '<div class="swiper-slide"> <img src="' + msg.Imgs[i].Url + '" alt=""> </div>'
+                                $('.swiper-container>.swiper-wrapper').append($li)
+                            }
+                            var mySwiper = new Swiper('.swiper-container', {
+                                direction: 'horizontal',
+                                pagination: '.swiper-pagination',
+                            });
+                        }
+                        //此处为详情页title价格信息
+                        $('.product-info-main ul li:first-child').text(msg.Name);
+                        $('.low-price').text(msg.Price);
+                        $('.high-price').text("¥" + msg.MarketPrice)
+                        if (msg.PriceTarget1) {
+                            $('.phone-only span').text(msg.PriceTarget1)
+                        }
+                        if (msg.PriceTarget2) {
+                            $('.product-discount span').text(msg.PriceTarget2)
+                        }
+                        if (parseFloat(msg.Price) > 200) {
+                            console.log("免运费")
+                        } else {
+                            $('.product-Freight').text("10元")
+                        }
+                        if (msg.Stock == 0) {
+                            $('.buy-bar .buy-bar-right ol').show()
+                            $('.buy-bar .buy-bar-right ul').hide()
+                        }
+                        $('.product-Sales').text(msg.SellCount)
+                        //商品大图
 //                    if()
-                    if (msg.ProductDesc) {
-                        for (var i = 0; i < msg.ProductDesc.List.length; i++) {
-                            if (msg.ProductDesc.List[i].Content) {
-                                $('.product-disc').before("<img src='" + msg.ProductDesc.List[i].Content + "'/>")
+                        if (msg.ProductDesc) {
+                            for (var i = 0; i < msg.ProductDesc.List.length; i++) {
+                                if (msg.ProductDesc.List[i].Content) {
+                                    $('.product-disc').before("<img src='" + msg.ProductDesc.List[i].Content + "'/>")
+                                }
+                            }
+                        }
+
+                        //商品文字描述
+                        if (msg.ProductParams) {
+                            for (var i = 0; i < msg.ProductParams.length; i++) {
+                                var $li = $('<li><b>' + msg.ProductParams[i].Name + '</b><p>' + msg.ProductParams[i].Value + '</p></li>');
+                                $('.product-disc ul').append($li)
                             }
                         }
                     }
+                }
+            });
 
-                    //商品文字描述
-                    if (msg.ProductParams) {
-                        for (var i = 0; i < msg.ProductParams.length; i++) {
-                            var $li = $('<li><b>' + msg.ProductParams[i].Name + '</b><p>' + msg.ProductParams[i].Value + '</p></li>');
-                            $('.product-disc ul').append($li)
+            //当前商品选择样式
+            $.ajax({
+                url: api + "/Product/ProductItem",
+                type: "post",
+                data: {Product_ID: ProductID},
+                dataType: "json",
+                success: function (data) {
+                    var msg = data.Data;
+                    console.log(msg)
+                    if (msg.length != 0) {
+                        for (var i = 0; i < msg.length; i++) {
+                            var $li = $("<li data_Color_ID='" + msg[i].Color_ID + "' data_Stock='" + msg[i].Stock + "' data_Style_ID='" + msg[i].Style_ID + "' data_Style_Nm='" + msg[i].Style_Nm + "'>" + msg[i].Color_Nm + "</li>")
+                            $('.classify-main ul').append($li)
                         }
+                        $('.classify-main h3 b').text(msg[0].Stock);
+                        if (msg[0].Stock == 0) {
+                            $('.classify-main .buy-bar-right ol').show()
+                            $('.classify-main .buy-bar-right ul').hide()
+                        }
+                        $('.classify-main ul li:first-child').addClass("classify-active");
+
                     }
-                }
-            }
-        });
 
-        //当前商品选择样式
-        $.ajax({
-            url: api + "/Product/ProductItem",
-            type: "post",
-            data: {Product_ID: ProductID},
-            dataType: "json",
-            success: function (data) {
-                var msg = data.Data;
-                console.log(msg)
-                if (msg.length != 0) {
-                    for (var i = 0; i < msg.length; i++) {
-                        var $li = $("<li data_Color_ID='" + msg[i].Color_ID + "' data_Stock='" + msg[i].Stock + "' data_Style_ID='" + msg[i].Style_ID + "' data_Style_Nm='" + msg[i].Style_Nm + "'>" + msg[i].Color_Nm + "</li>")
-                        $('.classify-main ul').append($li)
-                    }
-                    $('.classify-main h3 b').text(msg[0].Stock);
-                    if(msg[0].Stock == 0){
-                        $('.classify-main .buy-bar-right ol').show()
-                        $('.classify-main .buy-bar-right ul').hide()
-                    }
-                    $('.classify-main ul li:first-child').addClass("classify-active");
-
-                }
-
-                //多种样式
-                if (msg.length > 1) {
-                    //加入购物车或者购买弹出选择样式
-                    $(".check-classify").click(function () {
-                        $('.bg').show();
-                        $('.classify-main').slideDown();
-                    });
-                    //关闭弹窗
-                    $('.bg').click(function () {
-                        $('.bg').hide();
-                        $('.classify-main').slideUp();
-                        eachstyle()
-                    });
-
-                    //非弹出层按钮购买
-                    $('.buy-now-im').click(function () {
-//                        $('.')
-                        if ($('.check-classify span').attr("data-checked") != "true") {
+                    //多种样式
+                    if (msg.length > 1) {
+                        //加入购物车或者购买弹出选择样式
+                        $(".check-classify").click(function () {
                             $('.bg').show();
                             $('.classify-main').slideDown();
-                        } else {
+                        });
+                        //关闭弹窗
+                        $('.bg').click(function () {
+                            $('.bg').hide();
+                            $('.classify-main').slideUp();
+                            eachstyle()
+                        });
 
-                            if(logined){
+                        //非弹出层按钮购买
+                        $('.buy-now-im').click(function () {
+//                        $('.')
+                            if ($('.check-classify span').attr("data-checked") != "true") {
+                                $('.bg').show();
+                                $('.classify-main').slideDown();
+                            } else {
+
+                                if (logined) {
+                                    logindataGo()
+                                } else {
+
+                                    dataGo()
+                                }
+                            }
+                        })
+                        //非弹出层加入购物车
+                        $('.add-cart-im').click(function () {
+                            if ($('.check-classify span').attr("data-checked") != "true") {
+                                $('.bg').show();
+                                $('.classify-main').slideDown();
+                            } else {
+                                if (logined) {
+                                    addcart()
+                                } else {
+
+                                }
+                            }
+
+                        })
+
+                        //弹出层加入购物车
+                        $('.add-cart-not').click(function () {
+                            if (logined) {
+                                addcart()
+                            } else {
+
+                            }
+                        })
+                        //弹出层按钮购买
+                        $('.buy-now-not').click(function () {
+                            if (logined) {
                                 logindataGo()
-                            }else{
-
+                            } else {
                                 dataGo()
                             }
-                        }
-                    })
-                    //非弹出层加入购物车
-                    $('.add-cart-im').click(function () {
-                        if ($('.check-classify span').attr("data-checked") != "true") {
-                            $('.bg').show();
-                            $('.classify-main').slideDown();
-                        } else {
-                            addcart()
-                        }
-
-                    })
-
-                    //弹出层加入购物车
-                        $('.add-cart-not').click(function () {
-                            addcart()
                         })
-                    //弹出层按钮购买
-                    $('.buy-now-not').click(function () {
-                        if(logined){
-                            logindataGo()
-                        }else{
-                            dataGo()
-                        }
-                    })
 
 //                    选择样式
-                    $(document).on("click", ".classify-main>ul>li", function () {
-                        $(this).addClass("classify-active").siblings().removeClass("classify-active");
-                        $('.classify-main h3 b').text($(this).attr("data_Stock"))
-                        if ($(this).attr("data_Stock") == 0) {
-                            $(".classify-main ol").show();
-                            $('.classify-main ul').hide();
+                        $(document).on("click", ".classify-main>ul>li", function () {
+                            $(this).addClass("classify-active").siblings().removeClass("classify-active");
+                            $('.classify-main h3 b').text($(this).attr("data_Stock"))
+                            if ($(this).attr("data_Stock") == 0) {
+                                $(".classify-main ol").show();
+                                $('.classify-main ul').hide();
+                            } else {
+                                $(".classify-main ol").hide();
+                                $('.classify-main ul').show();
+                            }
+                        })
+
+
+                        //点击弹出框购物车关闭弹窗
+                        $('.add-cart-long').click(function () {
+                            $('.bg').hide();
+                            $('.classify-main').slideUp()
+                            eachstyle()
+
+                        })
+                    }
+                    //添加购物车
+                    function addcart() {
+                        if (msg.length > 1) {
+                            $('.classify-main ul li').each(function () {
+                                if ($(this).attr("class") == "classify-active") {
+                                    $.ajax({
+                                        url: api + "/Account/CartAdd",
+                                        type: "post",
+                                        data: {
+                                            "Product_ID": ProductID,
+                                            "Num": 1,
+                                            "CusNo": logined ? logined.CusNo : -1,
+                                            "Color_ID": $(this).attr("data_color_id"),
+                                            "Style_ID": $(this).attr("data_style_id"),
+                                            "ClientType": 0
+                                        },
+                                        success: function (data) {
+                                            console.log(data)
+                                            if (data.Data) {
+                                                $('.car-position b').show()
+                                                $('.car-position b').text(data.Data)
+                                            }
+                                        }
+                                    })
+                                }
+                            })
                         } else {
-                            $(".classify-main ol").hide();
-                            $('.classify-main ul').show();
+                            $('.classify-main ul li').each(function () {
+                                if ($(this).attr("class") == "classify-active") {
+                                    $.ajax({
+                                        url: api + "/Account/CartAdd",
+                                        type: "post",
+                                        data: {
+                                            "Product_ID": ProductID,
+                                            "Num": 1,
+                                            "CusNo": logined ? logined.CusNo : -1,
+                                            "Color_ID": $(this).attr("data_color_id"),
+                                            "Style_ID": $(this).attr("data_style_id"),
+                                            "ClientType": 0
+                                        },
+                                        success: function (data) {
+                                            console.log(data)
+                                            if (data.Data) {
+                                                $('.car-position b').show()
+
+                                                $('.car-position b').text(data.Data)
+                                            }
+                                        }
+                                    })
+                                }
+                            })
+
                         }
-                    })
-
-
-                    //点击弹出框购物车关闭弹窗
-                    $('.add-cart-long').click(function () {
-                        $('.bg').hide();
-                        $('.classify-main').slideUp()
-                        eachstyle()
-
-                    })
-                }
-                //添加购物车
-                function addcart() {
-                    if(msg.length>1){
-                        $('.classify-main ul li').each(function () {
-                            if($(this).attr("class") == "classify-active"){
-                                $.ajax({
-                                    url:api + "/Account/CartAdd",
-                                    type:"post",
-                                    data:{
-                                        "Product_ID": ProductID,
-                                        "Num": 1,
-                                        "CusNo": logined?logined.CusNo : -1,
-                                        "Color_ID": $(this).attr("data_color_id"),
-                                        "Style_ID": $(this).attr("data_style_id"),
-                                        "ClientType": 0
-                                    },
-                                    success:function (data) {
-                                        console.log(data)
-                                        if(data.Data){
-                                            $('.car-position b').show()
-                                            $('.car-position b').text(data.Data)
-                                        }
-                                    }
-                                })
-                            }
-                        })
-                    }else{
-                        $('.classify-main ul li').each(function () {
-                            if($(this).attr("class") == "classify-active"){
-                                $.ajax({
-                                    url:api + "/Account/CartAdd",
-                                    type:"post",
-                                    data:{
-                                        "Product_ID": ProductID,
-                                        "Num": 1,
-                                        "CusNo": logined?logined.CusNo : -1,
-                                        "Color_ID": $(this).attr("data_color_id"),
-                                        "Style_ID": $(this).attr("data_style_id"),
-                                        "ClientType": 0
-                                    },
-                                    success:function (data) {
-                                        console.log(data)
-                                        if(data.Data){
-                                            $('.car-position b').show()
-
-                                            $('.car-position b').text(data.Data)
-                                        }
-                                    }
-                                })
-                            }
-                        })
-
                     }
-                }
-                //购买跳转及带数据过去
-                function dataGo() {
-                    if (msg.length > 1) {
-                        $('.classify-main ul li').each(function () {
-                            if ($(this).attr("class") == "classify-active") {
-                                productinfoobject.productStyle = $(this).text();
-                                productinfoobject.productColorId = $(this).attr("data_color_id");
-                                productinfoobject.productStock = $(this).attr("data_tock");
-                                productinfoobject.productStyleId = $(this).attr("data_style_id");
-                                productinfoobject.productStyleNm = $(this).attr("data_style_nm");
-                                return true;
-                            }
-                        });
-                    } else {
-                        $('.classify-main ul li').each(function () {
-                            if ($(this).attr("class") == "classify-active") {
-                                productinfoobject.productStyle = $(this).text();
-                                productinfoobject.productColorId = $(this).attr("data_color_id");
-                                productinfoobject.productStock = $(this).attr("data_tock");
-                                productinfoobject.productStyleId = $(this).attr("data_style_id");
-                                productinfoobject.productStyleNm = $(this).attr("data_style_nm");
-                                return true;
-                            }
-                        });
-                    }
-                    console.log(productinfoobject);
-                    productinfoobject = JSON.stringify(productinfoobject);
-                    localStorage.setItem("productInfo", productinfoobject);
+
+                    //购买跳转及带数据过去
+                    function dataGo() {
+                        if (msg.length > 1) {
+                            $('.classify-main ul li').each(function () {
+                                if ($(this).attr("class") == "classify-active") {
+                                    productinfoobject.productStyle = $(this).text();
+                                    productinfoobject.productColorId = $(this).attr("data_color_id");
+                                    productinfoobject.productStock = $(this).attr("data_tock");
+                                    productinfoobject.productStyleId = $(this).attr("data_style_id");
+                                    productinfoobject.productStyleNm = $(this).attr("data_style_nm");
+                                    return true;
+                                }
+                            });
+                        } else {
+                            $('.classify-main ul li').each(function () {
+                                if ($(this).attr("class") == "classify-active") {
+                                    productinfoobject.productStyle = $(this).text();
+                                    productinfoobject.productColorId = $(this).attr("data_color_id");
+                                    productinfoobject.productStock = $(this).attr("data_tock");
+                                    productinfoobject.productStyleId = $(this).attr("data_style_id");
+                                    productinfoobject.productStyleNm = $(this).attr("data_style_nm");
+                                    return true;
+                                }
+                            });
+                        }
+                        console.log(productinfoobject);
+                        productinfoobject = JSON.stringify(productinfoobject);
+                        localStorage.setItem("productInfo", productinfoobject);
 
 //                        return;
-                    window.location.href = "buysoon.html?ProductID=" + ProductID
+                        window.location.href = "buysoon.html?ProductID=" + ProductID
 
-                }
-                function logindataGo() {
-                    if (msg.length > 1) {
-                        $('.classify-main ul li').each(function () {
-                            if ($(this).attr("class") == "classify-active") {
-                                productinfoobject.productStyle = $(this).text();
-                                productinfoobject.productColorId = $(this).attr("data_color_id");
-                                productinfoobject.productStock = $(this).attr("data_tock");
-                                productinfoobject.productStyleId = $(this).attr("data_style_id");
-                                productinfoobject.productStyleNm = $(this).attr("data_style_nm");
-                                return true;
-                            }
-                        });
-                    } else {
-                        $('.classify-main ul li').each(function () {
-                            if ($(this).attr("class") == "classify-active") {
-                                productinfoobject.productStyle = $(this).text();
-                                productinfoobject.productColorId = $(this).attr("data_color_id");
-                                productinfoobject.productStock = $(this).attr("data_tock");
-                                productinfoobject.productStyleId = $(this).attr("data_style_id");
-                                productinfoobject.productStyleNm = $(this).attr("data_style_nm");
-                                return true;
-                            }
-                        });
                     }
-                    var orderSubmitWX = {
-                        "CusNo": logined.CusNo,
-                        "OrderType": "ORDER_WAP",
+
+                    function logindataGo() {
+                        if (msg.length > 1) {
+                            $('.classify-main ul li').each(function () {
+                                if ($(this).attr("class") == "classify-active") {
+                                    productinfoobject.productStyle = $(this).text();
+                                    productinfoobject.productColorId = $(this).attr("data_color_id");
+                                    productinfoobject.productStock = $(this).attr("data_tock");
+                                    productinfoobject.productStyleId = $(this).attr("data_style_id");
+                                    productinfoobject.productStyleNm = $(this).attr("data_style_nm");
+                                    return true;
+                                }
+                            });
+                        } else {
+                            $('.classify-main ul li').each(function () {
+                                if ($(this).attr("class") == "classify-active") {
+                                    productinfoobject.productStyle = $(this).text();
+                                    productinfoobject.productColorId = $(this).attr("data_color_id");
+                                    productinfoobject.productStock = $(this).attr("data_tock");
+                                    productinfoobject.productStyleId = $(this).attr("data_style_id");
+                                    productinfoobject.productStyleNm = $(this).attr("data_style_nm");
+                                    return true;
+                                }
+                            });
+                        }
+                        var orderSubmitWX = {
+                            "CusNo": logined.CusNo,
+                            "OrderType": "ORDER_WAP",
 //                        "ReceiveMan": $reman,
 //                        "Phone": "",
 //                        "Province": $('.Province').text(),
@@ -455,72 +482,82 @@
 //                        "Area": $('.Area').text(),
 //                        "Street": $('.check-address-jie b').text(),
 //                        "DetailAddress": $addrmore,
-                        "PayMode": "微信",
-                        "OrderFee": $('.product-price-this').text(),
-                        "TiketNo": "",
-                        "Receipt_Type": "00",
-                        "Receipt_Title": "",
-                        "Remark": "",
-                        "OrderDetail": [
-                            {
-                                "ProductImg":productinfoobject.productImg,
-                                "ProductNumber":1,
-                                "Product_ID": productinfoobject.productId,
-                                "Name": productinfoobject.productName,
-                                "Color_id": productinfoobject.productColorId,
-                                "Color_Nm": productinfoobject.productStyle,
-                                "Style_id": productinfoobject.productStyleId,
-                                "Style_Nm": productinfoobject.productStyleNm,
-                                "OrderNum": 1,
-                                "OrderPrice": productinfoobject.productPrice,
-                                "OrderOldPrice": productinfoobject.productMarketPrice
-                            }
-                        ],
-                        "SessionCode": "",
-                        "LoginName": "",
-                        "SmsCode": ""
-                    }
-                    productinfoobject.CusNo = logined.CusNo;
-                    console.log(orderSubmitWX)
-                    console.log(productinfoobject);
-                    orderSubmitWX = JSON.stringify(orderSubmitWX);
-                    productinfoobject = JSON.stringify(productinfoobject);
-                    localStorage.setItem("productInfo", productinfoobject);
-                    localStorage.setItem("orderSubmitWX", orderSubmitWX);
+                            "PayMode": "微信",
+                            "OrderFee": $('.product-price-this').text(),
+                            "TiketNo": "",
+                            "Receipt_Type": "00",
+                            "Receipt_Title": "",
+                            "Remark": "",
+                            "OrderDetail": [
+                                {
+                                    "ProductImg": productinfoobject.productImg,
+                                    "ProductNumber": 1,
+                                    "Product_ID": productinfoobject.productId,
+                                    "Name": productinfoobject.productName,
+                                    "Color_id": productinfoobject.productColorId,
+                                    "Color_Nm": productinfoobject.productStyle,
+                                    "Style_id": productinfoobject.productStyleId,
+                                    "Style_Nm": productinfoobject.productStyleNm,
+                                    "OrderNum": 1,
+                                    "OrderPrice": productinfoobject.productPrice,
+                                    "OrderOldPrice": productinfoobject.productMarketPrice
+                                }
+                            ],
+                            "SessionCode": "",
+                            "LoginName": "",
+                            "SmsCode": ""
+                        }
+                        productinfoobject.CusNo = logined.CusNo;
+                        console.log(orderSubmitWX)
+                        console.log(productinfoobject);
+                        orderSubmitWX = JSON.stringify(orderSubmitWX);
+                        productinfoobject = JSON.stringify(productinfoobject);
+                        localStorage.setItem("productInfo", productinfoobject);
+                        localStorage.setItem("orderSubmitWX", orderSubmitWX);
 
 //                        return;
-                    window.location.href = "order-confure.html?from=product-main.html"
+                        window.location.href = "order/order-confure.html?from=product-main.html"
 
-                }
+                    }
 
 //                只有一种样式
-                if (msg.length == 1) {
-                    $('.check-classify').hide();
-                    $('.buy-now-im').click(function () {
-                        if(logined){
-                            logindataGo()
-                        }else{
-                            dataGo();
+                    if (msg.length == 1) {
+                        $('.check-classify').hide();
+                        $('.buy-now-im').click(function () {
+                            if (logined) {
+                                logindataGo()
+                            } else {
+                                dataGo();
 
-                        }
-                    })
-                    $('.add-cart-im').click(function () {
-                        addcart();
-                    })
+                            }
+                        })
+                        $('.add-cart-im').click(function () {
+                            if (logined) {
+                                addcart();
+                            } else {
+
+                            }
+                        })
+                    }
                 }
+            });
+            if (logined) {
+                $('.car-position').click(function () {
+                    window.location.href = "shop-cart.html"
+                })
+            } else {
+                $('.buy-bar-left ul li:eq(0),.buy-bar-left ul li:eq(1),.buy-bar-left ul li:eq(2)').click(function () {
+                    showBg();
+                    $('.alert p').text('未登陆')
+                    return false
+                })
             }
-        });
-        if(logined){
-            $('.car-position').click(function () {
-                window.location.href="shop-cart.html"
-            })
+
         }else{
-            $('.buy-bar-left ul li:eq(0),.buy-bar-left ul li:eq(1),.buy-bar-left ul li:eq(2)').click(function () {
-                showBg();
-                $('.alert p').text('未登陆')
-                return false
-            })
+            window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdad4cfca627754ef&redirect_uri="+ redirectUrl+"&response_type=code&scope=snsapi_base&state=123#wechat_redirect";
         }
+
+
     })
 </script>
 </body>

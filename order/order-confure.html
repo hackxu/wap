@@ -7,12 +7,12 @@
     <meta name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
     <title>订单确认</title>
-    <script src="js/jquery-1.11.1.min.js"></script>
-    <script src="js/rem.js"></script>
-    <script src="js/Jquery.Query.js"></script>
-    <script src="js/own.js"></script>
+    <script src="../js/jquery-1.11.1.min.js"></script>
+    <script src="../js/rem.js"></script>
+    <script src="../js/Jquery.Query.js"></script>
+    <script src="../js/own.js"></script>
     <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-    <link rel="stylesheet" href="css/own.css">
+    <link rel="stylesheet" href="../css/own.css">
     <style>
 
     </style>
@@ -21,24 +21,24 @@
 <div id="main">
     <div class="down-btn">
         <ul>
-            <li><img src="images/logo.png" alt=""></li>
+            <li><img src="../images/logo.png" alt=""></li>
             <li><a href="###"><span>一键下载</span></a></li>
         </ul>
     </div>
     <div class="top-title">
         <div class="center-word shop-cart-center">
-            <img src="images/ddqr.png" alt="">
+            <img src="../images/ddqr.png" alt="">
             <span>订单确认</span>
         </div>
         <div class="nav-list">
-            <p><img src="images/gd.png" alt=""></p>
+            <p><img src="../images/gd.png" alt=""></p>
             <div class="hide-nav">
-                <i><img src="images/sj.png" alt=""></i>
+                <i><img src="../images/sj.png" alt=""></i>
                 <ul>
-                    <li class="nav-list-active"><img src="images/rxcp.png" alt=""><span>热销产品</span></li>
-                    <li><img src="images/fljp.png" alt=""><span>分类精品</span></li>
-                    <li><img src="images/gwc.png" alt=""><span>购物车</span></li>
-                    <li><img src="images/grzx.png" alt=""><span>个人中心</span></li>
+                    <li class="nav-list-active"><img src="../images/rxcp.png" alt=""><span>热销产品</span></li>
+                    <li><img src="../images/fljp.png" alt=""><span>分类精品</span></li>
+                    <li><img src="../images/gwc.png" alt=""><span>购物车</span></li>
+                    <li><img src="../images/grzx.png" alt=""><span>个人中心</span></li>
                 </ul>
             </div>
         </div>
@@ -47,7 +47,7 @@
         <div class="buy-suc-div-b">
             <a href="Addressmanagement.html?backinfo=order-confure.html">
                 <div class="buy-suc-div-b-l">
-                    <img src="images/suozaidiqu.png" alt="">
+                    <img src="../images/suozaidiqu.png" alt="">
                 </div>
                 <div class="buy-suc-div-b-r">
                     <p style="text-align: left;font-size: .7rem;line-height: 2rem;display:none;">请选择地址</p>
@@ -56,20 +56,20 @@
                         <li>江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号</li>
                     </ul>
                 </div>
-                <img src="images/b.png" alt="">
+                <img src="../images/b.png" alt="">
             </a>
         </div>
     </div>
     <div class="shop-cart-check order-confiure-center order-list">
     </div>
     <div class="order-pay">
-        <h3><img src="images/zffs.png" alt=""><span>支付方式</span></h3>
+        <h3><img src="../images/zffs.png" alt=""><span>支付方式</span></h3>
         <ul>
-            <li datapay="wx"><img src="images/weixin.png" alt=""> <b>微信支付</b><img class="wx" src="images/xuanzhe1.png"
+            <li datapay="wx"><img src="../images/weixin.png" alt=""> <b>微信支付</b><img class="wx" src="../images/xuanzhe1.png"
                                                                                   alt=""></li>
 
-            <li><img src="images/zhifubao.png" alt=""> <b>支付宝</b><span>推荐支付宝用户使用</span>
-                <img class="zfb" src="images/xuanzhe2.png" alt=""></li>
+            <li><img src="../images/zhifubao.png" alt=""> <b>支付宝</b><span>推荐支付宝用户使用</span>
+                <img class="zfb" src="../images/xuanzhe2.png" alt=""></li>
         </ul>
     </div>
     <div class="shop-cart-bar order-cofiure-bottom">
@@ -77,11 +77,11 @@
         <div class="shop-cart-bar-l">
             <ul>
                 <li>总计：</li>
-                <li><b>¥</b><span class="pay-price">3000.00</span></li>
+                <li><b>¥</b><span class="pay-price">0.00</span></li>
             </ul>
         </div>
         <div class="shop-cart-bar-r">
-            <p><span>结算</span>(<b class="product-number">3</b>)</p>
+            <p><span>结算</span>(<b class="product-number">0</b>)</p>
         </div>
     </div>
     <div class="alert">
@@ -108,7 +108,7 @@
         if (logined) {
             var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
             var setAddrinfo = JSON.parse(localStorage.getItem("setAddrinfo"));
-
+                orderSubmitWX.Openid = localStorage.getItem("openid");
             console.log(orderSubmitWX);
 //            console.log(setAddrinfo);
             //填充下单商品
@@ -242,12 +242,12 @@
         $('.order-pay ul li').click(function () {
             paymode = $(this).find("img").eq(1).attr("class");
             if (paymode == "wx") {
-                $('.wx').attr("src", "images/xuanzhe1.png");
-                $('.zfb').attr("src", "images/xuanzhe2.png");
+                $('.wx').attr("src", "../images/xuanzhe1.png");
+                $('.zfb').attr("src", "../images/xuanzhe2.png");
                 $(this).attr("dataPay", "wx").siblings().removeAttr("dataPay");
             } else {
-                $('.wx').attr("src", "images/xuanzhe2.png");
-                $('.zfb').attr("src", "images/xuanzhe1.png");
+                $('.wx').attr("src", "../images/xuanzhe2.png");
+                $('.zfb').attr("src", "../images/xuanzhe1.png");
                 $(this).attr("dataPay", "zfb").siblings().removeAttr("dataPay");
             }
         });
@@ -285,94 +285,107 @@
 
         $('.shop-cart-bar-r').click(function () {
             $('.loading').show();
-            //下单
-            $.ajax({
-                url: orderapi + "/Order/OrderSubmitWX",
-                type: "post",
-                data: orderSubmitWX,
-                success: function (data) {
-                    console.log(data)
+            if($.query.get("buyType") == "buysoon"){
+                console.log(wxPay)
+                submitwx(wxPay)
+            }else{
+                //下单
+                $.ajax({
+                    url: orderapi + "/Order/OrderSubmitWX",
+                    type: "post",
+                    data: orderSubmitWX,
+                    success: function (data) {
+                        console.log(data)
 //                                console.log("@")
-                    if (data.Data) {
-                        wxPay = data.Data;
+                        if (data.Data) {
+                            wxPay = data.Data;
 
-                        console.log(wxPay);
+                            console.log(wxPay);
 //                        提交支付
-                        localStorage.setItem("OrderNo", wxPay.out_trand_no);
+//                        localStorage.setItem("OrderNo", wxPay.out_trand_no);
+                            submitwx(wxPay)
+
+                        } else {
+                            showBg();
+                            $('.alert p').text(data.Message);
+                            $(".alert span").click(function () {
+                                $(".bg").hide();
+                                $('.alert').hide();
+                                $('.loading').hide();
+                                if (from == "product-main.html") {
+                                    window.location.href = "products-main.html?productId=" + orderSubmitWX.OrderDetail[0].Product_ID;
+                                    return false;
+                                } else if (from == "shopCart") {
+                                    window.location.href = "shop-cart.html"
+                                    return false;
+                                }
+                            })
+
+                            return false;
+
+                        }
+                    }
+                })
+            }
+
+
+        })
+        function submitwx(wxPay) {
+            localStorage.setItem("OrderNo", wxPay.out_trand_no);
 
 //            return false;
 //                        window.location.href = "buy-success.html";
 //            区分支付方式
 //            console.log(paymode)
-                        $(".order-pay ul li").each(function () {
-                            if ($(this).attr("dataPay")) {
-                                paymode = $(this).attr("dataPay")
-                            }
-                        });
+            $(".order-pay ul li").each(function () {
+                if ($(this).attr("dataPay")) {
+                    paymode = $(this).attr("dataPay")
+                }
+            });
 
-                        function onBridgeReady() {
-                            var times = ((new Date().getTime()) / 1000).toString();
+            function onBridgeReady() {
+                var times = ((new Date().getTime()) / 1000).toString();
 //                alert(times.toString())
 //                alert(typeof times)
-                            WeixinJSBridge.invoke(
-                                'getBrandWCPayRequest', {
-                                    "appId": wxPay.WxPayParams.appid,     //公众号名称，由商户传入
-                                    "timeStamp": times,         //时间戳，自1970年以来的秒数
-                                    "nonceStr": wxPay.WxPayParams.nonce_str, //随机串
-                                    "package": "prepay_id=" + wxPay.WxPayParams.prepay_id,
-                                    "signType": "MD5",         //微信签名方式：
-                                    "paySign": wxPay.WxPayParams.sign //微信签名
-                                },
-                                function (res) {
-                                    if (res.err_msg == "get_brand_wcpay_request：ok") {
+                WeixinJSBridge.invoke(
+                    'getBrandWCPayRequest', {
+                        "appId": wxPay.WxPayParams.appid,     //公众号名称，由商户传入
+                        "timeStamp": times,         //时间戳，自1970年以来的秒数
+                        "nonceStr": wxPay.WxPayParams.nonce_str, //随机串
+                        "package": "prepay_id=" + wxPay.WxPayParams.prepay_id,
+                        "signType": "MD5",         //微信签名方式：
+                        "paySign": wxPay.WxPayParams.sign //微信签名
+                    },
+                    function (res) {
+                        if (res.err_msg == "get_brand_wcpay_request：ok") {
 
-                                        localStorage.setItem("OrderNo", wxPay.out_trand_no)
-                                    }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
-                                }
-                            );
-                        }
-
-                        if (paymode == "wx") {
-                            console.log(wxPay.prepay_id);
-                            if (typeof WeixinJSBridge == "undefined") {
-                                if (document.addEventListener) {
-                                    document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-                                } else if (document.attachEvent) {
-                                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-                                    document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-                                }
-                            } else {
-                                onBridgeReady();
-                            }
-
-                        } else if (paymode == 'zfb') {
-
-                        } else {
-
-                        }
-                    } else {
-                        showBg();
-                        $('.alert p').text(data.Message);
-                        $(".alert span").click(function () {
-                            $(".bg").hide();
-                            $('.alert').hide();
-                            $('.loading').hide();
-                            if (from == "product-main.html") {
-                                window.location.href = "products-main.html?productId=" + orderSubmitWX.OrderDetail[0].Product_ID;
-                                return false;
-                            } else if (from == "shopCart") {
-                                window.location.href = "shop-cart.html"
-                                return false;
-                            }
-                        })
-
-                        return false;
+                            localStorage.setItem("OrderNo", wxPay.out_trand_no);
+                            $('.loading').hide()
+                        }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
 
                     }
-                }
-            })
+                );
+            }
 
-        })
+            if (paymode == "wx") {
+                console.log(wxPay.prepay_id);
+                if (typeof WeixinJSBridge == "undefined") {
+                    if (document.addEventListener) {
+                        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                    } else if (document.attachEvent) {
+                        document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                        document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                    }
+                } else {
+                    onBridgeReady();
+                }
+
+            } else if (paymode == 'zfb') {
+
+            } else {
+
+            }
+        }
         //订单页商品跳转
 //        $('.shop-cart-check-list').click(function () {
 //            window.location.href = "products-main.html?productId=" + productsStyles.productId;

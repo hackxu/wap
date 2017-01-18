@@ -193,6 +193,7 @@
 //
 //
 //                }
+                var openid = localStorage.getItem("openid");
                 var orderSubmitWX = {
                     "CusNo": -1,
                     "OrderType": "ORDER_WAP",
@@ -223,6 +224,7 @@
                         }
                     ],
                     "SessionCode": "",
+                    "Openid":openid,
                     "LoginName": $orderphone,
                     "SmsCode": $authcode
                 };
@@ -239,21 +241,35 @@
 
                         if (data.Code != 200) {
                             showBg();
-                            $('.alert p').text(data.Message)
+                            $('.alert p').text(data.Message);
+                            return false
                         } else {
                             var wxPay = JSON.stringify(msg);
                             console.log(wxPay)
                             productsStyles.Phone = $phone;
+
                             productsStyles.Address = $('.check-address-more p').text() + $('.check-address-jie b').text() + $addrmore;
+
                             productsStyles.Reman = $reman;
+
                             productsStyles = JSON.stringify(productsStyles);
+
                             localStorage.setItem("wxPayinfo", wxPay);
+
+//                            document.write(wxPay);
+//                            return false
                             localStorage.setItem("productInfo",productsStyles);
-                            window.location.href="order-confure.html?buyType=buysoon";
+                            window.location.href="order/order-confure.html?buyType=buysoon";
 
                         }
 
+                    },
+                    error:function (e, r) {
+                        showBg();
+                        $('.alert p').text("请重试");
+                        return false
                     }
+                        
                 })
             }
 

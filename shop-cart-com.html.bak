@@ -274,7 +274,7 @@
         //购买跳转订单支付
         $('.shop-cart-bar-r').click(function () {
 
-            window.location.href = "order-confure.html?from=shopCart"
+            window.location.href = "../order-confure.html?from=shopCart"
         })
         $(document).on("click",".trendtoys-list",function () {
 

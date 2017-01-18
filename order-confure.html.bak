@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
+    <title>订单确认</title>
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/rem.js"></script>
+    <script src="js/Jquery.Query.js"></script>
+    <script src="js/own.js"></script>
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <link rel="stylesheet" href="css/own.css">
+    <style>
+
+    </style>
+</head>
+<body>
+<div id="main">
+    <div class="down-btn">
+        <ul>
+            <li><img src="images/logo.png" alt=""></li>
+            <li><a href="###"><span>一键下载</span></a></li>
+        </ul>
+    </div>
+    <div class="top-title">
+        <div class="center-word shop-cart-center">
+            <img src="images/ddqr.png" alt="">
+            <span>订单确认</span>
+        </div>
+        <div class="nav-list">
+            <p><img src="images/gd.png" alt=""></p>
+            <div class="hide-nav">
+                <i><img src="images/sj.png" alt=""></i>
+                <ul>
+                    <li class="nav-list-active"><img src="images/rxcp.png" alt=""><span>热销产品</span></li>
+                    <li><img src="images/fljp.png" alt=""><span>分类精品</span></li>
+                    <li><img src="images/gwc.png" alt=""><span>购物车</span></li>
+                    <li><img src="images/grzx.png" alt=""><span>个人中心</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="order-cofiure-top">
+        <div class="buy-suc-div-b">
+            <a href="Addressmanagement.html?backinfo=order-confure.html">
+                <div class="buy-suc-div-b-l">
+                    <img src="images/suozaidiqu.png" alt="">
+                </div>
+                <div class="buy-suc-div-b-r">
+                    <p style="text-align: left;font-size: .7rem;line-height: 2rem;display:none;">请选择地址</p>
+                    <ul>
+                        <li><span>收货人：<b>胡萝卜</b></span><b>13838384388</b></li>
+                        <li>江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号</li>
+                    </ul>
+                </div>
+                <img src="images/b.png" alt="">
+            </a>
+        </div>
+    </div>
+    <div class="shop-cart-check order-confiure-center order-list">
+    </div>
+    <div class="order-pay">
+        <h3><img src="images/zffs.png" alt=""><span>支付方式</span></h3>
+        <ul>
+            <li datapay="wx"><img src="images/weixin.png" alt=""> <b>微信支付</b><img class="wx" src="images/xuanzhe1.png"
+                                                                                  alt=""></li>
+
+            <li><img src="images/zhifubao.png" alt=""> <b>支付宝</b><span>推荐支付宝用户使用</span>
+                <img class="zfb" src="images/xuanzhe2.png" alt=""></li>
+        </ul>
+    </div>
+    <div class="shop-cart-bar order-cofiure-bottom">
+        <p>注：每笔订单满200元包邮；未满200元，收取10元运费 (全场商品适用)</p>
+        <div class="shop-cart-bar-l">
+            <ul>
+                <li>总计：</li>
+                <li><b>¥</b><span class="pay-price">0.00</span></li>
+            </ul>
+        </div>
+        <div class="shop-cart-bar-r">
+            <p><span>结算</span>(<b class="product-number">0</b>)</p>
+        </div>
+    </div>
+    <div class="alert">
+        <p>房价快速的减肥倒计时的风景 家居服</p>
+        <span>确&nbsp;&nbsp;&nbsp;&nbsp;定</span>
+    </div>
+    <div class="bg"></div>
+    <div class="loading">
+        <div class="wai">
+            <div class="spinner">
+                <div class="double-bounce1"></div>
+                <div class="double-bounce2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var buyType = $.query.get("buyType");
+        var backinfo = $.query.get("backinfo");
+        var from = $.query.get("from");
+        var paymode, wxPay;
+
+        if (logined) {
+            var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
+            var setAddrinfo = JSON.parse(localStorage.getItem("setAddrinfo"));
+
+            console.log(orderSubmitWX);
+//            console.log(setAddrinfo);
+            //填充下单商品
+            var OrderFee = 0;
+            for (var i = 0; i < orderSubmitWX.OrderDetail.length; i++) {
+                var $style = orderSubmitWX.OrderDetail[i].Color_Nm == '共同' ? '标准版' : orderSubmitWX.OrderDetail[i].Color_Nm;
+                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + orderSubmitWX.OrderDetail[i].ProductImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + orderSubmitWX.OrderDetail[i].Name + '</li> <li>颜色分类: <b>' + $style + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + orderSubmitWX.OrderDetail[i].OrderPrice / orderSubmitWX.OrderDetail[i].ProductNumber + '</span> <del>¥' + orderSubmitWX.OrderDetail[i].OrderOldPrice / orderSubmitWX.OrderDetail[i].ProductNumber + '</del> </div> <div class="shop-cart-product-number"> <p>X' + orderSubmitWX.OrderDetail[i].ProductNumber + '</p> </div> </li> </ul> </div> </div> </div>'
+                $('.order-list').append($div)
+                OrderFee = Number(parseFloat(OrderFee).toFixed(2)) + Number(parseFloat(orderSubmitWX.OrderDetail[i].OrderPrice).toFixed(2));
+
+                orderSubmitWX.OrderFee = OrderFee;
+                delete orderSubmitWX.OrderDetail[i].ProductNumber
+                delete orderSubmitWX.OrderDetail[i].ProductImg
+            }
+            if (OrderFee < 200) {
+                $('.pay-price').text((OrderFee + Number(10)).toFixed(2));
+                orderSubmitWX.OrderFee = (OrderFee + Number(10)).toFixed(2)
+            } else {
+                orderSubmitWX.OrderFee = OrderFee.toFixed(2)
+                $('.pay-price').text(OrderFee.toFixed(2));
+            }
+            $('.product-number').text($('.order-list .shop-cart-check-list').length);
+
+//            自主选择地址
+            if (backinfo == "addr") {
+                $(".buy-suc-div-b-r ul li:eq(0) span b").text(setAddrinfo.Name);
+                $(".buy-suc-div-b-r ul li:eq(0) > b").text(setAddrinfo.Phone);
+                $(".buy-suc-div-b-r ul li:eq(1)").text(setAddrinfo.mainAddr);
+                $('.buy-suc-div-b-r p').hide()
+                orderSubmitWX.ReceiveMan = setAddrinfo.Name;
+                orderSubmitWX.Phone = setAddrinfo.Phone;
+                orderSubmitWX.Province = setAddrinfo.Province;
+                orderSubmitWX.City = setAddrinfo.City;
+                orderSubmitWX.Area = setAddrinfo.Area;
+                orderSubmitWX.Street = setAddrinfo.Street;
+                orderSubmitWX.DetailAddress = setAddrinfo.Addrmore;
+//                alert("1")
+//                return;
+                console.log(orderSubmitWX)
+
+            } else {
+
+
+                //获取默认地址
+                $.ajax({
+                    url: api + "/Account/CusDefalutAddress",
+                    type: "post",
+                    data: {"CusNo": orderSubmitWX.CusNo},
+                    success: function (data) {
+                        console.log(data)
+                        if (data.Data) {
+                            var msg = data.Data;
+                            $(".buy-suc-div-b-r ul li:eq(0) span b").text(msg.Name);
+                            $(".buy-suc-div-b-r ul li:eq(0) > b").text(msg.Phone);
+                            $(".buy-suc-div-b-r ul li:eq(1)").text(msg.Province + msg.City + msg.Area + msg.Street + msg.DetailAddr);
+                            orderSubmitWX.ReceiveMan = msg.Name;
+                            orderSubmitWX.Phone = msg.Phone;
+                            orderSubmitWX.Province = msg.Province;
+                            orderSubmitWX.City = msg.City;
+                            orderSubmitWX.Area = msg.Area;
+                            orderSubmitWX.Street = msg.Street;
+                            orderSubmitWX.DetailAddress = msg.DetailAddr;
+//                        console.log("!")
+//                        $.ajax({
+//                            url: orderapi + "/Order/OrderSubmitWX",
+//                            type: "post",
+//                            data: orderSubmitWX,
+//                            success: function (data) {
+//                                console.log(data)
+////                                console.log("@")
+//                                if(data.Data){
+//                                    wxPay = data.Data;
+//
+//                                    console.log(wxPay)
+//                                }else{
+//                                    showBg();
+//                                    $('.alert b').text(data.Message)
+//                                    return false;
+//                                }
+//                            }
+//                        })
+
+                        } else {
+//                            alert("获取地址失败");
+                            $('.buy-suc-div-b-r p').show()
+                            $('.buy-suc-div-b-r ul').hide()
+//                        $('.buy-suc-div-b').css("opacity", 0)
+                        }
+                    }
+                })
+            }
+
+        } else {
+             wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
+            var productAddr = JSON.parse(localStorage.getItem("productInfo"));
+            console.log(wxPay);
+            console.log(productAddr);
+
+            function setAddr() {
+                $(".buy-suc-div-b-r ul li:eq(0) span b").text(productAddr.Reman);
+                $(".buy-suc-div-b-r ul li:eq(0) > b").text(productAddr.Phone);
+                $(".buy-suc-div-b-r ul li:eq(1)").text(productAddr.Address);
+                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + productAddr.productImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + productAddr.productName + '</li> <li>颜色分类: <b>' + productAddr.productStyle + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + productAddr.productPrice + '</span> <del>¥' + productAddr.productMarketPrice + '</del> </div> <div class="shop-cart-product-number"> <p>X1</p> </div> </li> </ul> </div> </div> </div>'
+                $('.order-list').append($div)
+
+//                $('.order-list .shop-cart-product-info>img').attr("src", productAddr.productImg);
+//                $('.order-list .shop-cart-product-disc ul li:eq(0)').text(productAddr.productName);
+//                $('.order-list .shop-cart-product-disc ul li:eq(1) b').text(productAddr.productStyle);
+//                $('.product-price-this').text(productAddr.productPrice);
+//                $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
+//                $('.shop-cart-product-number p').text("X1")
+                $('.shop-cart-check-list').click(function () {
+                    window.location.href = "products-main.html?productId=" + productAddr.productId;
+                });
+                if (productAddr.productPrice < 200) {
+                    $('.pay-price').text((Number(productAddr.productPrice) + Number(10)).toFixed(2));
+                } else {
+                    $('.pay-price').text(productAddr.productPrice);
+
+                }
+                $('.product-number').text($('.order-list .shop-cart-check-list').length);
+
+
+            }
+
+            setAddr()
+        }
+
+
+        //选择微信支付或支付宝支付
+        $('.order-pay ul li').click(function () {
+            paymode = $(this).find("img").eq(1).attr("class");
+            if (paymode == "wx") {
+                $('.wx').attr("src", "images/xuanzhe1.png");
+                $('.zfb').attr("src", "images/xuanzhe2.png");
+                $(this).attr("dataPay", "wx").siblings().removeAttr("dataPay");
+            } else {
+                $('.wx').attr("src", "images/xuanzhe2.png");
+                $('.zfb').attr("src", "images/xuanzhe1.png");
+                $(this).attr("dataPay", "zfb").siblings().removeAttr("dataPay");
+            }
+        });
+
+//        $('.shop-cart-bar-r').click(function () {
+//            paymode = $('.order-pay ul li').each(function () {
+//                if ($(this).attr("dataPay")) {
+//                    paymode = $(this).attr("dataPay")
+//                }
+//            });
+//
+//            wx.config({
+//                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+//                appId: wxPay.WxPayParams.appid, // 必填，公众号的唯一标识
+//                timestamp: parseInt((new Date().getTime()) / 1000), // 必填，生成签名的时间戳
+//                nonceStr: wxPay.WxPayParams.nonce_str, // 必填，生成签名的随机串
+//                signature: wxPay.WxPayParams.sign,// 必填，签名，见附录1
+//                jsApiList: ["chooseWXPay"] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+//            });
+//            wx.ready(function(){
+//
+//                // config信息验证后会执行ready方法，所有接口调用都必须在config接口获得结果之后，config是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在ready函数中调用来确保正确执行。对于用户触发时才调用的接口，则可以直接调用，不需要放在ready函数中。
+//                wx.chooseWXPay({
+//                    timestamp: parseInt((new Date().getTime()) / 1000), // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+//                    nonceStr: wxPay.WxPayParams.nonce_str, // 支付签名随机串，不长于 32 位
+//                    package: "prepay_id=" + wxPay.WxPayParams.prepay_id, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+//                    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+//                    paySign: wxPay.WxPayParams.sign, // 支付签名
+//                    success: function (res) {
+//                        // 支付成功后的回调函数
+//                    }
+//                });
+//            });
+//        })
+
+        $('.shop-cart-bar-r').click(function () {
+            $('.loading').show();
+            //下单
+            $.ajax({
+                url: orderapi + "/Order/OrderSubmitWX",
+                type: "post",
+                data: orderSubmitWX,
+                success: function (data) {
+                    console.log(data)
+//                                console.log("@")
+                    if (data.Data) {
+                        wxPay = data.Data;
+
+                        console.log(wxPay);
+//                        提交支付
+                        localStorage.setItem("OrderNo", wxPay.out_trand_no);
+
+//            return false;
+//                        window.location.href = "buy-success.html";
+//            区分支付方式
+//            console.log(paymode)
+                        $(".order-pay ul li").each(function () {
+                            if ($(this).attr("dataPay")) {
+                                paymode = $(this).attr("dataPay")
+                            }
+                        });
+
+                        function onBridgeReady() {
+                            var times = ((new Date().getTime()) / 1000).toString();
+//                alert(times.toString())
+//                alert(typeof times)
+                            WeixinJSBridge.invoke(
+                                'getBrandWCPayRequest', {
+                                    "appId": wxPay.WxPayParams.appid,     //公众号名称，由商户传入
+                                    "timeStamp": times,         //时间戳，自1970年以来的秒数
+                                    "nonceStr": wxPay.WxPayParams.nonce_str, //随机串
+                                    "package": "prepay_id=" + wxPay.WxPayParams.prepay_id,
+                                    "signType": "MD5",         //微信签名方式：
+                                    "paySign": wxPay.WxPayParams.sign //微信签名
+                                },
+                                function (res) {
+                                    if (res.err_msg == "get_brand_wcpay_request：ok") {
+
+                                        localStorage.setItem("OrderNo", wxPay.out_trand_no)
+                                    }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                                }
+                            );
+                        }
+
+                        if (paymode == "wx") {
+                            console.log(wxPay.prepay_id);
+                            if (typeof WeixinJSBridge == "undefined") {
+                                if (document.addEventListener) {
+                                    document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+                                } else if (document.attachEvent) {
+                                    document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                                    document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+                                }
+                            } else {
+                                onBridgeReady();
+                            }
+
+                        } else if (paymode == 'zfb') {
+
+                        } else {
+
+                        }
+                    } else {
+                        showBg();
+                        $('.alert p').text(data.Message);
+                        $(".alert span").click(function () {
+                            $(".bg").hide();
+                            $('.alert').hide();
+                            $('.loading').hide();
+                            if (from == "product-main.html") {
+                                window.location.href = "products-main.html?productId=" + orderSubmitWX.OrderDetail[0].Product_ID;
+                                return false;
+                            } else if (from == "shopCart") {
+                                window.location.href = "shop-cart.html"
+                                return false;
+                            }
+                        })
+
+                        return false;
+
+                    }
+                }
+            })
+
+        })
+        //订单页商品跳转
+//        $('.shop-cart-check-list').click(function () {
+//            window.location.href = "products-main.html?productId=" + productsStyles.productId;
+//        });
+
+
+    })
+</script>
+</body>
+</html>
