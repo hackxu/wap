@@ -1,18 +1,23 @@
 /**
  * Created by 2shou on 2017/1/7.
  */
-var api = "http://test-webapi.ymws.jstv.com:80";
-var orderapi = "http://test-orderapi.ymws.jstv.com:80";
+var api = "http://test-webapi.ymws.jstv.com";
+var orderapi = "http://test-orderapi.ymws.jstv.com";
+// var orderapi = "http://orderapi.ymws.jstv.com";
 var re = /^1[34578]\d{9}$/;
 var addarr = [];
 //判断是否登陆
 // var logined = localStorage.getItem("userInfo");
 if(localStorage.getItem("userInfo")){
     var logined =  JSON.parse(localStorage.getItem("userInfo"));
+    // if(logined){
+    //     localStorage.clear("nologincart");
+    // }
 }
 
 function showBg() {
     $('.bg').show();
+
     $('.alert').show();
 
 }

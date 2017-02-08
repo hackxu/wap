@@ -19,7 +19,7 @@
     <div class="down-btn">
         <ul>
             <li><img src="images/logo.png" alt=""></li>
-            <li><a href="###"><span>一键下载</span></a></li>
+            <li><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.android.umktshop"><span>一键下载</span></a></li>
         </ul>
     </div>
     <div class="top-title">
@@ -44,7 +44,7 @@
         </div>
     </div>
     <div class="alert">
-        <p>房价快速的减肥倒计时的风景 家居服</p>
+        <div class="middle"><p></p></div>
         <b>确&nbsp;&nbsp;&nbsp;&nbsp;定</b>
     </div>
     <div class="bg"></div>
@@ -62,24 +62,24 @@
             var $phone = $('.phone').val();
             var $authcode = $('.authcode').val();
             if(!re.test($phone)){
-                showBg()
+                showBg();
                 $('.alert p').text("请检查联系电话是否填写正确");
                 return false;
 
             }else if($authcode == ""){
-                showBg()
+                showBg();
                 $('.alert p').text("请检查验证码是否填写");
                 return false;
             }else{
                 $.ajax({
                     url:api+"/Account/LoginBySms",
                     type:"post",
-                    data:{"Phone":$phone,"SmsCode":$authcode,"ClientType":2},
+                    data:{"Phone":$phone,"SmsCode":$authcode,"ClientType":2,"Openid":localStorage.getItem("openid")},
                     success:function (data) {
-                        console.log(data)
+                        console.log(data);
                             var msg = data.Data;
                             if(data.Code != 200){
-                                showBg()
+                                showBg();
                                 $('.alert p').text(data.Message);
                                 return false;
                             }else {
@@ -94,7 +94,7 @@
                                     "HeadUrl":msg.HeadUrl,
                                 };
                                 userInfo = JSON.stringify(userInfo);
-                                var $userInfo = localStorage.setItem("userInfo",userInfo);
+                                 localStorage.setItem("userInfo",userInfo);
                                 window.location.href="PersonalCenter.html"
                             }
 

@@ -21,7 +21,7 @@
         <div class="down-btn">
             <ul>
                 <li><img src="images/logo.png" alt=""></li>
-                <li><a href="###"><span>一键下载</span></a></li>
+                <li><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.android.umktshop"><span>一键下载</span></a></li>
             </ul>
         </div>
         <div class="top-title">
@@ -35,16 +35,16 @@
                     <i><img src="images/sj.png" alt=""></i>
                     <ul>
                         <li class="nav-list-active"><img src="images/rxcp.png" alt=""><span>热销产品</span></li>
-                        <li><img src="images/fljp.png" alt=""><span>分类精品</span></li>
+                        <!--<li><img src="images/fljp.png" alt=""><span>分类精品</span></li>-->
                         <li><img src="images/gwc.png" alt=""><span>购物车</span></li>
-                        <li><img src="images/grzx.png" alt=""><span>个人中心</span></li>
+                        <!--<li><img src="images/grzx.png" alt=""><span>个人中心</span></li>-->
                     </ul>
                 </div>
             </div>
         </div>
         <div class="go-login">
-            <p>已有当好妈APP账号请 <a href="###">登陆</a></p>
-            <p>没有账号可 <a href="###">快速注册</a> 或在本页填写订单快捷购买</p>
+        <p>已有当好妈APP账号请 <a href="login.html">登陆</a></p>
+        <p>没有账号可 <a href="login.html">快速注册</a> 或在本页填写订单快捷购买</p>
         </div>
         <div class="add-address-write">
             <ul>
@@ -66,17 +66,17 @@
                 <ul>
                     <li>
                         <p><img src="images/kjxd.png" alt=""><span>快捷下单手机号验证：</span></p>
-                        <p><img src="images/dlff.png" alt=""><span>登陆方法</span></p>
+                        <p style="opacity:0;"><img src="images/dlff.png" alt=""><span>登陆方法</span></p>
                     </li>
                     <li>Tips:可利用该手机号登陆当好妈app，查询物流信息及购买记录等</li>
                 </ul>
             </div>
             <div class="login-div">
                 <ul>
-                    <li><img src="images/shoujihao.png" alt=""><input class="phone" type="number" placeholder="请输入手机号">
+                    <li><img src="images/shoujihao.png" alt=""><input class="phone" type="number" placeholder="请输入手机号(必填)">
                     </li>
                     <li><img src="images/mima.png" alt=""><input class="authcode" type="number"
-                                                                 placeholder="请输入验证码"><input data-type="Order"
+                                                                 placeholder="请输入验证码(必填)"><input data-type="Order"
                                                                                              class="get-code"
                                                                                              type="button"
                                                                                              value="获取验证码">
@@ -86,7 +86,7 @@
 
         </div>
         <div class="shop-cart-check order-confiure-center buy-soon-product">
-            <div class="shop-cart-check-list">
+            <div class="shop-cart-check-list shop-cart-check-list-one">
                 <div class="shop-cart-product-info">
                     <img src="images/nf.png" alt="">
                     <div class="shop-cart-product-disc">
@@ -117,22 +117,32 @@
         </ul>
     </div>
     <div class="alert">
-        <p>房价快速的减肥倒计时的风景 家居服</p>
+        <div class="middle"><p></p></div>
         <b>确&nbsp;&nbsp;&nbsp;&nbsp;定</b>
     </div>
     <div class="bg"></div>
     <div class="loading">
-        <div class="wai">
-            <div class="spinner">
-                <div class="double-bounce1"></div>
-                <div class="double-bounce2"></div>
-            </div>
-        </div>
+        <img src="images/loading.gif" class="loading-img" alt="">
     </div>
 </div>
 <script>
     $(function () {
         var productsStyles;
+        console.log(localStorage.getItem("userInfo"))
+
+        if (localStorage.getItem("localaddr")){
+            var $localaddr = JSON.parse(localStorage.getItem("localaddr"));
+            $('.add-address-write ul li:eq(0) input').val($localaddr.reman);
+            $('.add-address-write ul li:eq(1) input').val($localaddr.phone);
+//            $('.check-address-more  p span:first-child').text($localaddr.addr);
+            $('.Province').text($localaddr.addr[0])
+            $('.City').text($localaddr.addr[1])
+            $('.Area').text($localaddr.addr[2]);
+            $('.check-address-jie').attr("data-value",$localaddr.vale)
+            $('.check-address-jie b').text($localaddr.street);
+            $('.add-address-write ul li:eq(4) textarea').val($localaddr.addrmore);
+        }
+        var thing = $.query.get("thing");
         $('.btn').click(function () {
             $('.loading').show();
 
@@ -143,12 +153,20 @@
             var $addrmore = $('.add-address-write ul li:eq(4) textarea').val();
             var $orderphone = $(".phone").val();
             var $authcode = $('.authcode').val();
+            var localaddr = {
+                reman:$reman,
+                phone:$phone,
+                addr:[$('.Province').text(),$('.City').text(),$('.Area').text()],
+                street:$street,
+                addrmore:$addrmore,
+                vale:$(".check-address-jie").attr("data-value")
+            };
+            localStorage.setItem("localaddr",JSON.stringify(localaddr));
             if ($reman.length < 2) {
                 showBg();
                 $('.alert p').text("请检查收货人是否填写");
                 return false
-            }else
-            if (!re.test($phone)) {
+            } else if (!re.test($phone)) {
                 showBg()
                 $('.alert p').text("请检查联系电话是否填写正确");
                 return false;
@@ -194,45 +212,105 @@
 //
 //                }
                 var openid = localStorage.getItem("openid");
-                var orderSubmitWX = {
-                    "CusNo": -1,
-                    "OrderType": "ORDER_WAP",
-                    "ReceiveMan": $reman,
-                    "Phone": $phone,
-                    "Province": $('.Province').text(),
-                    "City": $('.City').text(),
-                    "Area": $('.Area').text(),
-                    "Street": $('.check-address-jie b').text(),
-                    "DetailAddress": $addrmore,
-                    "PayMode": "微信",
-                    "OrderFee": $('.product-price-this').text(),
-                    "TiketNo": "",
-                    "Receipt_Type": "00",
-                    "Receipt_Title": "",
-                    "Remark": "",
-                    "OrderDetail": [
-                        {
-                            "Product_ID": productsStyles.productId,
-                            "Name": productsStyles.productName,
-                            "Color_id": productsStyles.productColorId,
-                            "Color_Nm": productsStyles.productStyle,
-                            "Style_id": productsStyles.productStyleId,
-                            "Style_Nm": productsStyles.productStyleNm,
-                            "OrderNum": 1,
-                            "OrderPrice": productsStyles.productPrice,
-                            "OrderOldPrice": productsStyles.productMarketPrice
+                var userbind = JSON.parse(localStorage.getItem("userInfo"));
+                console.log(userbind)
+                if (thing == "shopcart") {
+                    var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
+                    orderSubmitWX.Province = $('.Province').text();
+                    orderSubmitWX.City = $('.City').text();
+                    orderSubmitWX.Area = $('.Area').text();
+                    orderSubmitWX.Street = $('.check-address-jie b').text();
+                    orderSubmitWX.DetailAddress = $addrmore;
+                    orderSubmitWX.ReceiveMan = $reman;
+                    orderSubmitWX.ReceiveMan = $reman;
+                    orderSubmitWX.Phone = $phone;
+                    orderSubmitWX.LoginName = $orderphone;
+                        orderSubmitWX.SmsCode = $authcode;
+                    console.log(JSON.stringify(orderSubmitWX))
+                    $.ajax({
+                        url: orderapi + "/Order/OrderSubmitWX",
+                        type: "post",
+                        data: orderSubmitWX,
+//                    dataType:"json",
+                        success: function (data) {
+                            var msg = data.Data;
+                            console.log(msg)
+
+                            if (data.Code != 200) {
+                                showBg();
+                                $('.alert p').text(data.Message);
+                                return false
+                            } else {
+                                var wxPay = JSON.stringify(msg);
+                                userbind.IsBindTel = msg.UserInfo.IsBindTel;
+                                console.log(userbind)
+
+                                localStorage.setItem("userInfo",JSON.stringify(userbind))
+
+                                console.log(wxPay)
+                                localStorage.setItem("orderSubmitWX",JSON.stringify(orderSubmitWX))
+                                localStorage.setItem("wxPayinfo", wxPay);
+
+//                            document.write(wxPay);
+//                            return false
+                                window.location.href = "order/order-confure.html?buyType=buysoon&thing=shopcart";
+
+                            }
+                        },
+                        error: function (e, r) {
+                            showBg();
+                            $('.alert p').text("请重试");
+                            return false
                         }
-                    ],
-                    "SessionCode": "",
-                    "Openid":openid,
-                    "LoginName": $orderphone,
-                    "SmsCode": $authcode
-                };
+
+                    })
+                    return false;
+                } else {
+                    var orderSubmitWX = {
+                        "CusNo": -1,
+                        "OrderType": "ORDER_WAP",
+                        "ReceiveMan": $reman,
+                        "Phone": $phone,
+                        "Province": $('.Province').text(),
+                        "City": $('.City').text(),
+                        "Area": $('.Area').text(),
+                        "Street": $('.check-address-jie b').text(),
+                        "DetailAddress": $addrmore,
+                        "PayMode": "微信",
+                        "OrderFee": $('.product-price-this').text(),
+                        "TiketNo": "",
+                        "Receipt_Type": "00",
+                        "Receipt_Title": "",
+                        "Remark": "",
+                        "OrderDetail": [
+                            {
+                                "Product_ID": productsStyles.productId,
+                                "Name": productsStyles.productName,
+                                "Color_id": productsStyles.productColorId,
+                                "Color_Nm": productsStyles.productStyle,
+                                "Style_id": productsStyles.productStyleId,
+                                "Style_Nm": productsStyles.productStyleNm,
+                                "OrderNum": 1,
+                                "OrderPrice": productsStyles.productPrice,
+                                "OrderOldPrice": productsStyles.productMarketPrice
+                            }
+                        ],
+                        "SessionCode": "",
+                        "Openid": openid,
+                        "LoginName": $orderphone,
+                        "SmsCode": $authcode
+                    };
+                }
+
                 console.log(JSON.stringify(orderSubmitWX))
+//                alert(JSON.stringify(orderSubmitWX));
+//                document.write(JSON.stringify(orderSubmitWX))
 //                return
                 $.ajax({
                     url: orderapi + "/Order/OrderSubmitWX",
                     type: "post",
+                    dataType : 'json',
+//                    contentType: 'application/json',
                     data: orderSubmitWX,
 //                    dataType:"json",
                     success: function (data) {
@@ -245,7 +323,11 @@
                             return false
                         } else {
                             var wxPay = JSON.stringify(msg);
-                            console.log(wxPay)
+                            console.log(wxPay);
+                            userbind.IsBindTel = msg.UserInfo.IsBindTel;
+                            console.log(userbind)
+
+                            localStorage.setItem("userInfo",JSON.stringify(userbind))
                             productsStyles.Phone = $phone;
 
                             productsStyles.Address = $('.check-address-more p').text() + $('.check-address-jie b').text() + $addrmore;
@@ -258,19 +340,24 @@
 
 //                            document.write(wxPay);
 //                            return false
-                            localStorage.setItem("productInfo",productsStyles);
-                            window.location.href="order/order-confure.html?buyType=buysoon";
+                            localStorage.setItem("productInfo", productsStyles);
+                            window.location.href = "order/order-confure.html?buyType=buysoon";
 
                         }
 
                     },
-                    error:function (e, r) {
+                    error: function (e, r,f) {
+//                        alert(JSON.parse(e))
+//                        alert(e.status)
+//                        alert(e.responseText)
+                        console.log(r)
+                        console.log(f)
                         showBg();
-                        $('.alert p').text("请重试");
+                        $('.alert p').text(JSON.parse(e.responseText).Message);
                         return false
                     }
-                        
                 })
+                return
             }
 
         });
@@ -290,12 +377,30 @@
             $('.shop-cart-product-price>del').text(productsStyles.productMarketPrice)
         }
 
-        setproductStylesoon()
+        if (thing == "shopcart") {
+            var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
+            for (var i = 0; i < orderSubmitWX.OrderDetail.length; i++) {
+                var $style = orderSubmitWX.OrderDetail[i].Color_Nm == '共同' ? '标准版' : orderSubmitWX.OrderDetail[i].Color_Nm;
+                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + orderSubmitWX.OrderDetail[i].ProductImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + orderSubmitWX.OrderDetail[i].Name + '</li> <li>颜色分类: <b>' + $style + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + orderSubmitWX.OrderDetail[i].OrderPrice  + '</span> <del>¥' + orderSubmitWX.OrderDetail[i].OrderOldPrice  + '</del> </div> <div class="shop-cart-product-number"> <p>X' + orderSubmitWX.OrderDetail[i].ProductNumber + '</p> </div> </li> </ul> </div> </div> </div>'
+                $('.buy-soon-product').append($div);
+                $('.shop-cart-check-list-one').hide();
+                localStorage.setItem("thing", "shopcart");
+//                OrderFee = Number(parseFloat(OrderFee).toFixed(2)) + Number(parseFloat(orderSubmitWX.OrderDetail[i].OrderPrice).toFixed(2));
+//
+//                orderSubmitWX.OrderFee = OrderFee;
+//                delete orderSubmitWX.OrderDetail[i].ProductNumber
+//                delete orderSubmitWX.OrderDetail[i].ProductImg
+            }
 
-        //订单页商品跳转
-        $('.shop-cart-check-list').click(function () {
-            window.location.href = "products-main.html?productId=" + productsStyles.productId;
-        });
+        } else {
+            setproductStylesoon()
+        }
+
+
+//        //订单页商品跳转
+//        $('.shop-cart-check-list').click(function () {
+//            window.location.href = "products-main.html?productId=" + productsStyles.productId;
+//        });
 
     })
 </script>

@@ -6,10 +6,11 @@
     <meta name="format-detection" content="telephone=no"/>
     <meta name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
-    <title>订单成功</title>
+    <title>支付结果</title>
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/own.js"></script>
     <script src="js/rem.js"></script>
+    <script src="js/Jquery.Query.js"></script>
     <link rel="stylesheet" href="css/own.css">
     <style>
     </style>
@@ -19,7 +20,7 @@
     <div class="down-btn">
         <ul>
             <li><img src="images/logo.png" alt=""></li>
-            <li><a href="###"><span>一键下载</span></a></li>
+            <li><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.android.umktshop"><span>一键下载</span></a></li>
         </ul>
     </div>
     <div class="top-title">
@@ -33,9 +34,9 @@
                 <i><img src="images/sj.png" alt=""></i>
                 <ul>
                     <li class="nav-list-active"><img src="images/rxcp.png" alt=""><span>热销产品</span></li>
-                    <li><img src="images/fljp.png" alt=""><span>分类精品</span></li>
+                    <!--<li><img src="images/fljp.png" alt=""><span>分类精品</span></li>-->
                     <li><img src="images/gwc.png" alt=""><span>购物车</span></li>
-                    <li><img src="images/grzx.png" alt=""><span>个人中心</span></li>
+                    <!--<li><img src="images/grzx.png" alt=""><span>个人中心</span></li>-->
                 </ul>
             </div>
         </div>
@@ -66,12 +67,21 @@
             </div>
         </div>
     </div>
-    <div class="trendtoys-list-main">
+    <!--<div class="trendtoys-list-main">-->
+    <!--</div>-->
+    <div class="hotProducts-list">
+        <p><img src="images/hmtj.png" alt=""></p>
     </div>
 
+    <div class="bg"></div>
+    <div class="loading">
+        <img src="images/loading.gif" class="loading-img" alt="">
+    </div>
 </div>
 <script>
     $(function () {
+        $('.loading').show();
+        var infoStatus = $.query.get("info");
         var $OrderNo = localStorage.getItem("OrderNo");
         $.ajax({
             url: orderapi+"/Order/paySuccess",
@@ -80,19 +90,56 @@
             success:function (data) {
                 var msg = data.Data;
                 console.log(msg)
+                $('.loading').hide()
                 if(msg){
-                    $('.order-no').text($OrderNo);
+//                    if(msg.OrderStauts != "订单接收"){
+//                        $('.order-status').html("对不起，订单失败");
+//                        $('.order-no').hide();
+//                        $('.buy-suc-div-t-l ul li:eq(1)').hide();
+//                    }else{
+//                        $('.order-no').text($OrderNo);
+//                    }
+                    if(infoStatus == "1"){
+                        $('.order-no').text($OrderNo);
+                    }else  if(infoStatus == "2"){
+                        $('.order-status').html("对不起，您取消了付款");
+                        $('.top-title span').html("支付失败")
+                        $('.buy-suc-div-t-l ul li:eq(1)').hide();
+                        $('.buy-suc-div-t-l ul li:eq(2)').hide();
+//                        $('.order-no').hide();
+                    }else  if(infoStatus == "3"){
+                        $('.order-status').html("支付失败");
+                        $('.top-title span').html("支付失败")
+
+                        $('.buy-suc-div-t-l ul li:eq(1)').hide();
+                        $('.buy-suc-div-t-l ul li:eq(2)').hide();
+//                        $('.order-no').hide();
+                    }
                     $('.buy-suc-div-b .buy-suc-div-b-r ul li:eq(1) span').text(msg.ReceiveMan)
                     $('.buy-suc-div-b .buy-suc-div-b-r ul li:eq(1) b').text(msg.Phone)
                     $('.buy-suc-div-b .buy-suc-div-b-r ul li:eq(2)').text(msg.Province + msg.City + msg.Area +msg.Street +msg.DetailAddress)
 
                     //推荐列表
-                    for(var i =0;i<msg.ADList.length;i++){
-                        var $div = $('<div class="trendtoys-list" dataProductId="'+ msg.ADList[i].ActionData.ProductID+'"> <div class="trendtoys-list-l"> <img src="'+ msg.ADList[i].ShowData.ImgUrl+'" alt=""> </div> <div class="trendtoys-list-r"> <img src="images/bq.png" alt=""> <p>'+ msg.ADList[i].ShowData.Title+'</p><div class="trendtoys-list-r-div"> <div class="trendtoys-list-r-div-l"> <p><b>¥</b><span>'+ msg.ADList[i].ShowData.Price+'</span></p> <del>'+ msg.ADList[i].ShowData.MarketPrice+'</del> </div> <div class="trendtoys-list-r-div-r" > </div> </div> </div> </div>')
-                        $('.trendtoys-list-main').append($div)
-                    }
+                    $.ajax({
+                        url:api + "/AD/GetWXAd?Position=1",
+                        type:"get",
+                        success:function (data) {
+                            console.log(data)
+                            if(data.Code == 200){
+                                var msg = data.Data;
+                                for (var i =0;i<msg.length;i++){
+                                    var $div = $('<div class="hotProducts-list-main"> <a href="products-main.html?productId='+ msg[i].Link+'"><ul> <li><img src="'+ msg[i].Img+'" alt=""><img src="images/HOT.png" alt=""></li> <li><img src="images/huo.png" alt=""> <p>'+ msg[i].Name+'</p></li> <li> <div class="hotProducts-list-main-l"> <b>￥</b> <span>'+msg[i].Price +'</span> <del>￥'+ msg[i].MarketPrice +'</del> <p>'+ msg[i].PriceTarget1+'</p> </div> <div class="hotProducts-list-main-r"> <img src="images/sale.png" alt=""> <span>已售:<b>'+ msg[i].SellCount+'</b>件</span> </div> </li> </ul> </a></div>')
+                                    $('.hotProducts-list').append($div)
+                                }
+                            }
+//                alert(data)
+                        }
+                    })
+//                    for(var i =0;i<msg.ADList.length;i++){
+//                        var $div = $('<div class="trendtoys-list" dataProductId="'+ msg.ADList[i].ActionData.ProductID+'"> <div class="trendtoys-list-l"> <img src="'+ msg.ADList[i].ShowData.ImgUrl+'" alt=""> </div> <div class="trendtoys-list-r"> <img src="images/bq.png" alt=""> <p>'+ msg.ADList[i].ShowData.Title+'</p><div class="trendtoys-list-r-div"> <div class="trendtoys-list-r-div-l"> <p><b>¥</b><span>'+ msg.ADList[i].ShowData.Price+'</span></p> <del>'+ msg.ADList[i].ShowData.MarketPrice+'</del> </div> <div class="trendtoys-list-r-div-r" > </div> </div> </div> </div>')
+//                        $('.trendtoys-list-main').append($div)
+//                    }
                 }
-
             }
         });
         $(document).on("click",".trendtoys-list",function () {

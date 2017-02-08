@@ -22,7 +22,7 @@
     <div class="down-btn">
         <ul>
             <li><img src="../images/logo.png" alt=""></li>
-            <li><a href="###"><span>一键下载</span></a></li>
+            <li><a href="http://a.app.qq.com/o/simple.jsp?pkgname=com.android.umktshop"><span>一键下载</span></a></li>
         </ul>
     </div>
     <div class="top-title">
@@ -36,24 +36,25 @@
                 <i><img src="../images/sj.png" alt=""></i>
                 <ul>
                     <li class="nav-list-active"><img src="../images/rxcp.png" alt=""><span>热销产品</span></li>
-                    <li><img src="../images/fljp.png" alt=""><span>分类精品</span></li>
+                    <!--<li><img src="../images/fljp.png" alt=""><span>分类精品</span></li>-->
                     <li><img src="../images/gwc.png" alt=""><span>购物车</span></li>
-                    <li><img src="../images/grzx.png" alt=""><span>个人中心</span></li>
+                    <!--<li><img src="../images/grzx.png" alt=""><span>个人中心</span></li>-->
                 </ul>
             </div>
         </div>
     </div>
     <div class="order-cofiure-top">
         <div class="buy-suc-div-b">
-            <a href="Addressmanagement.html?backinfo=order-confure.html">
+            <a href="../Addressmanagement.html?backinfo=order-confure.html">
+            <!--<a>-->
                 <div class="buy-suc-div-b-l">
                     <img src="../images/suozaidiqu.png" alt="">
                 </div>
                 <div class="buy-suc-div-b-r">
                     <p style="text-align: left;font-size: .7rem;line-height: 2rem;display:none;">请选择地址</p>
                     <ul>
-                        <li><span>收货人：<b>胡萝卜</b></span><b>13838384388</b></li>
-                        <li>江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号</li>
+                        <li ><span >收货人：<b style="font-weight: bold">胡萝卜</b></span><b >13838384388</b></li>
+                        <li >江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号</li>
                     </ul>
                 </div>
                 <img src="../images/b.png" alt="">
@@ -65,15 +66,14 @@
     <div class="order-pay">
         <h3><img src="../images/zffs.png" alt=""><span>支付方式</span></h3>
         <ul>
-            <li datapay="wx"><img src="../images/weixin.png" alt=""> <b>微信支付</b><img class="wx" src="../images/xuanzhe1.png"
-                                                                                  alt=""></li>
-
-            <li><img src="../images/zhifubao.png" alt=""> <b>支付宝</b><span>推荐支付宝用户使用</span>
-                <img class="zfb" src="../images/xuanzhe2.png" alt=""></li>
+            <li datapay="wx"><img src="../images/weixin.png" alt=""> <b>微信支付</b><img class="wx"
+                                                                                     src="../images/xuanzhe1.png"
+                                                                                     alt=""></li>
         </ul>
     </div>
-    <div class="shop-cart-bar order-cofiure-bottom">
-        <p>注：每笔订单满200元包邮；未满200元，收取10元运费 (全场商品适用)</p>
+    <div class="shop-cart-bar order-cofiure-bottom order-monster-bottom">
+        <p>注：每笔订单满200元包邮；未满200元，收取10元运费</p>
+
         <div class="shop-cart-bar-l">
             <ul>
                 <li>总计：</li>
@@ -85,39 +85,40 @@
         </div>
     </div>
     <div class="alert">
-        <p>房价快速的减肥倒计时的风景 家居服</p>
+        <div class="middle"><p></p></div>
         <span>确&nbsp;&nbsp;&nbsp;&nbsp;定</span>
     </div>
     <div class="bg"></div>
     <div class="loading">
-        <div class="wai">
-            <div class="spinner">
-                <div class="double-bounce1"></div>
-                <div class="double-bounce2"></div>
-            </div>
-        </div>
+        <img src="../images/loading.gif" class="loading-img" alt="">
     </div>
 </div>
 <script>
     $(function () {
         var buyType = $.query.get("buyType");
         var backinfo = $.query.get("backinfo");
+        var thing = $.query.get("thing");
         var from = $.query.get("from");
         var paymode, wxPay;
-
-        if (logined) {
+        console.log(localStorage.getItem("userInfo"))
+        function orderconfiure() {
+//            console.log(localStorage.getItem("orderSubmitWX"));
+//            return false;
             var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
-            var setAddrinfo = JSON.parse(localStorage.getItem("setAddrinfo"));
-                orderSubmitWX.Openid = localStorage.getItem("openid");
+            var setAddrinfo ;
+            if(JSON.parse(localStorage.getItem("setAddrinfo"))){
+                setAddrinfo = JSON.parse(localStorage.getItem("setAddrinfo"))
+            }
+            orderSubmitWX.Openid = localStorage.getItem("openid");
             console.log(orderSubmitWX);
 //            console.log(setAddrinfo);
             //填充下单商品
             var OrderFee = 0;
             for (var i = 0; i < orderSubmitWX.OrderDetail.length; i++) {
                 var $style = orderSubmitWX.OrderDetail[i].Color_Nm == '共同' ? '标准版' : orderSubmitWX.OrderDetail[i].Color_Nm;
-                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + orderSubmitWX.OrderDetail[i].ProductImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + orderSubmitWX.OrderDetail[i].Name + '</li> <li>颜色分类: <b>' + $style + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + orderSubmitWX.OrderDetail[i].OrderPrice / orderSubmitWX.OrderDetail[i].ProductNumber + '</span> <del>¥' + orderSubmitWX.OrderDetail[i].OrderOldPrice / orderSubmitWX.OrderDetail[i].ProductNumber + '</del> </div> <div class="shop-cart-product-number"> <p>X' + orderSubmitWX.OrderDetail[i].ProductNumber + '</p> </div> </li> </ul> </div> </div> </div>'
+                var $div = '<div class="shop-cart-check-list"> <div class="shop-cart-product-info"> <img src="' + orderSubmitWX.OrderDetail[i].ProductImg + '" alt=""> <div class="shop-cart-product-disc"> <ul> <li>' + orderSubmitWX.OrderDetail[i].Name + '</li> <li>颜色分类: <b>' + $style + '</b></li> <li> <div class="shop-cart-product-price"> <b>¥</b> <span class="product-price-this">' + orderSubmitWX.OrderDetail[i].OrderPrice + '</span> <del>¥' + orderSubmitWX.OrderDetail[i].OrderOldPrice + '</del> </div> <div class="shop-cart-product-number"> <p>X' + orderSubmitWX.OrderDetail[i].ProductNumber + '</p> </div> </li> </ul> </div> </div> </div>'
                 $('.order-list').append($div)
-                OrderFee = Number(parseFloat(OrderFee).toFixed(2)) + Number(parseFloat(orderSubmitWX.OrderDetail[i].OrderPrice).toFixed(2));
+                OrderFee = Number(parseFloat(OrderFee).toFixed(2)) + Number((parseFloat(orderSubmitWX.OrderDetail[i].OrderPrice) * parseFloat(orderSubmitWX.OrderDetail[i].ProductNumber)).toFixed(2));
 
                 orderSubmitWX.OrderFee = OrderFee;
                 delete orderSubmitWX.OrderDetail[i].ProductNumber
@@ -149,9 +150,13 @@
 //                return;
                 console.log(orderSubmitWX)
 
-            } else {
+            } else if(thing  == "shopcart") {
+                $(".buy-suc-div-b-r ul li:eq(0) span b").text(orderSubmitWX.ReceiveMan);
+                $(".buy-suc-div-b-r ul li:eq(0) > b").text(orderSubmitWX.Phone);
+                $(".buy-suc-div-b-r ul li:eq(1)").text(orderSubmitWX.Province +orderSubmitWX.City +orderSubmitWX.Area +orderSubmitWX.Street+orderSubmitWX.DetailAddress);
+                $('.buy-suc-div-b-r p').hide()
 
-
+            }else{
                 //获取默认地址
                 $.ajax({
                     url: api + "/Account/CusDefalutAddress",
@@ -200,13 +205,20 @@
                     }
                 })
             }
-
+        }
+        //填充地址
+        if (logined) {
+            orderconfiure()
         } else {
-             wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
+            wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
             var productAddr = JSON.parse(localStorage.getItem("productInfo"));
             console.log(wxPay);
             console.log(productAddr);
-
+            if (localStorage.getItem("thing") == "shopcart") {
+                orderconfiure()
+            } else {
+                setAddr()
+            }
             function setAddr() {
                 $(".buy-suc-div-b-r ul li:eq(0) span b").text(productAddr.Reman);
                 $(".buy-suc-div-b-r ul li:eq(0) > b").text(productAddr.Phone);
@@ -220,9 +232,9 @@
 //                $('.product-price-this').text(productAddr.productPrice);
 //                $('.shop-cart-product-price del').text(productAddr.productMarketPrice)
 //                $('.shop-cart-product-number p').text("X1")
-                $('.shop-cart-check-list').click(function () {
-                    window.location.href = "products-main.html?productId=" + productAddr.productId;
-                });
+//                $('.shop-cart-check-list').click(function () {
+//                    window.location.href = "../products-main.html?productId=" + productAddr.productId;
+//                });
                 if (productAddr.productPrice < 200) {
                     $('.pay-price').text((Number(productAddr.productPrice) + Number(10)).toFixed(2));
                 } else {
@@ -231,10 +243,8 @@
                 }
                 $('.product-number').text($('.order-list .shop-cart-check-list').length);
 
-
             }
 
-            setAddr()
         }
 
 
@@ -285,10 +295,10 @@
 
         $('.shop-cart-bar-r').click(function () {
             $('.loading').show();
-            if($.query.get("buyType") == "buysoon"){
+            if ($.query.get("buyType") == "buysoon") {
                 console.log(wxPay)
                 submitwx(wxPay)
-            }else{
+            } else {
                 //下单
                 $.ajax({
                     url: orderapi + "/Order/OrderSubmitWX",
@@ -344,25 +354,56 @@
             });
 
             function onBridgeReady() {
-                var times = ((new Date().getTime()) / 1000).toString();
+//                var times = parseInt((new Date().getTime()) / 1000).toString();
+//                alert(times);
+//                alert(wxPay.WxPayParams.appid)
+//                alert(wxPay.WxPayParams.nonce_str)
+//                alert(wxPay.WxPayParams.prepay_id)
+//                alert( wxPay.WxPayParams.sign)
+//                alert( wxPay.WxPayParams.TimeStamp)
 //                alert(times.toString())
 //                alert(typeof times)
                 WeixinJSBridge.invoke(
                     'getBrandWCPayRequest', {
                         "appId": wxPay.WxPayParams.appid,     //公众号名称，由商户传入
-                        "timeStamp": times,         //时间戳，自1970年以来的秒数
                         "nonceStr": wxPay.WxPayParams.nonce_str, //随机串
                         "package": "prepay_id=" + wxPay.WxPayParams.prepay_id,
+                        "paySign": wxPay.WxPayParams.sign, //微信签名,
                         "signType": "MD5",         //微信签名方式：
-                        "paySign": wxPay.WxPayParams.sign //微信签名
+                        "timeStamp": wxPay.WxPayParams.TimeStamp,         //时间戳，自1970年以来的秒数
+
                     },
                     function (res) {
-                        if (res.err_msg == "get_brand_wcpay_request：ok") {
+//                        alert(res.err_msg);
+                        if (res.err_msg == "get_brand_wcpay_request:ok") {
 
                             localStorage.setItem("OrderNo", wxPay.out_trand_no);
-                            $('.loading').hide()
+                            $('.loading').hide();
+                            window.location.href = "../buy-success.html?info=1"
                         }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                        if (res.err_msg == "get_brand_wcpay_request:cancel") {
+                            //回到已取消订单列表
+//                            alert("您取消了付款");
+                            $('.loading').hide();
+                            window.location.href = "../buy-success.html?info=2"
 
+                        }
+                        if (res.err_msg == "get_brand_wcpay_request:fail") {
+                            //回到待支付订单列表
+                            //alert("支付失败,回到待支付订单列表");
+                            //backorderlist();
+                            $('.loading').hide();
+                            window.location.href = "../buy-success.html?info=3"
+
+                        }
+                        if (res.err_msg == "getBrandWCPayRequest:fail_invalid appid") {
+                            //回到待支付订单列表
+//                            alert("支付失败,回到待支付订单列表[invalid appid]");
+                            $('.loading').hide();
+                            window.location.href = "../buy-success.html?info=3"
+
+
+                        }
                     }
                 );
             }
@@ -386,6 +427,7 @@
 
             }
         }
+
         //订单页商品跳转
 //        $('.shop-cart-check-list').click(function () {
 //            window.location.href = "products-main.html?productId=" + productsStyles.productId;
