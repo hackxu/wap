@@ -21,6 +21,12 @@ function showBg() {
     $('.alert').show();
 
 }
+function showBgt() {
+    $('.bg').show();
+
+    $('.alert-t').show();
+
+};
 $(function () {
 
     $('.nav-list p').click(function () {
@@ -87,6 +93,10 @@ $(function () {
         $(".bg").hide();
         $('.alert').hide();
         $('.loading').hide()
+    })
+    $('.alert-t b').click(function () {
+        $('.bg').hide()
+        $('.alert-t').hide()
     })
 
 

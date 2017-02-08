@@ -88,6 +88,10 @@
         <div class="middle"><p></p></div>
         <span>确&nbsp;&nbsp;&nbsp;&nbsp;定</span>
     </div>
+    <div class="alert-t">
+        <div class="middle"><p></p></div>
+        <b>确&nbsp;&nbsp;&nbsp;&nbsp;定</b>
+    </div>
     <div class="bg"></div>
     <div class="loading">
         <img src="../images/loading.gif" class="loading-img" alt="">
@@ -208,6 +212,7 @@
         }
         //填充地址
         if (logined) {
+            wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
             orderconfiure()
         } else {
             wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
@@ -294,11 +299,18 @@
 //        })
 
         $('.shop-cart-bar-r').click(function () {
+            if($('.buy-suc-div-b-r p').text() =="请选择地址"){
+                showBgt();
+                $('.alert-t p').html("请选择地址")
+            }else{
+
             $('.loading').show();
             if ($.query.get("buyType") == "buysoon") {
                 console.log(wxPay)
                 submitwx(wxPay)
             } else {
+                var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
+
                 //下单
                 $.ajax({
                     url: orderapi + "/Order/OrderSubmitWX",
@@ -336,6 +348,7 @@
                         }
                     }
                 })
+            }
             }
 
 
