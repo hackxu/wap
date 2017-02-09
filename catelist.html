@@ -70,7 +70,8 @@
         <!--<li><a href="###"><img src="images/yyjk.png" alt=""><span>营养健康</span></a></li>-->
         <!--</ul>-->
     </div>
-    <div  class="trendtoys-list-main">
+    <div class="trendtoys-list-main">
+        <div class="list-loading">正在加载</div>
     </div>
 
     <div class="shop-cart">
@@ -82,6 +83,8 @@
     <div class="bg"></div>
 </div>
 <script>
+    var $cateid;
+    var $number = 0;
     $(function () {
         var cateid = $.query.get("cateId");
         $('.loading').show();
@@ -106,14 +109,16 @@
                 }
                 $('.center-word span').text(msg[0].ShowData.ParentCateName);
                 mySwiper.update();
-                $('.swiper-wrapper .swiper-slide:eq(0)').addClass("swiper-active")
+                $('.swiper-wrapper .swiper-slide:eq(0)').addClass("swiper-active");
+                $cateid = msg[0].ActionData.TailClassID;
+//                alert($cateid)
                 $.ajax({
                     url: api + "/Product/ProductList",
                     type: "post",
                     data: {
                         "KeyWord": "",
                         "Brand_Id": 0,
-                        "CateId": msg[0].ShowData.TailClassID,
+                        "CateId": $cateid,
                         "Skip": 0,
                         "Take": 10,
                         "OrderBy": "sellcount",
@@ -125,7 +130,7 @@
                         var msg = data.Data;
                         for (var i = 0; i < msg.length; i++) {
                             var $divlist = $('<div class="trendtoys-list"><a href="products-main.html?productId=' + msg[i].ActionData.ProductID + '"> <div class="trendtoys-list-l"> <img src="' + msg[i].ShowData.ImgUrl + '" alt=""> </div> <div class="trendtoys-list-r"> <img src="images/bq.png" alt=""> <p>J' + msg[i].ShowData.Title + '</p> <div class="trendtoys-list-r-div"> <div class="trendtoys-list-r-div-l"> <p><b>¥</b><span>' + msg[i].ShowData.Price + '</span></p> <del>¥' + msg[i].ShowData.MarketPrice + '</del> </div> <div class="trendtoys-list-r-div-r"> </div> </div> </div> </a> </div>')
-                            $('.trendtoys-list-main').append($divlist)
+                            $('.list-loading').before($divlist)
                         }
 
                     }
@@ -136,14 +141,14 @@
         $(document).on("click", ".swiper-slide", function () {
             $('.loading').show()
             $(this).addClass("swiper-active").siblings().removeClass("swiper-active")
-            cateid = $(this).attr("data-cateid");
+            $cateid = $(this).attr("data-cateid");
             $.ajax({
                 url: api + "/Product/ProductList",
                 type: "post",
                 data: {
                     "KeyWord": "",
                     "Brand_Id": 0,
-                    "CateId": cateid,
+                    "CateId": $cateid,
                     "Skip": 0,
                     "Take": 10,
                     "OrderBy": "sellcount",
@@ -153,10 +158,11 @@
                     $('.loading').hide()
                     console.log(data);
                     $('.trendtoys-list-main').empty();
+                    $('.trendtoys-list-main').append($('<div class="list-loading">正在加载</div>'))
                     var msg = data.Data;
                     for (var i = 0; i < msg.length; i++) {
                         var $divlist = $('<div class="trendtoys-list"><a href="products-main.html?productId=' + msg[i].ActionData.ProductID + '"> <div class="trendtoys-list-l"> <img src="' + msg[i].ShowData.ImgUrl + '" alt=""> </div> <div class="trendtoys-list-r"> <img src="images/bq.png" alt=""> <p>J' + msg[i].ShowData.Title + '</p> <div class="trendtoys-list-r-div"> <div class="trendtoys-list-r-div-l"> <p><b>¥</b><span>' + msg[i].ShowData.Price + '</span></p> <del>¥' + msg[i].ShowData.MarketPrice + '</del> </div> <div class="trendtoys-list-r-div-r"> </div> </div> </div> </a> </div>')
-                        $('.trendtoys-list-main').append($divlist)
+                        $('.list-loading').before($divlist)
                     }
 
                 }
@@ -165,27 +171,47 @@
 
     })
     $(window).scroll(function (e) {
-        var $top = $('.trendtoys-list-main').height()-350;
+        var $top = $('.trendtoys-list-main').height() - 400;
         console.log($top)
         console.log($(window).scrollTop())
-        if($(window).scrollTop() > 1000){
-            $.ajax({
-                url: api + "/Product/ProductList",
-                type: "post",
-                data: {
-                    "KeyWord": "",
-                    "Brand_Id": 0,
-                    "CateId": msg[0].ShowData.TailClassID,
-                    "Skip": 0,
-                    "Take": 10,
-                    "OrderBy": "sellcount",
-                    "OrderByDesc": "DESC"
-                },
-                success:function (data) {
-                    console.log(data.Data);
-                    var msg = data.Data;
-                }
-            })
+        if ($(window).scrollTop() -$top > 0) {
+            if($('.trendtoys-list-main .trendtoys-list').length % 10 >0){
+                $number = 0;
+                console.log("加载完毕");
+                 $('.list-loading').show()
+                         .html("加载完毕")
+            }else{
+                $number +=1;
+                $('.list-loading').show()
+                        .html("正在加载")
+                $.ajax({
+                    url: api + "/Product/ProductList",
+                    type: "post",
+                    data: {
+                        "KeyWord": "",
+                        "Brand_Id": 0,
+                        "CateId": $cateid,
+                        "Skip": $number*10,
+                        "Take": 10,
+                        "OrderBy": "sellcount",
+                        "OrderByDesc": "DESC"
+                    },
+                    success: function (data) {
+                        console.log(data.Data);
+                        var msg = data.Data;
+                        for (var i = 0; i < msg.length; i++) {
+                            var $divlist = $('<div class="trendtoys-list"><a href="products-main.html?productId=' + msg[i].ActionData.ProductID + '"> <div class="trendtoys-list-l"> <img src="' + msg[i].ShowData.ImgUrl + '" alt=""> </div> <div class="trendtoys-list-r"> <img src="images/bq.png" alt=""> <p>J' + msg[i].ShowData.Title + '</p> <div class="trendtoys-list-r-div"> <div class="trendtoys-list-r-div-l"> <p><b>¥</b><span>' + msg[i].ShowData.Price + '</span></p> <del>¥' + msg[i].ShowData.MarketPrice + '</del> </div> <div class="trendtoys-list-r-div-r"> </div> </div> </div> </a> </div>')
+                            $('.list-loading').before($divlist)
+                        }
+                        if(msg.length<10){
+                            $('.list-loading').show()
+                                    .html("加载完毕")
+                        }else{
+                        }
+                    }
+                })
+            }
+
         }
     })
 
