@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pulldown Load</title>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <style type="text/css">
+        body {
+            overflow: hidden;
+        }
+        body,
+        ul {
+            padding: 0;
+            margin: 0;
+        }
+        .main {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .main .warpper {
+            position: absolute;
+            width: 100%;
+        }
+        .scroller-pullDown, .scroller-pullUp {
+            width: 100%;
+            height: 30px;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .scroller-pullUp {
+        }
+        .dropdown-list {
+            padding: 0;
+            margin: 0;
+        }
+        .dropdown-list li {
+            width: 97%;
+            background: #fff;
+            line-height: 45px;
+            text-align: left;
+            color: #000;
+            border-bottom: 1px solid #ddd;
+            padding-left: 3%;
+        }
+    </style>
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="js/iscroll-probe.js"></script>
+</head>
+
+<body>
+    <div id="MyScroller" class="main">
+        <div class="warpper">
+            <div id="Content" class="dropdown-list">
+            </div>
+            <div id="PullUp" class="scroller-pullUp" style="display: none;">
+                <img style="width: 20px; height: 20px;" src="rolling.svg"/>
+                <span id="pullUp-msg" class="pull-up-msg">正在加</span>
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+//    alert("!")
+    // 模拟数据
+    var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
+
+    function getContents() {
+        var li = "";
+        for (var i = 0; i < arr.length; i++) {
+            li += "<li>Item" + arr[i] + "</li>";
+        }
+        return li;
+    }
+
+    function appendContent(content) {
+        var ul = document.getElementById('Content');
+        ul.innerHTML = ul.innerHTML + content;
+    }
+
+    window.onload = function () {
+
+        // 初始化body高度
+        document.body.style.height = Math.max(document.documentElement.clientHeight, window.innerHeight || 0) + 'px';
+
+        appendContent(getContents());
+
+        var pullDown = document.querySelector("#PullDown"),
+            pullUp = document.querySelector("#PullUp"),
+            isPulled = false; // 拉动标记
+
+        var myScroll = new IScroll('#MyScroller', {
+            probeType: 3,
+            mouseWheel: true,
+            scrollbars: true,
+            preventDefault: false,
+            fadeScrollbars: true
+        });
+
+        myScroll.on('scroll', function () {
+            var height = this.y,
+                bottomHeight = this.maxScrollY - height;
+
+            console.log("height:" + height);
+            console.log("bottomHeight:" + bottomHeight);
+
+//            // 控制下拉显示
+//            if (height >= 60) {
+//                pullDown.style.display = "block";
+//                setTimeout(function () {
+//                    isPulled = true;
+//
+//                },2000);
+//                return;
+//            }
+//            else if (height < 60 && height >= 0) {
+//                pullDown.style.display = "none";
+//                return;
+//            }
+
+            // 控制上拉显示
+            if (bottomHeight >= 60) {
+                pullUp.style.display = "block";
+                isPulled = true;
+
+                return;
+            } else if (bottomHeight < 60 && bottomHeight >= 0) {
+                pullUp.style.display = "none";
+                return;
+            }
+        })
+
+        myScroll.on('scrollEnd', function () { // 滚动结束
+            if (isPulled) { // 如果达到触发条件，则执行加载
+                isPulled = false;
+                appendContent(getContents());
+                myScroll.refresh();
+            }
+        });
+    }
+</script>
+</body>
+
+</html>

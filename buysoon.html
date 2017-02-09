@@ -34,13 +34,14 @@
                 <div class="hide-nav">
                     <i><img src="images/sj.png" alt=""></i>
                     <ul>
-                        <li class="nav-list-active"><img src="images/rxcp.png" alt=""><span>热销产品</span></li>
-                        <!--<li><img src="images/fljp.png" alt=""><span>分类精品</span></li>-->
-                        <li><img src="images/gwc.png" alt=""><span>购物车</span></li>
-                        <!--<li><img src="images/grzx.png" alt=""><span>个人中心</span></li>-->
+                        <li ><a href="hotProduct.html"><img src="images/rxcp.png" alt=""><span>热销产品</span></a></li>
+                        <li><a href="CompetitiveProducts.html"><img src="images/fljp.png" alt=""><span>分类精品</span></a></li>
+                        <li><a href="shop-cart.html"><img src="images/gwc.png" alt=""><span>购物车</span></a></li>
+                        <li><a href="PersonalCenter.html"><img src="images/grzx.png" alt=""><span>个人中心</span></a></li>
                     </ul>
                 </div>
             </div>
+
         </div>
         <div class="go-login">
         <p>已有当好妈APP账号请 <a href="login.html">登陆</a></p>
@@ -124,6 +125,10 @@
     <div class="loading">
         <img src="images/loading.gif" class="loading-img" alt="">
     </div>
+    <div class="shop-cart">
+        <a href="shop-cart.html"><img src="images/fd.png" alt=""></a>
+    </div>
+
 </div>
 <script>
     $(function () {
@@ -310,8 +315,8 @@
                     url: orderapi + "/Order/OrderSubmitWX",
                     type: "post",
                     dataType : 'json',
-//                    contentType: 'application/json',
-                    data: orderSubmitWX,
+                    contentType: 'application/json',
+                    data: JSON.stringify(orderSubmitWX),
 //                    dataType:"json",
                     success: function (data) {
                         var msg = data.Data;

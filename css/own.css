@@ -7,6 +7,7 @@ input{ outline:none;border-radius: 0;}
 input[type="button"], input[type="submit"], input[type="reset"] {
  -webkit-appearance: none;
 }
+body,
 li{ cursor: pointer;}
 input{
  -webkit-appearance: none;
@@ -21,7 +22,7 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 .top-title .center-word { width: 30%; margin: 0 auto; height: 2.25rem; }
 .top-title .center-word img { width: 27.5%; float: left; margin-top: .75rem; }
 .top-title .center-word span { font-size: .8rem; color: #333; float: right; margin-top: .76rem; }
- .nav-list { position: absolute; top: 3.35rem; right: 3.8%; overflow: hidden; z-index:3; display: none;}
+ .nav-list { position: absolute; top: 3.35rem; right: 3.8%; overflow: hidden; z-index:3; }
  .nav-list p { width: 1.4rem; float: right; margin-right: .3rem; }
  .nav-list p img { width: 100%; }
  .nav-list .hide-nav { width: 5.6rem; height: 10.125rem; overflow: hidden; font-size: .65rem; margin-top: 1.55rem; margin-left: 20rem; display: none; }
@@ -115,10 +116,16 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 
 
 .reandtoys-list{width: 100%; height:auto; overflow: hidden;padding: .3rem 0;background: #fff; margin-top:.32rem;}
-.reandtoys-list ul li{ width:14.6%; height:auto; overflow: hidden; float: left;margin: 0 2.7%}
-.reandtoys-list ul li img{ width:60%;margin: 0 auto; margin-bottom:.1rem; height:1.28rem;}
+.reandtoys-list .swiper-slide { width:14.6%!important; height:auto; overflow: hidden; float: left;margin: 0 2.7%}
+.reandtoys-list .swiper-slide img{ width:60%;margin: 0 auto; margin-bottom:.1rem; height:1.28rem;}
 /*.reandtoys-list ul li:nth-child(2) img{ margin-bottom:.2rem;}*/
-.reandtoys-list ul li span{font-size: .5rem}
+.reandtoys-list .swiper-slide span{
+ font-size: .5rem;
+ width: 100%;
+ overflow: hidden;
+ display: block;
+ text-align: center;
+}
 .trendtoys-list-main{ width:100%; overflow: hidden; height:auto; margin-bottom:2rem;}
 .trendtoys-list{width: 96%; height:8.5rem;margin: 0 auto; margin-top:.42rem;border-radius: 5px;background: #fff; cursor: pointer;}
 .trendtoys-list-l{ width:55.6%; overflow: hidden; float: left;border-bottom-left-radius: 5px;border-top-left-radius: 5px }
@@ -380,6 +387,7 @@ body { font-family: "微软雅黑"; background: #f2f2f2; font-weight: 300; }
 .no-adress{ width:100%; height:auto; overflow: hidden; position: fixed; top:50%; left:50%; -webkit-transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); -o-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
 .no-adress p{text-align: center;font-size: .7rem;}
 .loading-img{ width:30%; position: fixed; top:50%; left:50%; -webkit-transform: translate(-50%, -50%); -moz-transform: translate(-50%, -50%); -ms-transform: translate(-50%, -50%); -o-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
+.swiper-active a{ color: #eb514f;}
 /*.swiper-container{ min-height:7.98rem ;}*/
 
 /*.buy-suc-div-b-r ul li:first-child{ font-weight:bold;}*/

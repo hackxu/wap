@@ -35,13 +35,14 @@
             <div class="hide-nav">
                 <i><img src="../images/sj.png" alt=""></i>
                 <ul>
-                    <li class="nav-list-active"><img src="../images/rxcp.png" alt=""><span>热销产品</span></li>
-                    <!--<li><img src="../images/fljp.png" alt=""><span>分类精品</span></li>-->
-                    <li><img src="../images/gwc.png" alt=""><span>购物车</span></li>
-                    <!--<li><img src="../images/grzx.png" alt=""><span>个人中心</span></li>-->
+                    <li ><a href="../hotProduct.html"><img src="../images/rxcp.png" alt=""><span>热销产品</span></a></li>
+                    <li><a href="../CompetitiveProducts.html"><img src="../images/fljp.png" alt=""><span>分类精品</span></a></li>
+                    <li><a href="../shop-cart.html"><img src="../images/gwc.png" alt=""><span>购物车</span></a></li>
+                    <li><a href="../PersonalCenter.html"><img src="../images/grzx.png" alt=""><span>个人中心</span></a></li>
                 </ul>
             </div>
         </div>
+
     </div>
     <div class="order-cofiure-top">
         <div class="buy-suc-div-b">
@@ -96,6 +97,10 @@
     <div class="loading">
         <img src="../images/loading.gif" class="loading-img" alt="">
     </div>
+    <div class="shop-cart">
+        <a href="../shop-cart.html"><img src="../images/fd.png" alt=""></a>
+    </div>
+
 </div>
 <script>
     $(function () {
@@ -103,12 +108,12 @@
         var backinfo = $.query.get("backinfo");
         var thing = $.query.get("thing");
         var from = $.query.get("from");
-        var paymode, wxPay;
+        var paymode, wxPay,orderSubmitWX;
         console.log(localStorage.getItem("userInfo"))
         function orderconfiure() {
 //            console.log(localStorage.getItem("orderSubmitWX"));
 //            return false;
-            var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
+            orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
             var setAddrinfo ;
             if(JSON.parse(localStorage.getItem("setAddrinfo"))){
                 setAddrinfo = JSON.parse(localStorage.getItem("setAddrinfo"))
@@ -180,6 +185,7 @@
                             orderSubmitWX.Area = msg.Area;
                             orderSubmitWX.Street = msg.Street;
                             orderSubmitWX.DetailAddress = msg.DetailAddr;
+//                            console.log(orderSubmitWX)
 //                        console.log("!")
 //                        $.ajax({
 //                            url: orderapi + "/Order/OrderSubmitWX",
@@ -211,9 +217,11 @@
             }
         }
         //填充地址
-        if (logined) {
+        if (logined && localStorage.getItem("isbindphone") == 1) {
             wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
+
             orderconfiure()
+
         } else {
             wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
             var productAddr = JSON.parse(localStorage.getItem("productInfo"));
@@ -299,7 +307,7 @@
 //        })
 
         $('.shop-cart-bar-r').click(function () {
-            if($('.buy-suc-div-b-r p').text() =="请选择地址"){
+            if($('.buy-suc-div-b-r ul').length == 0){
                 showBgt();
                 $('.alert-t p').html("请选择地址")
             }else{
@@ -309,13 +317,15 @@
                 console.log(wxPay)
                 submitwx(wxPay)
             } else {
-                var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
-
+//                var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
+                console.log(JSON.stringify(orderSubmitWX))
                 //下单
                 $.ajax({
                     url: orderapi + "/Order/OrderSubmitWX",
                     type: "post",
-                    data: orderSubmitWX,
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: JSON.stringify(orderSubmitWX),
                     success: function (data) {
                         console.log(data)
 //                                console.log("@")
