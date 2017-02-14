@@ -8,9 +8,10 @@
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
     <title>支付结果</title>
     <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/Jquery.Query.js"></script>
+
     <script src="js/own.js"></script>
     <script src="js/rem.js"></script>
-    <script src="js/Jquery.Query.js"></script>
     <link rel="stylesheet" href="css/own.css">
     <style>
     </style>
@@ -108,13 +109,13 @@
                         $('.order-no').text($OrderNo);
                     }else  if(infoStatus == "2"){
                         $('.order-status').html("对不起，您取消了付款");
-                        $('.top-title span').html("支付失败")
+                        $('.top-title .center-word span').html("支付失败")
                         $('.buy-suc-div-t-l ul li:eq(1)').hide();
                         $('.buy-suc-div-t-l ul li:eq(2)').hide();
 //                        $('.order-no').hide();
                     }else  if(infoStatus == "3"){
                         $('.order-status').html("支付失败");
-                        $('.top-title span').html("支付失败")
+                        $('.top-title .center-word span').html("支付失败")
 
                         $('.buy-suc-div-t-l ul li:eq(1)').hide();
                         $('.buy-suc-div-t-l ul li:eq(2)').hide();

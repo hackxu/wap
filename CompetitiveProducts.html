@@ -9,6 +9,8 @@
     <title>分类精品</title>
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/rem.js"></script>
+    <script src="js/Jquery.Query.js"></script>
+
     <script src="js/own.js"></script>
     <link rel="stylesheet" href="css/own.css">
     <style>
@@ -48,16 +50,21 @@
     <div class="shop-cart">
         <a href="shop-cart.html"><img src="images/fd.png" alt=""></a>
     </div>
+    <div class="loading">
+        <img src="images/loading.gif" class="loading-img" alt="">
+    </div>
 
 </div>
 <script>
     $(function () {
+        $('.loading').show();
         $.ajax({
             url: api + "/AD/GetWXAd?Position=2",
             type: "get",
             success: function (data) {
                 console.log(data)
                 if (data.Code == 200) {
+                    $('.loading').hide()
                     var msg = data.Data;
                     for (var i = 0; i < msg.length; i++) {
 //                        var $div = $('<div class="hotProducts-list-main"> <a href="products-main.html?productId='+ msg[i].Link+'"><ul> <li><img src="'+ msg[i].Img+'" alt=""><img src="images/HOT.png" alt=""></li> <li><img src="images/huo.png" alt=""> <p>'+ msg[i]+'</p></li> <li> <div class="hotProducts-list-main-l"> <b>￥</b> <span>'+msg[i].Price +'</span> <del>￥'+ msg[i].MarketPrice +'</del> <p>'+ msg[i].PriceTarget1+'</p> </div> <div class="hotProducts-list-main-r"> <img src="images/sale.png" alt=""> <span>已售:<b>'+ msg[i].SellCount+'</b>件</span> </div> </li> </ul> </a></div>')

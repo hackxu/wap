@@ -8,9 +8,10 @@
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,minimal-ui">
     <title>快捷购买</title>
     <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/Jquery.Query.js"></script>
+
     <script src="js/rem.js"></script>
     <script src="js/own.js"></script>
-    <script src="js/Jquery.Query.js"></script>
     <link rel="stylesheet" href="css/own.css">
     <style>
     </style>
@@ -218,7 +219,7 @@
 //                }
                 var openid = localStorage.getItem("openid");
                 var userbind = JSON.parse(localStorage.getItem("userInfo"));
-                console.log(userbind)
+                console.log(userbind);
                 if (thing == "shopcart") {
                     var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
                     orderSubmitWX.Province = $('.Province').text();

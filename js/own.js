@@ -1,13 +1,45 @@
 /**
  * Created by 2shou on 2017/1/7.
  */
-var api = "http://test-webapi.ymws.jstv.com";
-var orderapi = "http://test-orderapi.ymws.jstv.com";
+var api = "http://webapi.ymws.jstv.com";
+var orderapi = "http://webapi.ymws.jstv.com";
+var isbindphone;
+var userInfo;
 // var orderapi = "http://orderapi.ymws.jstv.com";
 var re = /^1[34578]\d{9}$/;
 var addarr = [];
+var authcode = $.query.get("code");
+var openid
 //判断是否登陆
 // var logined = localStorage.getItem("userInfo");
+if(localStorage.getItem("openid")){
+    openid = localStorage.getItem("openid");
+
+    isbindphone = JSON.parse(localStorage.getItem("userInfo")).IsBindTel;
+    localStorage.setItem("isbindphone", isbindphone);
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
+    localStorage.setItem("isbindphone", userInfo.IsBindTel);
+    logined = userInfo;
+
+
+}else{
+    if(authcode.length>0){
+        $.getJSON('http://test-webapi.ymws.jstv.com/WXHandler/GetOpenId?code=' + authcode, function (data) {
+            if (data.Data){
+                localStorage.setItem("openid", data.Data.Openid);
+                userInfo = data.Data;
+                isbindphone = userInfo.IsBindTel;
+                localStorage.setItem("isbindphone", isbindphone);
+                localStorage.setItem("userInfo", JSON.stringify(userInfo));
+                localStorage.setItem("isbindphone", userInfo.IsBindTel);
+
+            }
+        })
+
+    }else {
+        window.location.href = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdad4cfca627754ef&redirect_uri=" + document.URL + "&response_type=code&scope=snsapi_userinfo&state=123#wechat_redirect";
+    }
+}
 if(localStorage.getItem("userInfo")){
     var logined =  JSON.parse(localStorage.getItem("userInfo"));
     // if(logined){
@@ -97,6 +129,8 @@ $(function () {
     $('.alert-t b').click(function () {
         $('.bg').hide()
         $('.alert-t').hide()
+        $('.loading').hide()
+
     })
 
 

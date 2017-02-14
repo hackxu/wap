@@ -35,8 +35,9 @@
             <div class="hide-nav">
                 <i><img src="../images/sj.png" alt=""></i>
                 <ul>
-                    <li ><a href="../hotProduct.html"><img src="../images/rxcp.png" alt=""><span>热销产品</span></a></li>
-                    <li><a href="../CompetitiveProducts.html"><img src="../images/fljp.png" alt=""><span>分类精品</span></a></li>
+                    <li><a href="../hotProduct.html"><img src="../images/rxcp.png" alt=""><span>热销产品</span></a></li>
+                    <li><a href="../CompetitiveProducts.html"><img src="../images/fljp.png" alt=""><span>分类精品</span></a>
+                    </li>
                     <li><a href="../shop-cart.html"><img src="../images/gwc.png" alt=""><span>购物车</span></a></li>
                     <li><a href="../PersonalCenter.html"><img src="../images/grzx.png" alt=""><span>个人中心</span></a></li>
                 </ul>
@@ -47,15 +48,15 @@
     <div class="order-cofiure-top">
         <div class="buy-suc-div-b">
             <a href="../Addressmanagement.html?backinfo=order-confure.html">
-            <!--<a>-->
+                <!--<a>-->
                 <div class="buy-suc-div-b-l">
                     <img src="../images/suozaidiqu.png" alt="">
                 </div>
                 <div class="buy-suc-div-b-r">
                     <p style="text-align: left;font-size: .7rem;line-height: 2rem;display:none;">请选择地址</p>
                     <ul>
-                        <li ><span >收货人：<b style="font-weight: bold">胡萝卜</b></span><b >13838384388</b></li>
-                        <li >江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号</li>
+                        <li><span>收货人：<b style="font-weight: bold">胡萝卜</b></span><b>13838384388</b></li>
+                        <li>江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号江苏省南京市鼓楼区北京东路4号</li>
                     </ul>
                 </div>
                 <img src="../images/b.png" alt="">
@@ -108,14 +109,14 @@
         var backinfo = $.query.get("backinfo");
         var thing = $.query.get("thing");
         var from = $.query.get("from");
-        var paymode, wxPay,orderSubmitWX;
+        var paymode, wxPay, orderSubmitWX;
         console.log(localStorage.getItem("userInfo"))
         function orderconfiure() {
 //            console.log(localStorage.getItem("orderSubmitWX"));
 //            return false;
             orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
-            var setAddrinfo ;
-            if(JSON.parse(localStorage.getItem("setAddrinfo"))){
+            var setAddrinfo;
+            if (JSON.parse(localStorage.getItem("setAddrinfo"))) {
                 setAddrinfo = JSON.parse(localStorage.getItem("setAddrinfo"))
             }
             orderSubmitWX.Openid = localStorage.getItem("openid");
@@ -159,13 +160,13 @@
 //                return;
                 console.log(orderSubmitWX)
 
-            } else if(thing  == "shopcart") {
+            } else if (thing == "shopcart") {
                 $(".buy-suc-div-b-r ul li:eq(0) span b").text(orderSubmitWX.ReceiveMan);
                 $(".buy-suc-div-b-r ul li:eq(0) > b").text(orderSubmitWX.Phone);
-                $(".buy-suc-div-b-r ul li:eq(1)").text(orderSubmitWX.Province +orderSubmitWX.City +orderSubmitWX.Area +orderSubmitWX.Street+orderSubmitWX.DetailAddress);
+                $(".buy-suc-div-b-r ul li:eq(1)").text(orderSubmitWX.Province + orderSubmitWX.City + orderSubmitWX.Area + orderSubmitWX.Street + orderSubmitWX.DetailAddress);
                 $('.buy-suc-div-b-r p').hide()
 
-            }else{
+            } else {
                 //获取默认地址
                 $.ajax({
                     url: api + "/Account/CusDefalutAddress",
@@ -216,6 +217,7 @@
                 })
             }
         }
+
         //填充地址
         if (logined && localStorage.getItem("isbindphone") == 1) {
             wxPay = JSON.parse(localStorage.getItem("wxPayinfo"));
@@ -307,58 +309,63 @@
 //        })
 
         $('.shop-cart-bar-r').click(function () {
-            if($('.buy-suc-div-b-r ul').length == 0){
+            if ($('.buy-suc-div-b-r ul').length == 0) {
                 showBgt();
                 $('.alert-t p').html("请选择地址")
-            }else{
-
-            $('.loading').show();
-            if ($.query.get("buyType") == "buysoon") {
-                console.log(wxPay)
-                submitwx(wxPay)
             } else {
-//                var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
-                console.log(JSON.stringify(orderSubmitWX))
-                //下单
-                $.ajax({
-                    url: orderapi + "/Order/OrderSubmitWX",
-                    type: "post",
-                    dataType: 'json',
-                    contentType: 'application/json',
-                    data: JSON.stringify(orderSubmitWX),
-                    success: function (data) {
-                        console.log(data)
-//                                console.log("@")
-                        if (data.Data) {
-                            wxPay = data.Data;
 
-                            console.log(wxPay);
+                $('.loading').show();
+                if ($.query.get("buyType") == "buysoon") {
+                    console.log(wxPay)
+                    submitwx(wxPay)
+                } else {
+//                var orderSubmitWX = JSON.parse(localStorage.getItem("orderSubmitWX"));
+                    console.log(JSON.stringify(orderSubmitWX))
+                    //下单
+                    $.ajax({
+                        url: orderapi + "/Order/OrderSubmitWX",
+                        type: "post",
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify(orderSubmitWX),
+                        success: function (data) {
+                            console.log(data)
+//                                console.log("@")
+                            if (data.Data) {
+                                wxPay = data.Data;
+
+                                console.log(wxPay);
 //                        提交支付
 //                        localStorage.setItem("OrderNo", wxPay.out_trand_no);
-                            submitwx(wxPay)
+                                submitwx(wxPay)
 
-                        } else {
-                            showBg();
-                            $('.alert p').text(data.Message);
-                            $(".alert span").click(function () {
-                                $(".bg").hide();
-                                $('.alert').hide();
-                                $('.loading').hide();
-                                if (from == "product-main.html") {
-                                    window.location.href = "products-main.html?productId=" + orderSubmitWX.OrderDetail[0].Product_ID;
-                                    return false;
-                                } else if (from == "shopCart") {
-                                    window.location.href = "shop-cart.html"
-                                    return false;
-                                }
-                            })
+                            } else {
+                                showBg();
+                                $('.alert p').text(data.Message);
+                                $(".alert span").click(function () {
+                                    $(".bg").hide();
+                                    $('.alert').hide();
+                                    $('.loading').hide();
+                                    if (from == "product-main.html") {
+                                        window.location.href = "../products-main.html?productId=" + orderSubmitWX.OrderDetail[0].Product_ID;
+                                        return false;
+                                    } else if (from == "shopCart") {
+                                        window.location.href = "../shop-cart.html"
+                                        return false;
+                                    }
+                                });
 
-                            return false;
+                                return false;
 
+                            }
+                        },
+                        error: function (e, r) {
+                            showBgt();
+                            $('.alert-t p').text("请重试");
+                            return false
                         }
-                    }
-                })
-            }
+                    })
+                }
             }
 
 

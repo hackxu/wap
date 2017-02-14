@@ -9,6 +9,7 @@
     <title>购物车</title>
     <script src="js/jquery-1.11.1.min.js"></script>
     <script src="js/rem.js"></script>
+    <script src="js/Jquery.Query.js"></script>
     <script src="js/own.js"></script>
     <link rel="stylesheet" href="css/own.css">
     <style>
@@ -76,9 +77,9 @@
     <div class="loading">
         <img src="images/loading.gif" class="loading-img" alt="">
     </div>
-    <div class="shop-cart">
-        <a href="shop-cart.html"><img src="images/fd.png" alt=""></a>
-    </div>
+    <!--<div class="shop-cart">-->
+        <!--<a href="shop-cart.html"><img src="images/fd.png" alt=""></a>-->
+    <!--</div>-->
 
 </div>
 <script>
@@ -297,6 +298,8 @@
             var $stock = parseInt($input.attr("data-stock"));
             $val += 1;
             if ($val > $stock) {
+                showBg();
+                $('.alert p').html("已达到最大库存")
                 $val = $stock
             }
             $input.val($val)
@@ -462,13 +465,13 @@
                 orderSubmitWX = JSON.stringify(orderSubmitWX);
                 localStorage.setItem("orderSubmitWX", orderSubmitWX)
 //                return false;
-                if(logined && localStorage.getItem("isbindphone") == 1){
+                if(logined && localStorage.getItemx("isbindphone") == 1){
                     window.location.href = "order/order-confure.html?from=shopCart"
                 }else {
                     window.location.href = "buysoon.html?thing=shopcart"
                 }
             }
-        })
+        });
         //购物车商品跳转
         $(document).on("click", ".go-products", function () {
             var productId = $(this).parent().parent().parent().parent().attr('data-productid');
